@@ -1,7 +1,19 @@
 package it.unibo.hookmaster;
 
-public final class App {
-    private App() {}
+import javafx.application.Application;
 
-    public static void main(final String[] args) {}
+/**
+ * Main application entry-point's class.
+ */
+public final class App {
+    private App() { }
+
+    /**
+     * Main application entry-point.
+     * 
+     * @param args unused
+     */
+    public static void main(final String[] args) {
+        Application.launch(JFXApp.class);
+    }
 }
