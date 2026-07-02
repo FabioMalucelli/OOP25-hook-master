@@ -21,13 +21,6 @@ public final class UpgradeFactory {
     private UpgradeFactory() { }
 
     /**
-     * Diffrent upgrade types.
-     */
-    public enum UpgradeType {
-        MAX_WEIGHT, SPEED
-    }
-
-    /**
      * Static method to create a new upgrade.
      * 
      * @param type the new upgrade type

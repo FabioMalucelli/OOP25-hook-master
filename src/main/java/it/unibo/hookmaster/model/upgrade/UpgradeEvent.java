@@ -1,7 +1,5 @@
 package it.unibo.hookmaster.model.upgrade;
 
-import it.unibo.hookmaster.model.upgrade.UpgradeFactory.UpgradeType;
-
 /**
  * Event for when the player buys an upgrades.
  */
