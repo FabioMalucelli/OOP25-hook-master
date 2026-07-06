@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.model.fishing.minigame;
 
 /**
- * Strategy Pattern: the indicator moves linearly
+ * Strategy Pattern - concrete: the indicator moves linearly
  * back and forth between 0.0 and 1.0 at a constant speed.
  * This is the default indicator.
  */

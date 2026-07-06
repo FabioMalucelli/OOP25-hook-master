@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.model.fishing.minigame;
 
 /**
- * Strategy Pattern: the indicator moves at varying speed, simulating rough weather conditions.
+ * Strategy Pattern - concrete: the indicator moves at varying speed, simulating rough weather conditions.
  * The speed constantly varies around base speed, so the indicator accelerates and decelerates unpredictably
  * making the QTE harder.
  * 

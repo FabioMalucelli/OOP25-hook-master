@@ -1,83 +1,43 @@
 package it.unibo.hookmaster.model.fishing;
 
+
 /**
- * Model of the Boat. It moves only horizzontaly on the surface.
+ * Defines the contract for the boat model.
  */
-public final class Boat {
-
-    private double x;
-    private final double y;         //the boat is always on the same height
-    private final double speed;     //pixels per second
-    private final double minX;
-    private final double maxX;
-    private boolean movingLeft;
-    private boolean movingRight;
+public interface Boat {
 
     /**
-     * Constructs a new Boat with specified position, speed, and boundaries.
-     *
-     * @param startX   the initial X position
-     * @param surfaceY the fixed Y position
-     * @param speed    the speed of the boat
-     * @param minX     the minimum allowed X boundary
-     * @param maxX     the maximum allowed X boundary
-     */
-    public Boat(final double startX, final double surfaceY, final double speed, final double minX, final double maxX) {
-        this.x = startX;
-        this.y = surfaceY;
-        this.speed = speed;
-        this.minX = minX;
-        this.maxX = maxX;
-    }
-
-    /**
-     * Updates the boat position based on the current input.
-     * Called once per frame of the GameLoop.
-     *
-     * @param deltaTime the time that has passed since the last frame
-     */
-    public void update(final double deltaTime) {
-        if (movingLeft && !movingRight) { 
-            x -= speed * deltaTime;
-        } else if (movingRight && !movingLeft) {
-            x += speed * deltaTime;
-        }
-        x = Math.max(minX, Math.min(maxX, x));
-    }
-
-    /**
-     * Sets whether the boat is moving left.
+     * Advances the boat postion by one frame.
      * 
-     * @param movingLeft movingLeft true if moving left, false otherwise
+     * @param deltaTime seconds elapsed since the last frame
      */
-    public void setMovingLeft(final boolean movingLeft) {
-        this.movingLeft = movingLeft;
-    }
+    void update(double deltaTime);
 
     /**
-     * Sets whether the boat is moving right.
-     *
-     * @param movingRight true if moving right, false otherwise
+     * Sets if the boat should move left.
+     * 
+     * @param movingLeft true to move left, false to stop
      */
-    public void setMovingRight(final boolean movingRight) { 
-        this.movingRight = movingRight;
-    }
+    void setMovingLeft(boolean movingLeft);
+
+    /**
+     * Sets if the boat should move right.
+     * 
+     * @param movingRight true to move right, flase to stop
+     */
+    void setMovingRight(boolean movingRight);
 
     /**
      * Gets the current X position of the boat.
-     *
-     * @return the X coordinate
+     * 
+     * @return the X coordinates in pixels
      */
-    public double getX() {
-        return x;
-    }
+    double getX();
 
     /**
-     * Gets the fixed Y position of the boat.
-     *
-     * @return the Y coordinate
+     * Gets the current Y position of the boat.
+     * 
+     * @return the Y coordinates in pixels
      */
-    public double getY() {
-        return y;
-    }
+    double getY();
 }

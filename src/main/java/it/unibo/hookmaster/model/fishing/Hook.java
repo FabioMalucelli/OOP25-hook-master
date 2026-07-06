@@ -1,143 +1,93 @@
 package it.unibo.hookmaster.model.fishing;
 
 /**
- * Model of the Hook.
+ * Defines the hook model.
  */
-public final class Hook {
-    private double x;
-    private double y;
-
-    //Game attributes (whitch can then be modified using the shop)
-    private double dropSpeed;
-    private double reelSpeed;
-    private final double maxDepth;
-
-    private HookState currenState;
+public interface Hook {
 
     /**
-     * Constructs a new Hook with specified intial postion, dropSpeed, reelSpeed, maxDepth.
-     *
-     * @param startX        the initial X position (usually the boat's X)
-     * @param startY        the initial Y position (usually the boat's Y)
-     * @param dropSpeed     the speed at which the hook drops
-     * @param reelSpeed     the speed at which the hook is reeled in
-     * @param maxDepth      the maximum depth the hook can reach
-     */
-    public Hook(final double startX, final double startY, final double dropSpeed, final double reelSpeed, final double maxDepth) {
-        this.x = startX;
-        this.y = startY;
-        this.dropSpeed = dropSpeed;
-        this.reelSpeed = reelSpeed;
-        this.maxDepth = maxDepth;
-        this.currenState = HookState.IDLE;
-    }
-
-    /**
-     * Updates the position and the logic of the hook based on the current state.
+     * Advances the hook position by one frame.
      * 
-     * @param deltaTime the time passed since the last frame
-     * @param boatX     the current X position of the boat
-     * @param boatY     the current Y position of the boat
+     * @param deltaTime seconds passed since the last frame
+     * @param boatX     current X of the boat
+     * @param boatY     current Y of the boat
      */
-    public void update(final double deltaTime, final double boatX, final double boatY) {
-        switch (currenState) {
-            case IDLE:
-                this.x = boatX;
-                this.y = boatY;
-                break;
-            case DROPPING:
-                y += dropSpeed * deltaTime;
-                if (y >= maxDepth) {
-                    y = maxDepth;
-                    currenState = HookState.REELING;
-                }
-                break;
-            case REELING:
-                y -= reelSpeed * deltaTime;
-                if (y <= boatY) {
-                    y = boatY;
-                    currenState = HookState.IDLE;
-                }
-                break;
-            case MINIGAME:
-                //TODO
-                break;
-        }
-    }
+    void update(double deltaTime, double boatX, double boatY);
 
     /**
-     * Throws the hook if you are on the boat.
-     */
-    public void cast() {
-        if (currenState == HookState.IDLE) {
-            currenState = HookState.DROPPING;
-        }
-    }
-
-    /**
-     * Starts recolling the hook manually.
-     */
-    public void reelIn() {
-        if (currenState == HookState.DROPPING) {
-            currenState = HookState.REELING;
-        }
-    }
-
-    //Gettetrs e Setters for the Shop upgrades
-
-    /**
-     * Gets the current state of the Hook.
+     * Casts the hook into the water if its current HookState is IDLE.
      * 
-     * @return the current HookState of the hook 
+     * @return true if the cast was performed
      */
-    public HookState getCurrentState() {
-        return currenState;
-    }
+    boolean cast();
 
     /**
-     * Sets the current state of the Hook.
+     * Starts reeling the hook if its current HookState is DROPPING.
      * 
-     * @param state the new HookState to set
+     * @return true if the reeling was started.
      */
-    public void setCurrentState(final HookState state) {
-        this.currenState = state;
-    }
+    boolean reelIn();
+
+    /**
+     * Freezes the hook and enters the HookState -> MINIGAME.
+     * Should be called when the hook collides with a fish.
+     * 
+     * @param fish the fish that has been hooked
+     */
+    void hookFish(Catchable fish);
+
+    /**
+     * Resolves the minigame and starts reeling.
+     * On failure the fish reference is cleared.
+     * 
+     * @param success true if the player caught the fish
+     */
+    void completeMinigame(boolean success);
+
+    /**
+     * Clears the hooked-fish reference after the reward has been collected.
+     */
+    void clearHookedFish();
+
+    /**
+     * Gets the current state of the hook.
+     * 
+     * @return the current HookState
+     */
+    HookState getCurrentState();
+
+    /**
+     * Gets the fish currently hooked, if any.
+     * 
+     * @return the hooked Catchable, or null if none
+     */
+    Catchable getHookedFish();
 
     /**
      * Gets the current X position of the hook.
      * 
-     * @return the X coordinate
+     * @return the X coordinate in pixels
      */
-    public double getX() {
-        return x;
-    }
+    double getX();
 
     /**
-     * Gets the current Y position (depth) of the hook.
+     * Gets the current Y(depth) position of the hook.
      * 
-     * @return the Y coordinate
+     * @return the Y coordinate in pixels
      */
-    public double getY() {
-        return y;
-    }
+    double getY();
 
     /**
-     * Sets the dropping speed of the hook.
-     * Typically invoked when purchasing upgrades from the shop.
+     * Sets the dropping speed. Invoked by the shop on upgrade purchase.
      * 
-     * @param dropSpeed the new descending speed in pixels per second
+     * @param dropSpeed new sinking speed in pixels/second
      */
-    public void setDropSpeed(final double dropSpeed) {
-        this.dropSpeed = dropSpeed;
-    }
+    void setDropSpeed(double dropSpeed);
 
     /**
-     * Sets the reeling speed of the hook.
-     * Typically invoked when purchasing upgrades from the shop.
+     * Sets the reeling speed. Invoked by the shop on upgrade purchase.
      * 
-     * @param reelSpeed the new ascending speed in pixels per second
+     * @param reelSpeed new reel speed in pixels/second
      */
-    public void setReelSpeed(final double reelSpeed) {
-        this.reelSpeed = reelSpeed;
-    }
+    void setReelSpeed(double reelSpeed);
 }

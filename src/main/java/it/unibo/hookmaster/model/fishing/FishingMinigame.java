@@ -59,7 +59,7 @@ public class FishingMinigame {
      * 
      * @param deltaTime seconds elapsed since the last frame
      */
-    private void update(final double deltaTime) {
+    public void update(final double deltaTime) {
         if (outcome == MinigameOutcome.IN_PROGRESS) {
             indicator.update(deltaTime);
         }
