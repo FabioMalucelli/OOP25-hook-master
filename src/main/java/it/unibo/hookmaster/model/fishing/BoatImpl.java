@@ -1,7 +1,9 @@
 package it.unibo.hookmaster.model.fishing;
 
 /**
- * Model of the Boat. It moves only horizzontaly on the surface.
+ * Standard implementation of Boat.
+ * Moves horizzontally at a constant speed within defined boundaries.
+ * If both movement flags are active simultaneously the boat stays still. 
  */
 public final class BoatImpl implements Boat {
 

@@ -1,8 +1,9 @@
 package it.unibo.hookmaster.model.fishing;
 
-
 /**
  * Defines the contract for the boat model.
+ * The boat moves horizzontally along the water surface and acts
+ * as the anchor point from which the hook is cast.
  */
 public interface Boat {
 

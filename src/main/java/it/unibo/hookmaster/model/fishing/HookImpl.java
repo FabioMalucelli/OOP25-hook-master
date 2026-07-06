@@ -1,9 +1,23 @@
 package it.unibo.hookmaster.model.fishing;
 
+import it.unibo.hookmaster.controller.HookCollisionListener;
+import it.unibo.hookmaster.model.collision.Collidable;
+import it.unibo.hookmaster.model.collision.CollisionArea;
+import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
+
 /**
- * Model of the Hook.
+ * Standard implementation of Hook,, which also acts as a Collidable.
+ * 
+ * <p>Uses the State pattern: update and onCollision behaviour depends on the current HookState.
+ * Uses the Observer pattern to notify a HookCollisionListener (FishingController) on catchable collisions.</p>
  */
-public final class HookImpl implements Hook {
+public final class HookImpl implements Hook, Collidable {
+
+    /**
+     * Size of the square hitbox around the hook tip(in pixels).
+     */
+    private static final double HITBOX_SIZE = 10.0;
+
     private double x;
     private double y;
 
@@ -12,10 +26,16 @@ public final class HookImpl implements Hook {
     private double reelSpeed;
     private final double maxDepth;
 
-    private HookState currenState;
+    private HookState currentState;
+    private Catchable hookedFish;
 
     /**
-     * Constructs a new Hook with specified intial postion, dropSpeed, reelSpeed, maxDepth.
+     * Observer Pattern - the listener that will react to hook collisions.
+     */
+    private HookCollisionListener collisionListener;
+
+    /**
+     * Constructs a new HookImpl.
      *
      * @param startX        the initial X position (usually the boat's X)
      * @param startY        the initial Y position (usually the boat's Y)
@@ -23,24 +43,19 @@ public final class HookImpl implements Hook {
      * @param reelSpeed     the speed at which the hook is reeled in
      * @param maxDepth      the maximum depth the hook can reach
      */
-    public HookImpl(final double startX, final double startY, final double dropSpeed, final double reelSpeed, final double maxDepth) {
+    public HookImpl(final double startX, final double startY, 
+        final double dropSpeed, final double reelSpeed, final double maxDepth) {
         this.x = startX;
         this.y = startY;
         this.dropSpeed = dropSpeed;
         this.reelSpeed = reelSpeed;
         this.maxDepth = maxDepth;
-        this.currenState = HookState.IDLE;
+        this.currentState = HookState.IDLE;
     }
 
-    /**
-     * Updates the position and the logic of the hook based on the current state.
-     * 
-     * @param deltaTime the time passed since the last frame
-     * @param boatX     the current X position of the boat
-     * @param boatY     the current Y position of the boat
-     */
+    @Override
     public void update(final double deltaTime, final double boatX, final double boatY) {
-        switch (currenState) {
+        switch (currentState) {
             case IDLE:
                 this.x = boatX;
                 this.y = boatY;
@@ -49,85 +64,111 @@ public final class HookImpl implements Hook {
                 y += dropSpeed * deltaTime;
                 if (y >= maxDepth) {
                     y = maxDepth;
-                    currenState = HookState.REELING;
+                    currentState = HookState.REELING;
                 }
                 break;
             case REELING:
                 y -= reelSpeed * deltaTime;
                 if (y <= boatY) {
                     y = boatY;
-                    currenState = HookState.IDLE;
+                    currentState = HookState.IDLE;
                 }
                 break;
             case MINIGAME:
-                
+                //Position frozen while the QTE is running.
                 break;
         }
     }
 
     @Override
     public boolean cast() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cast'");
+        if (currentState == HookState.IDLE) {
+            currentState = HookState.DROPPING;
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean reelIn() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reelIn'");
+        if (currentState == HookState.DROPPING) {
+            currentState = HookState.REELING;
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void hookFish(Catchable fish) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hookFish'");
+    public void hookFish(final Catchable fish) {
+        if ((currentState == HookState.DROPPING || currentState == HookState.REELING) && hookedFish == null) {
+            this.hookedFish = fish;
+            this.currentState = HookState.MINIGAME;
+        }
     }
 
     @Override
-    public void completeMinigame(boolean success) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'completeMinigame'");
+    public void completeMinigame(final boolean success) {
+        if (currentState == HookState.MINIGAME) {
+            if (!success) {
+                hookedFish = null;
+            }
+            currentState = HookState.REELING;
+        }
     }
 
     @Override
     public void clearHookedFish() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clearHookedFish'");
+        this.hookedFish = null;
+    }
+
+    @Override
+    public CollisionArea getCollisionArea() {
+        return new CollisionAreaRectangle(x - HITBOX_SIZE / 2.0, y - HITBOX_SIZE / 2.0, HITBOX_SIZE, HITBOX_SIZE);
+    }
+
+    @Override
+    public void onCollision(final Collidable other) {
+        if (collisionListener != null && (currentState == HookState.DROPPING || currentState == HookState.REELING)) {
+            collisionListener.onHookCollision(other);
+        }
+    }
+
+    /**
+     * Registers the listener that will handle hook-collision events.
+     * 
+     * @param listener the collision listener to register
+     */
+    public void setCollisionListener(final HookCollisionListener listener) {
+        this.collisionListener = listener;
     }
 
     @Override
     public HookState getCurrentState() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCurrentState'");
+        return currentState;
     }
 
     @Override
     public Catchable getHookedFish() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getHookedFish'");
+        return hookedFish;
     }
 
     @Override
     public double getX() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getX'");
+        return x;
     }
 
     @Override
     public double getY() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getY'");
+        return y;
     }
 
     @Override
-    public void setDropSpeed(double dropSpeed) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDropSpeed'");
+    public void setDropSpeed(final double dropSpeed) {
+        this.dropSpeed = dropSpeed;
     }
 
     @Override
-    public void setReelSpeed(double reelSpeed) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setReelSpeed'");
+    public void setReelSpeed(final double reelSpeed) {
+        this.reelSpeed = reelSpeed;
     }
 }

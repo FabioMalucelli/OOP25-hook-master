@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.model.fishing;
 
 /**
- * Defines the hook model.
+ * Defines the contract for the hook model.
  */
 public interface Hook {
 
