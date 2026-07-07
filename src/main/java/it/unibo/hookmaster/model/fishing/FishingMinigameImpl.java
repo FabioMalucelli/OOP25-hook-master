@@ -11,7 +11,7 @@ import it.unibo.hookmaster.model.fishing.minigame.IndicatorStrategy;
  * <p>Uses the Strategy Pattern to decouple the indicators movement behaviour from this class.</p>
  * 
  */
-public class FishingMinigameImpl implements FishingMinigame {
+public final class FishingMinigameImpl implements FishingMinigame {
     private final IndicatorStrategy indicator;
     private final double targetStart;
     private final double targetEnd;
