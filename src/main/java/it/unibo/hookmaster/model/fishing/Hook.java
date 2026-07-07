@@ -90,4 +90,12 @@ public interface Hook {
      * @param reelSpeed new reel speed in pixels/second
      */
     void setReelSpeed(double reelSpeed);
+
+    /**
+     * Registers the listener nitified when this hook collides with
+     * another Collidable while in a cathcable state(DROPPING or REELING).
+     * 
+     * @param listener the collision listener to register
+     */
+    void setCollisionListener(HookCollisionListener listener);
 }

@@ -1,6 +1,5 @@
 package it.unibo.hookmaster.model.fishing;
 
-import it.unibo.hookmaster.controller.HookCollisionListener;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
@@ -133,11 +132,7 @@ public final class HookImpl implements Hook, Collidable {
         }
     }
 
-    /**
-     * Registers the listener that will handle hook-collision events.
-     * 
-     * @param listener the collision listener to register
-     */
+    @Override
     public void setCollisionListener(final HookCollisionListener listener) {
         this.collisionListener = listener;
     }
