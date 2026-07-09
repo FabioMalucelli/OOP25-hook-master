@@ -1,9 +1,13 @@
 package it.unibo.hookmaster.model.upgrade.upgrades;
 
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
+
 /**
  * Interface that models an upgrade.
  */
 public interface Upgrade {
+
+    UpgradeType getType();
 
     /**
      * Retrives the upgrade name.
@@ -26,12 +30,18 @@ public interface Upgrade {
      */
     int getLevel();
 
+    int getMaxLevel();
+
+    int getCost();
+
     /**
      * Retrives the upgrade value.
      * 
      * @return the upgrade value
      */
     double getValue();
+
+    boolean canUpgrade(int playerCoins);
 
     /**
      * Increase the upgrade level.

@@ -12,6 +12,8 @@ public interface UpgradeValueStrategy {
      * @param level the upgrade level
      * @return the new upgrade value
      */
-    double calcValue(int level);
+    double valueForLevel(int level);
+
+    int costForLevel(int level);
 
 }

@@ -1,4 +1,6 @@
-package it.unibo.hookmaster.model.upgrade;
+package it.unibo.hookmaster.model.event;
+
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
 
 /**
  * Event for when the player buys an upgrades.

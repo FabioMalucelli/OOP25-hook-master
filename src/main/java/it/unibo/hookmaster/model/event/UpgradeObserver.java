@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.upgrade;
+package it.unibo.hookmaster.model.event;
 
 /**
  * Observer interface for upgrade event.

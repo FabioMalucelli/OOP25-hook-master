@@ -1,6 +1,6 @@
 package it.unibo.hookmaster.model.upgrade.upgrades;
 
-import it.unibo.hookmaster.model.upgrade.strategies.UpgradeValueLinear;
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.strategies.UpgradeValueStrategy;
 
 /**
@@ -8,9 +8,11 @@ import it.unibo.hookmaster.model.upgrade.strategies.UpgradeValueStrategy;
  */
 public final class SpeedUpgrade implements Upgrade {
 
+    private static final UpgradeType type = UpgradeType.SPEED;
     private static final String UPGRADE_NAME = "Velocità";
     private static final String UPGRADE_DESCRIPTION = "Aumenta la velocità";
     private int level = 1;
+    private final int maxLevel = 10;
     private final UpgradeValueStrategy strategy;
 
     /**
@@ -18,8 +20,13 @@ public final class SpeedUpgrade implements Upgrade {
      * 
      * @param strategy the upgrade strategy used by this upgrade instance
      */
-    public SpeedUpgrade(final UpgradeValueLinear strategy) {
+    public SpeedUpgrade(final UpgradeValueStrategy strategy) {
         this.strategy = strategy;
+    }
+
+    @Override
+    public UpgradeType getType() {
+        return type;
     }
 
     @Override
@@ -34,16 +41,31 @@ public final class SpeedUpgrade implements Upgrade {
 
     @Override
     public int getLevel() {
-        return this.level;
+        return level;
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    @Override
+    public int getCost() {
+        return strategy.costForLevel(level);
     }
 
     @Override
     public double getValue() {
-        return this.strategy.calcValue(level);
+        return strategy.valueForLevel(level);
+    }
+
+    @Override
+    public boolean canUpgrade(int playerCoins) {
+        return getLevel() <= getMaxLevel() && playerCoins >= getCost();
     }
 
     @Override
     public void upgrade() {
-        this.level++;
+        level++;
     }
 }
