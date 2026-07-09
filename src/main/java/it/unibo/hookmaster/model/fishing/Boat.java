@@ -5,7 +5,7 @@ package it.unibo.hookmaster.model.fishing;
  * The boat moves horizzontally along the water surface and acts
  * as the anchor point from which the hook is cast.
  */
-public interface Boat {
+public interface Boat extends BoatView {
 
     /**
      * Advances the boat postion by one frame.
@@ -28,17 +28,9 @@ public interface Boat {
      */
     void setMovingRight(boolean movingRight);
 
-    /**
-     * Gets the current X position of the boat.
-     * 
-     * @return the X coordinates in pixels
-     */
+    @Override
     double getX();
 
-    /**
-     * Gets the current Y position of the boat.
-     * 
-     * @return the Y coordinates in pixels
-     */
+    @Override
     double getY();
 }

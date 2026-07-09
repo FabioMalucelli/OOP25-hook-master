@@ -3,7 +3,7 @@ package it.unibo.hookmaster.model.fishing;
 /**
  * Defines the contract for the hook model.
  */
-public interface Hook {
+public interface Hook extends HookView {
 
     /**
      * Advances the hook position by one frame.
@@ -49,32 +49,16 @@ public interface Hook {
      */
     void clearHookedFish();
 
-    /**
-     * Gets the current state of the hook.
-     * 
-     * @return the current HookState
-     */
+    @Override
     HookState getCurrentState();
 
-    /**
-     * Gets the fish currently hooked, if any.
-     * 
-     * @return the hooked Catchable, or null if none
-     */
+    @Override
     Catchable getHookedFish();
 
-    /**
-     * Gets the current X position of the hook.
-     * 
-     * @return the X coordinate in pixels
-     */
+    @Override
     double getX();
 
-    /**
-     * Gets the current Y(depth) position of the hook.
-     * 
-     * @return the Y coordinate in pixels
-     */
+    @Override
     double getY();
 
     /**

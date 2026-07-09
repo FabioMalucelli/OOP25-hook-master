@@ -6,11 +6,15 @@ import java.util.List;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.fishing.Boat;
+import it.unibo.hookmaster.model.fishing.BoatSnapshot;
+import it.unibo.hookmaster.model.fishing.BoatView;
 import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.FishingMinigame;
 import it.unibo.hookmaster.model.fishing.Hook;
 import it.unibo.hookmaster.model.fishing.HookCollisionListener;
 import it.unibo.hookmaster.model.fishing.HookState;
+import it.unibo.hookmaster.model.fishing.HookSnapshot;
+import it.unibo.hookmaster.model.fishing.HookView;
 import it.unibo.hookmaster.model.upgrade.UpgradeEvent;
 import it.unibo.hookmaster.model.upgrade.UpgradeObserver;
 
@@ -166,27 +170,21 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
     }
 
     /**
-     * @return the boat model
+     * Gets an immutable snapshot of the boat current position for the View to render.
+     * 
+     * @return an immutable snapshot of the boat position
      */
-    @SuppressFBWarnings(
-        value = "EI",
-        justification = "The view requires direct access to the live mutable model istances"
-            + "to correctly render position updates in real time during each frame"
-    )
-    public Boat getBoat() {
-        return boat;
+    public BoatView getBoat() {
+        return new BoatSnapshot(boat.getX(), boat.getY());
     }
 
     /**
-     * @return the hook model
+     * Gets an immutable snapshot of the hook current position and state for the View to render.
+     * 
+     * @return an immutable snapshot of the hook position and state
      */
-    @SuppressFBWarnings(
-        value = "EI",
-        justification = "The view requires direct access to the live mutable model istances"
-            + "to correctly render position updates in real time during each frame"
-    )
-    public Hook getHook() {
-        return hook;
+    public HookView getHook() {
+        return new HookSnapshot(hook.getX(), hook.getY(), hook.getCurrentState(), hook.getHookedFish());
     }
 
     /**
