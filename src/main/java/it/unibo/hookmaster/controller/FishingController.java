@@ -3,6 +3,7 @@ package it.unibo.hookmaster.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.fishing.Boat;
 import it.unibo.hookmaster.model.fishing.Catchable;
@@ -36,6 +37,11 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
      * @param boat  the boat model
      * @param hook  the hook model 
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Boat and Hook are mutable game entities updated every frame by the game loop"
+            + "the controller must hold the same live istances"
+    )
     public FishingController(final Boat boat, final Hook hook) {
         this.boat = boat;
         this.hook = hook;
@@ -62,8 +68,6 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
                 break;
             case MAX_WEIGHT:
                 fireEvent(new FishingEvent(FishingEvent.Type.UPGRADE_APPLIED, null));
-                break;
-            default:
                 break;
         }
     }
@@ -164,6 +168,11 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
     /**
      * @return the boat model
      */
+    @SuppressFBWarnings(
+        value = "EI",
+        justification = "The view requires direct access to the live mutable model istances"
+            + "to correctly render position updates in real time during each frame"
+    )
     public Boat getBoat() {
         return boat;
     }
@@ -171,6 +180,11 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
     /**
      * @return the hook model
      */
+    @SuppressFBWarnings(
+        value = "EI",
+        justification = "The view requires direct access to the live mutable model istances"
+            + "to correctly render position updates in real time during each frame"
+    )
     public Hook getHook() {
         return hook;
     }
