@@ -197,6 +197,7 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
     private void startMinigame(final Catchable fish) {
         hook.hookFish(fish);
         currentMinigame = MinigameFactory.create(fish, stormy);
+        fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
     }
 
     private void fireEvent(final FishingEvent event) {
