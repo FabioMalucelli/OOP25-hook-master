@@ -15,8 +15,8 @@ import it.unibo.hookmaster.model.fishing.HookCollisionListener;
 import it.unibo.hookmaster.model.fishing.HookState;
 import it.unibo.hookmaster.model.fishing.HookSnapshot;
 import it.unibo.hookmaster.model.fishing.HookView;
-import it.unibo.hookmaster.model.upgrade.UpgradeEvent;
-import it.unibo.hookmaster.model.upgrade.UpgradeObserver;
+import it.unibo.hookmaster.model.event.UpgradeEvent;
+import it.unibo.hookmaster.model.event.UpgradeObserver;
 
 /**
  * Coordinates Boat, Hook, and FishingMinigame.
