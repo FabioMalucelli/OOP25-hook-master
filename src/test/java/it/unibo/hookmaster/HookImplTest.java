@@ -168,4 +168,50 @@ class HookImplTest {
         final CollisionArea faraway = new CollisionAreaRectangle( 1000.0, 1000.0, 5.0, 5.0);
         assertFalse(area.intersects(faraway));
     }
+
+    @Test
+    void collisionIsForwardedToListenerWhileDropping() {
+        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
+        hook.setCollisionListener(listener);
+        hook.cast();
+        final FakeCollidable other = new FakeCollidable();
+        hook.onCollision(other);
+        assertEquals(1, listener.getCallCount());
+        assertEquals(other, listener.getLastCollision());
+    }
+
+    @Test
+    void collisionIsForwardedToListenerWhileReeling() {
+        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
+        hook.setCollisionListener(listener);
+        hook.cast();
+        hook.reelIn();
+        hook.onCollision(new FakeCollidable());
+        assertEquals(1, listener.getCallCount());
+    }
+
+    @Test
+    void collisionIsIgnoredWhileIdle() {
+        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
+        hook.setCollisionListener(listener);
+        hook.onCollision(new FakeCollidable());
+        assertEquals(0, listener.getCallCount());
+    }
+
+    @Test
+    void collisionIsIgnoredDuringMinigame() {
+        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
+        hook.setCollisionListener(listener);
+        hook.cast();
+        hook.hookFish(new FakeCatchable());
+        hook.onCollision(new FakeCollidable());
+        assertEquals(0, listener.getCallCount());
+    }
+
+    @Test
+    void collisionIsIgnoredWhenNoListenerIsRegistered() {
+        hook.cast();
+        hook.onCollision(new FakeCollidable());
+        assertEquals(HookState.DROPPING, hook.getCurrentState());
+    }
 }
