@@ -8,11 +8,11 @@ import it.unibo.hookmaster.model.upgrade.strategies.UpgradeValueStrategy;
  */
 public final class SpeedUpgrade implements Upgrade {
 
-    private static final UpgradeType type = UpgradeType.SPEED;
+    private static final UpgradeType TYPE = UpgradeType.SPEED;
     private static final String UPGRADE_NAME = "Velocità";
     private static final String UPGRADE_DESCRIPTION = "Aumenta la velocità";
+    private static final int MAX_LEVEL = 10;
     private int level = 1;
-    private final int maxLevel = 10;
     private final UpgradeValueStrategy strategy;
 
     /**
@@ -26,7 +26,7 @@ public final class SpeedUpgrade implements Upgrade {
 
     @Override
     public UpgradeType getType() {
-        return type;
+        return TYPE;
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class SpeedUpgrade implements Upgrade {
 
     @Override
     public int getMaxLevel() {
-        return maxLevel;
+        return MAX_LEVEL;
     }
 
     @Override
@@ -60,8 +60,8 @@ public final class SpeedUpgrade implements Upgrade {
     }
 
     @Override
-    public boolean canUpgrade(int playerCoins) {
-        return getLevel() <= getMaxLevel() && playerCoins >= getCost();
+    public boolean canUpgrade(final int playerCoins) {
+        return getLevel() < getMaxLevel() && playerCoins >= getCost();
     }
 
     @Override

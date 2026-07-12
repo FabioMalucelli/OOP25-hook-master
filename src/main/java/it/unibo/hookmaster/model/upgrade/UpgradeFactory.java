@@ -1,5 +1,6 @@
 package it.unibo.hookmaster.model.upgrade;
 
+import java.util.Map;
 import it.unibo.hookmaster.model.upgrade.strategies.LinearUpgradeValueStrategy;
 import it.unibo.hookmaster.model.upgrade.upgrades.MaxWeightUpgrade;
 import it.unibo.hookmaster.model.upgrade.upgrades.SpeedUpgrade;
@@ -21,16 +22,16 @@ public final class UpgradeFactory {
     private UpgradeFactory() { }
 
     /**
-     * Static method to create a new upgrade.
-     * 
-     * @param type the new upgrade type
-     * @return a new upgrade instance
+     * Static method to create the different upgrades.
+     *
+     * @return a map containg the upgrade type and its upgrade
      */
-    public static Upgrade create(final UpgradeType type) {
-        return switch (type) {
-            case MAX_WEIGHT -> new MaxWeightUpgrade(
-                    new LinearUpgradeValueStrategy(MAX_WEIGHT_BASE, MAX_WEIGHT_STEP));
-            case SPEED -> new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP));
-        };
+    public static Map<UpgradeType, Upgrade> createUpgrades() {
+        return Map.of(
+                UpgradeType.MAX_WEIGHT,
+                new MaxWeightUpgrade(new LinearUpgradeValueStrategy(MAX_WEIGHT_BASE, MAX_WEIGHT_STEP)),
+                UpgradeType.SPEED,
+                new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP))
+        );
     }
 }

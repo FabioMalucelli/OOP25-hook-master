@@ -1,19 +1,23 @@
 package it.unibo.hookmaster.model.upgrade.strategies;
 
 /**
- * Strategy for the upgrade value.
+ * Strategy for the upgrade value and cost.
  */
-@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface UpgradeValueStrategy {
 
     /**
-     * Compute the upgrade value.
+     * Calculate the upgrade value.
      * 
      * @param level the upgrade level
      * @return the new upgrade value
      */
     double valueForLevel(int level);
 
+    /**
+     * Calculate the upgrade cost.
+     * 
+     * @param level the upgrade level
+     * @return the new upgrade cost
+     */
     int costForLevel(int level);
-
 }

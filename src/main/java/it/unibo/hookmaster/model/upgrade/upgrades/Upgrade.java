@@ -7,6 +7,11 @@ import it.unibo.hookmaster.model.upgrade.UpgradeType;
  */
 public interface Upgrade {
 
+    /**
+     * Retrives the upgrade type.
+     * 
+     * @return the upgrade type
+     */
     UpgradeType getType();
 
     /**
@@ -30,8 +35,18 @@ public interface Upgrade {
      */
     int getLevel();
 
+    /**
+     * Retrives the upgrade max level.
+     * 
+     * @return the upgrade max level
+     */
     int getMaxLevel();
 
+    /**
+     * Retrives the upgrade cost.
+     * 
+     * @return the upgrade cost
+     */
     int getCost();
 
     /**
@@ -41,6 +56,12 @@ public interface Upgrade {
      */
     double getValue();
 
+    /**
+     * Check if the player can upgrade.
+     * 
+     * @param playerCoins the player coins
+     * @return whether the player can or can't upgrade
+     */
     boolean canUpgrade(int playerCoins);
 
     /**
