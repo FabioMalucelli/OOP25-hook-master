@@ -3,7 +3,7 @@ package it.unibo.hookmaster.model.collision;
 /**
  * Represents a collision area with a rectangular shape.
  */
-public class CollisionAreaRectangle implements CollisionArea {
+public final class CollisionAreaRectangle implements CollisionArea {
     private final double x;
     private final double y;
     private final double width;
@@ -16,8 +16,12 @@ public class CollisionAreaRectangle implements CollisionArea {
      * @param y The y-coordinate of the top-left corner of the rectangle.
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
+     * @throws IllegalArgumentException if width or height is negative
      */
     public CollisionAreaRectangle(final double x, final double y, final double width, final double height) {
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("Rectangle dimensions cannot be negative.");
+        }
         this.x = x;
         this.y = y;
         this.width = width;
@@ -25,18 +29,38 @@ public class CollisionAreaRectangle implements CollisionArea {
     }
 
     /**
-     * @inheritDoc
+     * Returns the x-coordinate of the top-left corner.
+     *
+     * @return the x-coordinate of the top-left corner
      */
-    @Override
-    public boolean intersects(final CollisionArea other) {
-        if (other instanceof CollisionAreaRectangle) {
-            final CollisionAreaRectangle otherRect = (CollisionAreaRectangle) other;
-            return this.x < otherRect.x + otherRect.width
-                && this.x + this.width > otherRect.x
-                && this.y < otherRect.y + otherRect.height
-                && this.y + this.height > otherRect.y;
-        }
-        return false;
+    public double getX() {
+        return this.x;
+    }
+
+    /**
+     * Returns the y-coordinate of the top-left corner.
+     *
+     * @return the y-coordinate of the top-left corner
+     */
+    public double getY() {
+        return this.y;
+    }
+
+    /**
+     * Returns the rectangle width.
+     *
+     * @return the rectangle width
+     */
+    public double getWidth() {
+        return this.width;
+    }
+
+    /**
+     * Returns the rectangle height.
+     *
+     * @return the rectangle height
+     */
+    public double getHeight() {
+        return this.height;
     }
 }
-
