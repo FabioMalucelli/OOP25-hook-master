@@ -1,8 +1,8 @@
 package it.unibo.hookmaster.controller;
 
 import it.unibo.hookmaster.model.fishing.Catchable;
-import it.unibo.hookmaster.model.fishing.FishingMinigame;
-import it.unibo.hookmaster.model.fishing.FishingMinigameImpl;
+import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
+import it.unibo.hookmaster.model.fishing.minigame.FishingMinigameImpl;
 import it.unibo.hookmaster.model.fishing.minigame.IndicatorStrategy;
 import it.unibo.hookmaster.model.fishing.minigame.OscillatingIndicator;
 import it.unibo.hookmaster.model.fishing.minigame.StormyIndicator;
