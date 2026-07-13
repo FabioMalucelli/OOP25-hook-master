@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
+import it.unibo.hookmaster.model.collision.CollisionPredicate;
+import it.unibo.hookmaster.model.collision.CollisionPredicates;
 import it.unibo.hookmaster.model.fishing.HookImpl;
 import it.unibo.hookmaster.model.fishing.HookState;
 
@@ -161,12 +163,15 @@ class HookImplTest {
         hook.update(1.0, 100.0, 100.0);
         final CollisionArea area = hook.getCollisionArea();
         assertNotNull(area);
+
+        final CollisionPredicate rectRectPredicate = new CollisionPredicates.RectangleRectangleCollisionPredicate();
+
         //A rectangle covering the exact hook area must intersect its hitbox.
         final CollisionArea overlapping = new CollisionAreaRectangle(95.0, 95.0, 10.0, 10.0);
-        assertTrue(area.intersects(overlapping));
+        assertTrue(rectRectPredicate.test(area, overlapping));
         //A rectangle far away must not intersect
         final CollisionArea faraway = new CollisionAreaRectangle( 1000.0, 1000.0, 5.0, 5.0);
-        assertFalse(area.intersects(faraway));
+        assertFalse(rectRectPredicate.test(area, faraway));
     }
 
     @Test

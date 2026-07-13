@@ -2,6 +2,7 @@ package it.unibo.hookmaster;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
+import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishing.Catchable;
 
 public final class FakeCatchable implements Catchable, Collidable {
@@ -48,7 +49,7 @@ public final class FakeCatchable implements Catchable, Collidable {
 
     @Override
     public CollisionArea getCollisionArea() {
-        return other -> false;
+        return new CollisionAreaRectangle(0, 0, 0, 0);
     }
 
     @Override

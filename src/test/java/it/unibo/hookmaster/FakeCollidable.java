@@ -2,6 +2,7 @@ package it.unibo.hookmaster;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
+import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 
 /**
  * A Collidable test double that is intentionally NOT a Catchable.
@@ -11,7 +12,7 @@ public final class FakeCollidable implements Collidable {
     
     @Override
     public CollisionArea getCollisionArea() {
-        return other -> false;
+        return new CollisionAreaRectangle(0, 0, 0, 0);
     }
 
     @Override
