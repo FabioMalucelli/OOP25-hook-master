@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.boat;
 
 /**
  * Standard implementation of Boat.

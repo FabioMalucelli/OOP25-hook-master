@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.hook;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 

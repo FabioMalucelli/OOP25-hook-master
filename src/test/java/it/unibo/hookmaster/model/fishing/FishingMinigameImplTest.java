@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import it.unibo.hookmaster.model.fishing.minigame.FishingMinigameImpl;
+import it.unibo.hookmaster.model.fishing.minigame.MinigameOutcome;
 import it.unibo.hookmaster.testutil.FakeCatchable;
 import it.unibo.hookmaster.testutil.FakeIndicatorStrategy;
 

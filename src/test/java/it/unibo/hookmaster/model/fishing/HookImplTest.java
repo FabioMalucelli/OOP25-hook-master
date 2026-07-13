@@ -13,6 +13,8 @@ import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.collision.CollisionPredicate;
 import it.unibo.hookmaster.model.collision.CollisionPredicates;
+import it.unibo.hookmaster.model.fishing.hook.HookImpl;
+import it.unibo.hookmaster.model.fishing.hook.HookState;
 import it.unibo.hookmaster.testutil.FakeCatchable;
 import it.unibo.hookmaster.testutil.FakeCollidable;
 import it.unibo.hookmaster.testutil.RecordingHookCollisionListener;

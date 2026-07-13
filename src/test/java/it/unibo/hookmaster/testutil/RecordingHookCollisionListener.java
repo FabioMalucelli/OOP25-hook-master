@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.testutil;
 
 import it.unibo.hookmaster.model.collision.Collidable;
-import it.unibo.hookmaster.model.fishing.HookCollisionListener;
+import it.unibo.hookmaster.model.fishing.hook.HookCollisionListener;
 
 /**
  * A fake HookCollisionListener that counts calls and saves the last collision.

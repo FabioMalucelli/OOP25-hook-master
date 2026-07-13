@@ -1,4 +1,6 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.hook;
+
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Read only view of a Hook, exposing only the data needed to render its position, current state and the hooked fish.

@@ -1,8 +1,9 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.hook;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Standard implementation of Hook,, which also acts as a Collidable.

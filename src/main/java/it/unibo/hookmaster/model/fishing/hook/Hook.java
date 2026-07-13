@@ -1,4 +1,6 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.hook;
+
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Defines the contract for the hook model.

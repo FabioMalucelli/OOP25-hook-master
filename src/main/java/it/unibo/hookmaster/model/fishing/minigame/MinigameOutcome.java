@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.minigame;
 
 /**
  * Possible outcomes of a FishingMinigame.

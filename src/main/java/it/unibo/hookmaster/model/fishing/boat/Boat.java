@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.boat;
 
 /**
  * Defines the contract for the boat model.

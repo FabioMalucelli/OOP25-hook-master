@@ -1,4 +1,6 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.minigame;
+
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Defines the contract for the catching minigame(QTE).

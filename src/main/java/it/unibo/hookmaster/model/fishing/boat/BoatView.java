@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.boat;
 
 /**
  * Read only view of a Boat, exposing only the data needed to render its current position.

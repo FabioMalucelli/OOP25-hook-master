@@ -1,6 +1,6 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.minigame;
 
-import it.unibo.hookmaster.model.fishing.minigame.IndicatorStrategy;
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Standard implementation of FishingMinigame.

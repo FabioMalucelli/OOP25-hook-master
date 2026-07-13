@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.fishing;
+package it.unibo.hookmaster.model.fishing.boat;
 
 /**
  * Immutable snapshot of a boat position at a given instant.

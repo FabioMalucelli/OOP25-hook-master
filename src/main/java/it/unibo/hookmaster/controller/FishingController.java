@@ -5,16 +5,16 @@ import java.util.List;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.model.collision.Collidable;
-import it.unibo.hookmaster.model.fishing.Boat;
-import it.unibo.hookmaster.model.fishing.BoatSnapshot;
-import it.unibo.hookmaster.model.fishing.BoatView;
+import it.unibo.hookmaster.model.fishing.boat.Boat;
+import it.unibo.hookmaster.model.fishing.boat.BoatSnapshot;
+import it.unibo.hookmaster.model.fishing.boat.BoatView;
 import it.unibo.hookmaster.model.fishing.Catchable;
-import it.unibo.hookmaster.model.fishing.FishingMinigame;
-import it.unibo.hookmaster.model.fishing.Hook;
-import it.unibo.hookmaster.model.fishing.HookCollisionListener;
-import it.unibo.hookmaster.model.fishing.HookState;
-import it.unibo.hookmaster.model.fishing.HookSnapshot;
-import it.unibo.hookmaster.model.fishing.HookView;
+import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
+import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.fishing.hook.HookCollisionListener;
+import it.unibo.hookmaster.model.fishing.hook.HookState;
+import it.unibo.hookmaster.model.fishing.hook.HookSnapshot;
+import it.unibo.hookmaster.model.fishing.hook.HookView;
 import it.unibo.hookmaster.model.event.UpgradeEvent;
 import it.unibo.hookmaster.model.event.UpgradeObserver;
 
