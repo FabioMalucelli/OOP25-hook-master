@@ -1,4 +1,4 @@
-package it.unibo.hookmaster;
+package it.unibo.hookmaster.testutil;
 
 import it.unibo.hookmaster.model.fishing.minigame.IndicatorStrategy;
 

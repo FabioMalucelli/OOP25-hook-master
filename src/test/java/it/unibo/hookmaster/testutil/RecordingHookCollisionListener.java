@@ -1,4 +1,4 @@
-package it.unibo.hookmaster;
+package it.unibo.hookmaster.testutil;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.fishing.HookCollisionListener;
@@ -8,12 +8,12 @@ import it.unibo.hookmaster.model.fishing.HookCollisionListener;
  * Used in tests to check if, how many times and with what data onHookCollision was called.
  */
 public final class RecordingHookCollisionListener implements HookCollisionListener {
-    
+
     private Collidable lastCollision;
     private int callCount;
 
     @Override
-    public  void onHookCollision(final Collidable other) {
+    public void onHookCollision(final Collidable other) {
         this.lastCollision = other;
         this.callCount++;
     }

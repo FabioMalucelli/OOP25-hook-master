@@ -1,4 +1,4 @@
-package it.unibo.hookmaster;
+package it.unibo.hookmaster.model.fishing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.hookmaster.model.fishing.FishingMinigameImpl;
-import it.unibo.hookmaster.model.fishing.MinigameOutcome;
+import it.unibo.hookmaster.testutil.FakeCatchable;
+import it.unibo.hookmaster.testutil.FakeIndicatorStrategy;
 
 /**
  * Unit tests for FishingMinigameImpl.
@@ -30,7 +30,7 @@ class FishingMinigameImplTest {
         //Place the indicator exactly at the middle of the target zone.
         final double midpoint = (minigame.getTargetStart() + minigame.getTargetEnd()) / 2.0;
         indicator.setPosition(midpoint);
-        
+
         final boolean success = minigame.attemptCatch();
         assertTrue(success);
         assertEquals(MinigameOutcome.SUCCESS, minigame.getOutcome());
@@ -111,7 +111,7 @@ class FishingMinigameImplTest {
     }
 
     @Test
-    void getTargetReturnsTheConstructorFish() {
+    void targetReturnsTheConstructorFish() {
         final FakeCatchable fish = new FakeCatchable();
         final FishingMinigameImpl minigame = new FishingMinigameImpl(fish, new FakeIndicatorStrategy(0.0));
         assertEquals(fish, minigame.getTarget());

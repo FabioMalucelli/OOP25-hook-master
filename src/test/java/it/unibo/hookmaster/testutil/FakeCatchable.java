@@ -1,16 +1,19 @@
-package it.unibo.hookmaster;
+package it.unibo.hookmaster.testutil;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishing.Catchable;
 
+/**
+ * Minimal, fully controllable test implementig both Catchable and Collidable.
+ */
 public final class FakeCatchable implements Catchable, Collidable {
-    
+
     private final int economicValue;
     private final double catchDifficulty;
     private final String name;
-    
+
     /**
      * Constructs a fake fish with the given proprieties.
      * 
