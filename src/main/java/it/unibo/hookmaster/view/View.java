@@ -3,9 +3,9 @@ package it.unibo.hookmaster.view;
 /**
  * View interface that every view in the game implements.
  * 
- * @param <Snapshot> type of the data snapshot used by the view
+ * @param <S> type of the data snapshot used by the view
  */
-public interface View<Snapshot> {
+public interface View<S> {
 
     /**
      * Set this view as the scene root.
@@ -17,5 +17,5 @@ public interface View<Snapshot> {
      * 
      * @param snapshot data snapshot needed by the view
      */
-    void render(Snapshot snapshot);
+    void render(S snapshot);
 }
