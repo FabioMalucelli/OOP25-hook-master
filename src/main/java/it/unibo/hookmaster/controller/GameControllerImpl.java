@@ -1,15 +1,18 @@
 package it.unibo.hookmaster.controller;
 
+import it.unibo.hookmaster.view.View;
+import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
+import javafx.animation.AnimationTimer;
+
 /**
  * Implementation of the GameController.
  */
 public class GameControllerImpl implements GameController {
-    private static final long FRAME_TIME = 16; // 60 FPS
+    private final LoopTimer loopTimer = new LoopTimer();
+    private final View<MenuSnapshot> menuView;
 
-    /**
-     * Constructs the game controller.
-     */
-    public GameControllerImpl() {
+    public GameControllerImpl(final View<MenuSnapshot> menuView) {
+        this.menuView = menuView;
     }
 
     /**
@@ -17,15 +20,7 @@ public class GameControllerImpl implements GameController {
      */
     @Override
     public void run() {
-        long lastTime = System.currentTimeMillis();
-        while (true) {
-            final long currentTime = System.currentTimeMillis();
-            final long deltaTime = currentTime - lastTime;
-            if (deltaTime >= FRAME_TIME) {
-                lastTime = currentTime;
-                tick(deltaTime);
-            }
-        }
+        loopTimer.start();
     }
 
     /**
@@ -33,6 +28,24 @@ public class GameControllerImpl implements GameController {
      * 
      * @param deltaTime the amount of milliseconds elapsed since last tick.
      */
-    private void tick(final long deltaTime) { }
+    private void tick(final long deltaTime) {
+        menuView.select();
+        menuView.update(new MenuSnapshot(false));
+    }
 
+    private class LoopTimer extends AnimationTimer {
+        private long lastTime = -1;
+
+        @Override
+        public void handle(long now) {
+            if (lastTime < 0) {
+                lastTime = now;
+                return;
+            }
+            final long deltaTime = now - lastTime;
+            lastTime = now;
+            tick(deltaTime);
+        }
+
+    }
 }
