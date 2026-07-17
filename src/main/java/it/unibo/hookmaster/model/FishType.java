@@ -1,15 +1,18 @@
-package it.unibo.hookmaster.fishdata;
+package it.unibo.hookmaster.model;
+
+import it.unibo.hookmaster.model.movement.LinearMovement;
+import it.unibo.hookmaster.model.movement.MovementStrategy;
 
 /**
- *  Types of fishes that can spawn.
+ * Types of fishes that can spawn.
  */
 public enum FishType {
 
-    GREATWHITE("Great White Shark", true, 100, 15, 1.0), 
-    ANCHOVY("Anchovy", false, 5, 2, 0.1), 
-    CLOWNFISH("Clownfish", false, 10, 3, 0.1), 
-    TUNA("Tuna", false, 20, 10, .55), 
-    MARLIN("Marlin", true, 50, 10, .8);
+    GREATWHITE("Shark", true, 100, 8, 1.0),
+    ANCHOVY("Anchovy", false, 5, 2, 0.1),
+    CLOWNFISH("Clownfish", false, 10, 3, 0.1),
+    TUNA("Tuna", false, 20, 6, .55),
+    MARLIN("Marlin", true, 50, 4, .8);
 
     private final String name;
     private final boolean predator;
@@ -17,7 +20,8 @@ public enum FishType {
     private final int speed;
     private final double catchDifficulty;
 
-    FishType(final String name, final boolean predator, final int economicValue, final int speed, final double catchDifficulty) {
+    FishType(final String name, final boolean predator, final int economicValue,
+             final int speed, final double catchDifficulty) {
         this.name = name;
         this.predator = predator;
         this.economicValue = economicValue;
@@ -54,9 +58,19 @@ public enum FishType {
     }
 
     /**
-     * @return the weight of the fish
+     * @return the catch difficulty of the fish
      */
     public double getCatchDifficulty() {
         return catchDifficulty;
+    }
+
+    /**
+     * Creates the default movement strategy for this species.
+     * Predators start with a straight-line patrol, can later switch to chase when a prey is detected.
+     *
+     * @return a new movement strategy instance
+     */
+    public MovementStrategy createDefaultMovementStrategy() {
+        return new LinearMovement();
     }
 }

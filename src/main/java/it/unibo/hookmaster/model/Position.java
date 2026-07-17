@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.fishdata;
+package it.unibo.hookmaster.model;
 
 /**
  * Represents the starting position for a fish.
