@@ -13,9 +13,9 @@ public interface View<S> {
     void select();
 
     /**
-     * Renders the view.
+     * Updates the view.
      * 
      * @param snapshot data snapshot needed by the view
      */
-    void render(S snapshot);
+    void update(S snapshot);
 }
