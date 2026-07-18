@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.hookmaster.model.event.UpgradeEvent;
 import it.unibo.hookmaster.model.event.UpgradeObserver;
 import it.unibo.hookmaster.model.fishing.boat.BoatImpl;
+import it.unibo.hookmaster.model.fishing.hook.FishingEvent;
 import it.unibo.hookmaster.model.fishing.hook.HookImpl;
 import it.unibo.hookmaster.model.fishing.hook.HookState;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
@@ -151,18 +152,6 @@ class FishingControllerTest {
         controller.castHook();
         controller.update(ONE_SECOND);
         assertEquals(HookState.REELING, controller.getHook().getCurrentState());
-    }
-
-    @Test
-    void maxWeightUpgradeFiresUpgradeAppliedEvent() {
-        final RecordingFishingListener listener = new RecordingFishingListener();
-        controller.addListener(listener);
-        final UpgradeEvent event = new UpgradeEvent(UpgradeType.MAX_WEIGHT, UPGRADE_NEW_LEVEL, UPGRADE_NEW_MAX_WEIGHT_VALUE);
-
-        final UpgradeObserver observer = controller;
-        observer.onUpgrade(event);
-
-        assertTrue(listener.hasRecieved(FishingEvent.Type.UPGRADE_APPLIED));
     }
 
     @Test

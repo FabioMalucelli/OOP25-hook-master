@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.controller;
+package it.unibo.hookmaster.model.fishing.hook;
 
 import it.unibo.hookmaster.model.fishing.Catchable;
 
@@ -17,7 +17,6 @@ public final class FishingEvent {
         FISH_HOOKED,        //A fish has been hooked and the QTE minigame has started
         FISH_CAUGHT,        //The player succeeded in the QTE and caught the fish
         FISH_ESCAPED,       //The player missed the QTE and the fish escaped
-        UPGRADE_APPLIED     //An upgrade was purchased from the shop 
     }
 
     private final Type type;

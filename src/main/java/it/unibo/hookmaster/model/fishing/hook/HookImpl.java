@@ -1,5 +1,8 @@
 package it.unibo.hookmaster.model.fishing.hook;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
@@ -35,10 +38,7 @@ public final class HookImpl implements Hook, Collidable {
     private FishingMinigame currentMinigame;
     private boolean stormy;
 
-    /**
-     * Observer Pattern - the listener that will react to hook collisions.
-     */
-    private HookCollisionListener collisionListener;
+    private final List<FishingListener> listeners = new ArrayList<>();
 
     /**
      * Constructs a new HookImpl.
@@ -93,6 +93,7 @@ public final class HookImpl implements Hook, Collidable {
     public boolean cast() {
         if (currentState == HookState.IDLE) {
             currentState = HookState.DROPPING;
+            fireEvent(new FishingEvent(FishingEvent.Type.HOOK_CAST, null));
             return true;
         }
         return false;
@@ -102,6 +103,7 @@ public final class HookImpl implements Hook, Collidable {
     public boolean reelIn() {
         if (currentState == HookState.DROPPING) {
             currentState = HookState.REELING;
+            fireEvent(new FishingEvent(FishingEvent.Type.HOOK_REELING, null));
             return true;
         }
         return false;
@@ -113,6 +115,7 @@ public final class HookImpl implements Hook, Collidable {
             this.hookedFish = fish;
             this.currentMinigame = MinigameFactory.create(fish, stormy);
             this.currentState = HookState.MINIGAME;
+            fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
         }
     }
 
@@ -122,9 +125,11 @@ public final class HookImpl implements Hook, Collidable {
             return false;
         }
 
+        final Catchable fish = hookedFish;
         final boolean success = currentMinigame.attemptCatch();
         completeMinigame(success);
         currentMinigame = null;
+        fireEvent(new FishingEvent(success ? FishingEvent.Type.FISH_CAUGHT : FishingEvent.Type.FISH_ESCAPED, fish));
         return success;
     }
 
@@ -168,14 +173,9 @@ public final class HookImpl implements Hook, Collidable {
 
     @Override
     public void onCollision(final Collidable other) {
-        if (collisionListener != null && (currentState == HookState.DROPPING || currentState == HookState.REELING)) {
-            collisionListener.onHookCollision(other);
+        if ((currentState == HookState.DROPPING || currentState == HookState.REELING) && other instanceof Catchable) {
+            hookFish((Catchable) other);
         }
-    }
-
-    @Override
-    public void setCollisionListener(final HookCollisionListener listener) {
-        this.collisionListener = listener;
     }
 
     @Override
@@ -206,5 +206,20 @@ public final class HookImpl implements Hook, Collidable {
     @Override
     public void setReelSpeed(final double reelSpeed) {
         this.reelSpeed = reelSpeed;
+    }
+
+    @Override
+    public void addListener(final FishingListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(final FishingListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void fireEvent(final FishingEvent event) {
+        for (final FishingListener listener : listeners) {
+            listener.onFishingEvent(event);
+        }
     }
 }

@@ -101,11 +101,7 @@ public interface Hook extends HookView, UpgradeObserver {
      */
     void setReelSpeed(double reelSpeed);
 
-    /**
-     * Registers the listener nitified when this hook collides with
-     * another Collidable while in a cathcable state(DROPPING or REELING).
-     * 
-     * @param listener the collision listener to register
-     */
-    void setCollisionListener(HookCollisionListener listener);
+    void addListener(FishingListener listener);
+
+    void removeListener(FishingListener listener);
 }
