@@ -12,7 +12,6 @@ import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
 import it.unibo.hookmaster.model.fishing.hook.HookCollisionListener;
-import it.unibo.hookmaster.model.fishing.hook.HookState;
 import it.unibo.hookmaster.model.fishing.hook.HookSnapshot;
 import it.unibo.hookmaster.model.fishing.hook.HookView;
 import it.unibo.hookmaster.model.event.UpgradeEvent;
@@ -30,10 +29,8 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
 
     private final Boat boat;
     private final Hook hook;
-    private FishingMinigame currentMinigame;
 
     private final List<FishingListener> listeners = new ArrayList<>();
-    private boolean stormy;
 
     /**
      * Constructs the controller and wires itself as the hook collision listener.
@@ -55,25 +52,16 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
     @Override
     public void onHookCollision(final Collidable other) {
         if (other instanceof Catchable) {
-            startMinigame((Catchable) other);
+            final Catchable fish = (Catchable) other;
+            hook.hookFish(fish);
+            fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
         }
     }
 
-    /**
-     * Called by the shop whenever the player succesfully purchase an upgrade.
-     * This is the single integration point between the upgrade model and the fishing model.
-     */
     @Override
     public void onUpgrade(final UpgradeEvent event) {
-        switch (event.getUpgradeType()) {
-            case SPEED:
-                hook.setDropSpeed(event.getNewValue());
-                hook.setReelSpeed(event.getNewValue());
-                break;
-            case MAX_WEIGHT:
-                fireEvent(new FishingEvent(FishingEvent.Type.UPGRADE_APPLIED, null));
-                break;
-        }
+        hook.onUpgrade(event);
+        fireEvent(new FishingEvent(FishingEvent.Type.UPGRADE_APPLIED, null));
     }
 
     /**
@@ -84,9 +72,6 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
     public void update(final double deltaTime) {
         boat.update(deltaTime);
         hook.update(deltaTime, boat.getX(), boat.getY());
-        if (hook.getCurrentState() == HookState.MINIGAME && currentMinigame != null) {
-            currentMinigame.update(deltaTime);
-        }
     }
 
     /**
@@ -131,14 +116,11 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
      * @return true if the catch succeeded
      */
     public boolean attemptCatch() {
-        if (hook.getCurrentState() != HookState.MINIGAME || currentMinigame == null) {
-            return false;
-        }
-        final boolean success = currentMinigame.attemptCatch();
         final Catchable fish = hook.getHookedFish();
-        hook.completeMinigame(success);
-        currentMinigame = null;
-        fireEvent(new FishingEvent(success ? FishingEvent.Type.FISH_CAUGHT : FishingEvent.Type.FISH_ESCAPED, fish));
+        final boolean success = hook.attemptCatch();
+        if (fish != null) {
+            fireEvent(new FishingEvent(success ? FishingEvent.Type.FISH_CAUGHT : FishingEvent.Type.FISH_ESCAPED, fish));
+        }
         return success;
     }
 
@@ -148,7 +130,7 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
      * @param stormy true to activate storm conditions
      */
     public void setStormy(final boolean stormy) {
-        this.stormy = stormy;
+        hook.setStormy(stormy);
     }
 
     /**
@@ -191,13 +173,7 @@ public final class FishingController implements HookCollisionListener, UpgradeOb
      * @return the active minigame, or null
      */
     public FishingMinigame getCurrentMinigame() {
-        return currentMinigame;
-    }
-
-    private void startMinigame(final Catchable fish) {
-        hook.hookFish(fish);
-        currentMinigame = MinigameFactory.create(fish, stormy);
-        fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
+        return hook.getCurrentMinigame();
     }
 
     private void fireEvent(final FishingEvent event) {

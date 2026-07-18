@@ -1,11 +1,6 @@
-package it.unibo.hookmaster.controller;
+package it.unibo.hookmaster.model.fishing.minigame;
 
 import it.unibo.hookmaster.model.fishing.Catchable;
-import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
-import it.unibo.hookmaster.model.fishing.minigame.FishingMinigameImpl;
-import it.unibo.hookmaster.model.fishing.minigame.IndicatorStrategy;
-import it.unibo.hookmaster.model.fishing.minigame.OscillatingIndicator;
-import it.unibo.hookmaster.model.fishing.minigame.StormyIndicator;
 
 /**
  * Factory Method Pattern : handles the creation of FishingMinigame instances,

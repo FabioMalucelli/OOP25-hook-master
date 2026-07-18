@@ -3,7 +3,11 @@ package it.unibo.hookmaster.model.fishing.hook;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
+import it.unibo.hookmaster.model.event.UpgradeEvent;
 import it.unibo.hookmaster.model.fishing.Catchable;
+import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
+import it.unibo.hookmaster.model.fishing.minigame.MinigameFactory;
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
 
 /**
  * Standard implementation of Hook,, which also acts as a Collidable.
@@ -28,6 +32,8 @@ public final class HookImpl implements Hook, Collidable {
 
     private HookState currentState;
     private Catchable hookedFish;
+    private FishingMinigame currentMinigame;
+    private boolean stormy;
 
     /**
      * Observer Pattern - the listener that will react to hook collisions.
@@ -76,6 +82,9 @@ public final class HookImpl implements Hook, Collidable {
                 break;
             case MINIGAME:
                 //Position frozen while the QTE is running.
+                if (currentMinigame != null) {
+                    currentMinigame.update(deltaTime);
+                }
                 break;
         }
     }
@@ -102,8 +111,21 @@ public final class HookImpl implements Hook, Collidable {
     public void hookFish(final Catchable fish) {
         if ((currentState == HookState.DROPPING || currentState == HookState.REELING) && hookedFish == null) {
             this.hookedFish = fish;
+            this.currentMinigame = MinigameFactory.create(fish, stormy);
             this.currentState = HookState.MINIGAME;
         }
+    }
+
+    @Override
+    public boolean attemptCatch() {
+        if (currentState != HookState.MINIGAME || currentMinigame == null) {
+            return false;
+        }
+
+        final boolean success = currentMinigame.attemptCatch();
+        completeMinigame(success);
+        currentMinigame = null;
+        return success;
     }
 
     @Override
@@ -119,6 +141,24 @@ public final class HookImpl implements Hook, Collidable {
     @Override
     public void clearHookedFish() {
         this.hookedFish = null;
+    }
+
+    @Override
+    public FishingMinigame getCurrentMinigame() {
+        return currentMinigame;
+    }
+
+    @Override
+    public void setStormy(final boolean stormy) {
+        this.stormy = stormy;
+    }
+
+    @Override
+    public void onUpgrade(final UpgradeEvent event) {
+        if (event.getUpgradeType() == UpgradeType.SPEED) {
+            this.dropSpeed = event.getNewValue();
+            this.reelSpeed = event.getNewValue();
+        }
     }
 
     @Override

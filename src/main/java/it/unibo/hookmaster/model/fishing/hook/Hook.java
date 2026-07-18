@@ -1,11 +1,13 @@
 package it.unibo.hookmaster.model.fishing.hook;
 
+import it.unibo.hookmaster.model.event.UpgradeObserver;
 import it.unibo.hookmaster.model.fishing.Catchable;
+import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
 
 /**
  * Defines the contract for the hook model.
  */
-public interface Hook extends HookView {
+public interface Hook extends HookView, UpgradeObserver {
 
     /**
      * Advances the hook position by one frame.
@@ -39,6 +41,14 @@ public interface Hook extends HookView {
     void hookFish(Catchable fish);
 
     /**
+     * Resolves the active catching minigame: checks if the indicator was inside the target zone, updates
+     * the hooked-fish,clears the minigame, and resumes reeling.
+     * 
+     * @return true if the catch succeeded
+     */
+    boolean attemptCatch();
+
+    /**
      * Resolves the minigame and starts reeling.
      * On failure the fish reference is cleared.
      * 
@@ -62,6 +72,20 @@ public interface Hook extends HookView {
 
     @Override
     double getY();
+
+    /**
+     * Gets the catching minigame currently active, if any.
+     * 
+     * @return the active FishingMinigame, or null if no minigame is in progress
+     */
+    FishingMinigame getCurrentMinigame();
+
+    /**
+     * Sets whether stormy weather is active, affecting the difficulty of the catching minigame created by the next call.
+     * 
+     * @param stormy true to activate stormy conditions
+     */
+    void setStormy(boolean stormy);
 
     /**
      * Sets the dropping speed. Invoked by the shop on upgrade purchase.
