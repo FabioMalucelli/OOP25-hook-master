@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.model.upgrade.strategies;
 
 /**
- * Linear upgrade value strategy.
+ * {@link UpgradeValueStrategy} implementation that scales values and costs linearly.
  */
 public final class LinearUpgradeValueStrategy implements UpgradeValueStrategy {
 
@@ -9,10 +9,10 @@ public final class LinearUpgradeValueStrategy implements UpgradeValueStrategy {
     private final double step;
 
     /**
-     * Creates a new linear upgrade value strategy with the provieded base and step.
+     * Constructs a linear upgrade strategy with the provieded base and step.
      * 
-     * @param base initial upgrade value
-     * @param step upgrade value increment
+     * @param base the initial upgrade value and cost at level 1.
+     * @param step the amount added for each level increment.
      */
     public LinearUpgradeValueStrategy(final int base, final double step) {
         this.base = base;

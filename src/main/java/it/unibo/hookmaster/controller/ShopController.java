@@ -1,8 +1,8 @@
 package it.unibo.hookmaster.controller;
 
 import java.util.Collection;
-import it.unibo.hookmaster.model.Player;
-import it.unibo.hookmaster.model.Shop;
+import it.unibo.hookmaster.model.upgrade.Player;
+import it.unibo.hookmaster.model.upgrade.Shop;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 import it.unibo.hookmaster.view.ShopView;

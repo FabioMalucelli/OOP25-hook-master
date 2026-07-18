@@ -1,15 +1,15 @@
 package it.unibo.hookmaster.model.event;
 
 /**
- * Observer interface for upgrade event.
+ * Observer interface for listening to upgrade events.
  */
 @SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface UpgradeObserver {
 
     /**
-     * Called on upgrade.
+     * Invoked when an upgarde event is triggered.
      * 
-     * @param event the upgrade event
+     * @param event the event details.
      */
     void onUpgrade(UpgradeEvent event);
 }

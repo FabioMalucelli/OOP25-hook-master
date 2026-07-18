@@ -1,8 +1,15 @@
 package it.unibo.hookmaster.model.upgrade;
 
 /**
- * Enum for the different upgrade types.
+ * Defines the types of upgrades in the game.
  */
 public enum UpgradeType {
-    MAX_WEIGHT, SPEED
+    /**
+     * An upgrade that increases the max weight the player can hook.
+     */
+    MAX_WEIGHT,
+    /**
+     * An upgrade that increases the movement speed.
+     */
+    SPEED
 }

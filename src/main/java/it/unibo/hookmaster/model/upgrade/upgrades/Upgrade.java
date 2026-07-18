@@ -3,70 +3,70 @@ package it.unibo.hookmaster.model.upgrade.upgrades;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 
 /**
- * Interface that models an upgrade.
+ * Represents a general upgrade in the game.
  */
 public interface Upgrade {
 
     /**
-     * Retrives the upgrade type.
+     * Retrives the type of the upgrade.
      * 
-     * @return the upgrade type
+     * @return the upgrade type.
      */
     UpgradeType getType();
 
     /**
-     * Retrives the upgrade name.
+     * Retrives the name of the upgrade.
      * 
-     * @return the upgrade name
+     * @return the upgrade name.
      */
     String getName();
 
     /**
-     * Retrives the upgrade description.
+     * Retrives the description of the upgrade.
      * 
-     * @return the upgrade description
+     * @return the upgrade description.
      */
     String getDescription();
 
     /**
-     * Retrives the upgrade level.
+     * Retrives the current level of the upgrade.
      * 
-     * @return the upgrade level
+     * @return the current upgrade level.
      */
     int getLevel();
 
     /**
-     * Retrives the upgrade max level.
+     * Retrives the max level for this upgrade.
      * 
-     * @return the upgrade max level
+     * @return the max level.
      */
     int getMaxLevel();
 
     /**
-     * Retrives the upgrade cost.
+     * Retrives the cost to reach the next level.
      * 
-     * @return the upgrade cost
+     * @return the cost of the next upgrade.
      */
     int getCost();
 
     /**
-     * Retrives the upgrade value.
+     * Retrives the current value of the upgrade.
      * 
-     * @return the upgrade value
+     * @return the current upgrade value.
      */
     double getValue();
 
     /**
-     * Check if the player can upgrade.
+     * Check if the player can level up this upgrade.
      * 
-     * @param playerCoins the player coins
-     * @return whether the player can or can't upgrade
+     * @param playerCoins the amount of coins the player has.
+     * @return {@code true} if the player can upgrade, {@code false} otherwise.
      */
     boolean canUpgrade(int playerCoins);
 
     /**
-     * Increase the upgrade level.
+     * Increases the upgrade level, use {@link #canUpgrade(int)} to check if upgarde can actually be
+     * levelled up.
      */
     void upgrade();
-
 }

@@ -3,7 +3,7 @@ package it.unibo.hookmaster.model.event;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 
 /**
- * Event for when the player buys an upgrades.
+ * Represents an event triggered when the player levels up an upgrade.
  */
 public final class UpgradeEvent {
 
@@ -12,11 +12,11 @@ public final class UpgradeEvent {
     private final double newValue;
 
     /**
-     * Build the event.
+     * Constructs a new upgrade event.
      * 
-     * @param type the upgrade type
-     * @param newLevel the new level of the upgrade
-     * @param newValue the new value of the upgrade
+     * @param type the upgrade type.
+     * @param newLevel the new level of the upgrade.
+     * @param newValue the new value of the upgrade.
      */
     public UpgradeEvent(final UpgradeType type, final int newLevel, final double newValue) {
         this.type = type;
@@ -27,27 +27,27 @@ public final class UpgradeEvent {
     /**
      * Retrives the upgrade type.
      * 
-     * @return the upgrade type
+     * @return the upgrade type.
      */
     public UpgradeType getUpgradeType() {
-        return type;
+        return this.type;
     }
 
     /**
      * Retrives the upgrade level.
      * 
-     * @return the upgrade level
+     * @return the upgrade level.
      */
     public int getNewLevel() {
-        return newLevel;
+        return this.newLevel;
     }
 
     /**
      * Retrives the upgrade value.
      * 
-     * @return the upgrade value
+     * @return the upgrade value.
      */
     public double getNewValue() {
-        return newValue;
+        return this.newValue;
     }
 }

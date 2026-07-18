@@ -6,18 +6,18 @@ package it.unibo.hookmaster.model.upgrade.strategies;
 public interface UpgradeValueStrategy {
 
     /**
-     * Calculate the upgrade value.
+     * Calculates the upgrade value at the spcified level.
      * 
-     * @param level the upgrade level
-     * @return the new upgrade value
+     * @param level the target upgrade level.
+     * @return the calculated upgrade value.
      */
     double valueForLevel(int level);
 
     /**
-     * Calculate the upgrade cost.
+     * Calculates the upgrade cost for the spcified level.
      * 
-     * @param level the upgrade level
-     * @return the new upgrade cost
+     * @param level the target upgrade level.
+     * @return the calculated upgrade cost.
      */
     int costForLevel(int level);
 }
