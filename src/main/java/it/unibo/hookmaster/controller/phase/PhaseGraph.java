@@ -1,12 +1,11 @@
 package it.unibo.hookmaster.controller.phase;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public final class PhaseGraph {
     private PhaseController runningPhase = null;
-
-    private final Map<Phase, PhaseController> phaseControllers = new HashMap<>();
+    private final Map<Phase, PhaseController> phaseControllers = new EnumMap<>(Phase.class);
 
     public PhaseController getRunningPhase() {
         return runningPhase;

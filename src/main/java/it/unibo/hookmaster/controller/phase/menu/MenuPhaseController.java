@@ -1,24 +1,26 @@
-package it.unibo.hookmaster.controller.phase;
+package it.unibo.hookmaster.controller.phase.menu;
 
+import it.unibo.hookmaster.controller.phase.Phase;
+import it.unibo.hookmaster.controller.phase.PhaseController;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.application.Platform;
 
-public class MenuController extends PhaseController {
+public class MenuPhaseController extends PhaseController {
     private final View<MenuSnapshot, MenuInputHandler> menuView;
 
-    public MenuController(final View<MenuSnapshot, MenuInputHandler> menuView) {
+    public MenuPhaseController(final View<MenuSnapshot, MenuInputHandler> menuView) {
         this.menuView = menuView;
         menuView.setInputHandler(new InputHandlerImpl());
     }
 
     @Override
-    public void select() {
+    protected void select() {
         this.menuView.select();
     }
 
     @Override
-    public void tick(final long deltaTime) {
+    protected void tick(final long deltaTime) {
         this.menuView.update(new MenuSnapshot(false));
     }
 

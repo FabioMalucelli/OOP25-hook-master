@@ -1,7 +1,7 @@
 package it.unibo.hookmaster;
 
 import it.unibo.hookmaster.controller.GameControllerImpl;
-import it.unibo.hookmaster.controller.phase.MenuInputHandler;
+import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import it.unibo.hookmaster.view.MenuView;
@@ -29,6 +29,6 @@ public final class JFXApp extends Application {
         primaryStage.show();
 
         View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
-        new GameControllerImpl(menuView).run();
+        new GameControllerImpl(menuView, null).run();
     }
 }

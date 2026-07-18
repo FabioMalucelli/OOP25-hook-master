@@ -1,6 +1,6 @@
 package it.unibo.hookmaster.view;
 
-import it.unibo.hookmaster.controller.phase.MenuInputHandler;
+import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

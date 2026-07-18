@@ -1,9 +1,11 @@
 package it.unibo.hookmaster.controller;
 
-import it.unibo.hookmaster.controller.phase.MenuController;
-import it.unibo.hookmaster.controller.phase.MenuInputHandler;
 import it.unibo.hookmaster.controller.phase.Phase;
 import it.unibo.hookmaster.controller.phase.PhaseGraph;
+import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
+import it.unibo.hookmaster.controller.phase.game.GamePhaseController;
+import it.unibo.hookmaster.controller.phase.menu.MenuPhaseController;
+import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.animation.AnimationTimer;
@@ -15,9 +17,10 @@ public class GameControllerImpl implements GameController {
     private final LoopTimer loopTimer = new LoopTimer();
     private final PhaseGraph phaseGraph;
 
-    public GameControllerImpl(final View<MenuSnapshot, MenuInputHandler> menuView) {
+    public GameControllerImpl(final View<MenuSnapshot, MenuInputHandler> menuView, final View<?, GameInputHandler> gameView) {
         this.phaseGraph = new PhaseGraph();
-        this.phaseGraph.registerPhase(Phase.MENU, new MenuController(menuView));
+        this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(menuView));
+        //this.phaseGraph.registerPhase(Phase.GAME, new GamePhaseController(gameView));
     }
 
     /**
