@@ -1,5 +1,8 @@
 package it.unibo.hookmaster.model.weather;
 
+/**
+ * Event fired by a WeatherSystem whenever the weather changes.
+ */
 public final class WeatherEvent {
     private final Weather weather;
 
