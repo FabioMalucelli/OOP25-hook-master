@@ -1,6 +1,7 @@
 package it.unibo.hookmaster.controller;
 
 import it.unibo.hookmaster.controller.phase.MenuController;
+import it.unibo.hookmaster.controller.phase.MenuInputHandler;
 import it.unibo.hookmaster.controller.phase.Phase;
 import it.unibo.hookmaster.controller.phase.PhaseGraph;
 import it.unibo.hookmaster.view.View;
@@ -14,7 +15,7 @@ public class GameControllerImpl implements GameController {
     private final LoopTimer loopTimer = new LoopTimer();
     private final PhaseGraph phaseGraph;
 
-    public GameControllerImpl(final View<MenuSnapshot> menuView) {
+    public GameControllerImpl(final View<MenuSnapshot, MenuInputHandler> menuView) {
         this.phaseGraph = new PhaseGraph();
         this.phaseGraph.registerPhase(Phase.MENU, new MenuController(menuView));
     }

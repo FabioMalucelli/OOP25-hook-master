@@ -5,10 +5,11 @@ import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.application.Platform;
 
 public class MenuController extends PhaseController {
-    private final View<MenuSnapshot> menuView;
+    private final View<MenuSnapshot, MenuInputHandler> menuView;
 
-    public MenuController(final View<MenuSnapshot> menuView) {
+    public MenuController(final View<MenuSnapshot, MenuInputHandler> menuView) {
         this.menuView = menuView;
+        menuView.setInputHandler(new InputHandlerImpl());
     }
 
     @Override

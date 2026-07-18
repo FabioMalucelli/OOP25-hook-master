@@ -1,6 +1,7 @@
 package it.unibo.hookmaster;
 
 import it.unibo.hookmaster.controller.GameControllerImpl;
+import it.unibo.hookmaster.controller.phase.MenuInputHandler;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import it.unibo.hookmaster.view.MenuView;
@@ -27,7 +28,7 @@ public final class JFXApp extends Application {
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
 
-        View<MenuSnapshot> menuView = new MenuView(scene);
+        View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
         new GameControllerImpl(menuView).run();
     }
 }
