@@ -1,16 +1,20 @@
 package it.unibo.hookmaster.model.fishing.hook;
 
+import it.unibo.hookmaster.model.collision.Collidable;
+import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
 import it.unibo.hookmaster.model.event.UpgradeObserver;
 import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
+import it.unibo.hookmaster.model.weather.WeatherObserver;
 
 /**
  * Defines the contract for the hook model.
  */
-public interface Hook extends HookView, UpgradeObserver {
+public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
 
     /**
-     * Advances the hook position by one frame.
+     * Advances the hook position by one frame,and if a minigame is active 
+     * the minigame advances by one frame.
      * 
      * @param deltaTime seconds passed since the last frame
      * @param boatX     current X of the boat
@@ -61,17 +65,36 @@ public interface Hook extends HookView, UpgradeObserver {
      */
     void clearHookedFish();
 
-    @Override
+    /**
+     * Gets the current states of the hook.
+     * 
+     * @return the current HookState
+     */
     HookState getCurrentState();
 
-    @Override
+    /**
+     * Gets the fish currently hooked, if any.
+     * 
+     * @return the hooked Catchable, or null if none
+     */
     Catchable getHookedFish();
 
-    @Override
+    /**
+     * Gets the current X position of the hook.
+     * 
+     * @return the X coordinate in pixels
+     */
     double getX();
 
-    @Override
+    /**
+     * Gets the current Y(depth) position of the hook
+     * 
+     * @return the Y coordinate in pixels
+     */
     double getY();
+    
+    @Override
+    CollisionAreaCircle getCollisionArea();
 
     /**
      * Gets the catching minigame currently active, if any.
@@ -101,7 +124,17 @@ public interface Hook extends HookView, UpgradeObserver {
      */
     void setReelSpeed(double reelSpeed);
 
+    /**
+     * Registers a listener to recieve fishing events fired by this hook.
+     * 
+     * @param listener the observer to add
+     */
     void addListener(FishingListener listener);
 
+    /**
+     * Removes a previously registerd litener.
+     * 
+     * @param listener the observer to remove
+     */
     void removeListener(FishingListener listener);
 }

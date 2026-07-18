@@ -5,25 +5,25 @@ import java.util.List;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionArea;
+import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.event.UpgradeEvent;
 import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
 import it.unibo.hookmaster.model.fishing.minigame.MinigameFactory;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
+import it.unibo.hookmaster.model.weather.Weather;
+import it.unibo.hookmaster.model.weather.WeatherEvent;
 
 /**
- * Standard implementation of Hook,, which also acts as a Collidable.
- * 
- * <p>Uses the State pattern: update and onCollision behaviour depends on the current HookState.
- * Uses the Observer pattern to notify a HookCollisionListener (FishingController) on catchable collisions.</p>
+ * Standard implementation of Hook.
  */
-public final class HookImpl implements Hook, Collidable {
+public final class HookImpl implements Hook {
 
     /**
-     * Size of the square hitbox around the hook tip(in pixels).
+     * Radius of the circular hitbox around the hook tip(in pixels).
      */
-    private static final double HITBOX_SIZE = 10.0;
+    private static final double HOOK_RADIUS = 5.0;
 
     private double x;
     private double y;
@@ -82,6 +82,7 @@ public final class HookImpl implements Hook, Collidable {
                 break;
             case MINIGAME:
                 //Position frozen while the QTE is running.
+                //still needs to advance(indicator movement).
                 if (currentMinigame != null) {
                     currentMinigame.update(deltaTime);
                 }
@@ -167,8 +168,13 @@ public final class HookImpl implements Hook, Collidable {
     }
 
     @Override
-    public CollisionArea getCollisionArea() {
-        return new CollisionAreaRectangle(x - HITBOX_SIZE / 2.0, y - HITBOX_SIZE / 2.0, HITBOX_SIZE, HITBOX_SIZE);
+    public void onWeatherChanged(final WeatherEvent event) {
+        setStormy(event.getWeather() == Weather.STORMY);
+    }
+
+    @Override
+    public CollisionAreaCircle getCollisionArea() {
+        return new CollisionAreaCircle(x, y, HOOK_RADIUS);
     }
 
     @Override
