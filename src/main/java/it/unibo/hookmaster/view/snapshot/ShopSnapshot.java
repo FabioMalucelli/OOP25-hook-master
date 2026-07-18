@@ -4,9 +4,10 @@ import java.util.Collection;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 
 /**
- * Read only record to pass data to the shop view.
+ * Immutable snapshot of the shop state, used to pass data to the
+ * {@link it.unibo.hookmaster.view.ShopView}.
  * 
- * @param upgrades list of upgrades
- * @param coins player coins
+ * @param upgrades the list of upgrades.
+ * @param coins the player coin balance.
  */
 public record ShopSnapshot(Collection<Upgrade> upgrades, int coins) { }

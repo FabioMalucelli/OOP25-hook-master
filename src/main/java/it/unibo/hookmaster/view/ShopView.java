@@ -1,8 +1,10 @@
 package it.unibo.hookmaster.view;
 
 import it.unibo.hookmaster.controller.ShopController;
+import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
+import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,9 +22,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * View for the shop.
+ * Represents the shop view.
  */
-public final class ShopView extends BorderPane {
+public final class ShopView extends BorderPane implements View<ShopSnapshot, MenuInputHandler> {
 
     private static final Color BACKGROUND_COLOR = Color.web("#1d5f9e");
     private static final Color DARK_BACKGROUND_COLOR = Color.web("#132038");
@@ -200,5 +202,32 @@ public final class ShopView extends BorderPane {
         }
 
         return listBox;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void select() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'select'");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ShopSnapshot snapshot) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setInputHandler(MenuInputHandler inputHandler) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setInputHandler'");
     }
 }

@@ -22,7 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * Main menu view.
+ * Represents the menu view.
  */
 public final class MenuView extends VBox implements View<MenuSnapshot, MenuInputHandler> {
 
@@ -49,14 +49,14 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
     private MenuInputHandler inputHandler;
 
     /**
-     * Builder for the main menu view.
+     * Contructs the main menu view.
      * 
-     * @param scene scene
+     * @param scene the main game scene.
      */
     public MenuView(final Scene scene) {
         this.scene = scene;
 
-        setPrefSize(scene.getWidth(), scene.getHeight());
+        //setPrefSize(scene.getWidth(), scene.getHeight());
         setAlignment(Pos.CENTER);
         setSpacing(scene.getHeight() * BUTTONS_SPACING_RATIO);
         setBackground(new Background(
@@ -80,11 +80,17 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
         getChildren().addAll(logo, btnList);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void select() {
         scene.setRoot(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(final MenuSnapshot snapshot) {
         this.btnStart.setText(snapshot.inGame() ? "Resume game" : "Start game");
@@ -115,6 +121,9 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
         return btn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setInputHandler(MenuInputHandler inputHandler) {
         this.inputHandler = inputHandler;
