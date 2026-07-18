@@ -13,11 +13,14 @@ import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.collision.CollisionPredicate;
 import it.unibo.hookmaster.model.collision.CollisionPredicates;
+import it.unibo.hookmaster.model.event.UpgradeEvent;
+import it.unibo.hookmaster.model.fishing.hook.FishingEvent;
 import it.unibo.hookmaster.model.fishing.hook.HookImpl;
 import it.unibo.hookmaster.model.fishing.hook.HookState;
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.testutil.FakeCatchable;
 import it.unibo.hookmaster.testutil.FakeCollidable;
-import it.unibo.hookmaster.testutil.RecordingHookCollisionListener;
+import it.unibo.hookmaster.testutil.RecordingFishingListener;
 
 /**
  * Unit tests for HookImpl : the state Pattern lifecycle and
@@ -43,6 +46,9 @@ class HookImplTest {
     private static final double OVERLAPPING_RECT_SIZE = 10.0;
     private static final double FARAWAY_RECT_ORIGIN = 1000.0;
     private static final double FARAWAY_RECT_SIZE = 5.0;
+
+    private static final int UPGRADE_NEW_LEVEL = 2;
+    private static final double UPGRADE_NEW_SPEED = 50.0;
 
     private HookImpl hook;
 
@@ -125,6 +131,8 @@ class HookImplTest {
         hook.hookFish(fish);
         assertEquals(HookState.MINIGAME, hook.getCurrentState());
         assertEquals(fish, hook.getHookedFish());
+        assertNotNull(hook.getCurrentMinigame());
+        assertEquals(fish, hook.getCurrentMinigame().getTarget());
     }
 
     @Test
@@ -133,6 +141,7 @@ class HookImplTest {
         hook.hookFish(fish);
         assertEquals(HookState.IDLE, hook.getCurrentState());
         assertNull(hook.getHookedFish());
+        assertNull(hook.getCurrentMinigame());
     }
 
     @Test
@@ -146,7 +155,23 @@ class HookImplTest {
     }
 
     @Test
-    void completeMinigameWithSuccessKeepsFIshAndResumesReeling() {
+    void attemptCatchReturnsFalseWhenNotInMinigame() {
+        assertFalse(hook.attemptCatch());
+    }
+
+    @Test
+    void attemptCatchResolvesMinigameRegardlessOfOutcome() {
+        hook.cast();
+        hook.hookFish(new FakeCatchable());
+
+        hook.attemptCatch();
+
+        assertEquals(HookState.REELING, hook.getCurrentState());
+        assertNull(hook.getCurrentMinigame());
+    }
+
+    @Test
+    void completeMinigameWithSuccessKeepsFishAndResumesReeling() {
         hook.cast();
         final FakeCatchable fish = new FakeCatchable();
         hook.hookFish(fish);
@@ -192,48 +217,110 @@ class HookImplTest {
     }
 
     @Test
-    void collisionIsForwardedToListenerWhileDropping() {
-        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
-        hook.setCollisionListener(listener);
+    void coollisionWithCatchableWhileDroppingHooksFishDirectly() {
         hook.cast();
-        final FakeCollidable other = new FakeCollidable();
-        hook.onCollision(other);
-        assertEquals(1, listener.getCallCount());
-        assertEquals(other, listener.getLastCollision());
+        final FakeCatchable fish = new FakeCatchable();
+        hook.onCollision(fish);
+        assertEquals(HookState.MINIGAME, hook.getCurrentState());
+        assertEquals(fish, hook.getHookedFish());
     }
 
     @Test
-    void collisionIsForwardedToListenerWhileReeling() {
-        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
-        hook.setCollisionListener(listener);
+    void collisionWithNonCatchableIsIgnored() {
         hook.cast();
-        hook.reelIn();
         hook.onCollision(new FakeCollidable());
-        assertEquals(1, listener.getCallCount());
-    }
-
-    @Test
-    void collisionIsIgnoredWhileIdle() {
-        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
-        hook.setCollisionListener(listener);
-        hook.onCollision(new FakeCollidable());
-        assertEquals(0, listener.getCallCount());
+        assertEquals(HookState.DROPPING, hook.getCurrentState());
+        assertNull(hook.getCurrentMinigame());
     }
 
     @Test
     void collisionIsIgnoredDuringMinigame() {
-        final RecordingHookCollisionListener listener = new RecordingHookCollisionListener();
-        hook.setCollisionListener(listener);
         hook.cast();
-        hook.hookFish(new FakeCatchable());
-        hook.onCollision(new FakeCollidable());
-        assertEquals(0, listener.getCallCount());
+        final FakeCatchable firstFish = new FakeCatchable();
+        hook.onCollision(firstFish);
+
+        final FakeCatchable secondFish = new FakeCatchable(999, 0.9, "SecondFish");
+        hook.onCollision(secondFish);
+
+        //The second collision must not replace the fish already being caught.
+        assertEquals(firstFish, hook.getHookedFish());
     }
 
     @Test
-    void collisionIsIgnoredWhenNoListenerIsRegistered() {
+    void castFiresHookCastEvent() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.addListener(listener);
         hook.cast();
-        hook.onCollision(new FakeCollidable());
-        assertEquals(HookState.DROPPING, hook.getCurrentState());
+        assertTrue(listener.hasRecieved(FishingEvent.Type.HOOK_CAST));
+    }
+
+    @Test
+    void castWhileNotIdleDoesNotFireEvent() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.cast();
+        hook.addListener(listener);
+        hook.cast();
+        assertFalse(listener.hasRecieved(FishingEvent.Type.HOOK_CAST));
+    }
+
+    @Test
+    void reelInFiresHookReelingEvent() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.addListener(listener);
+        hook.cast();
+        hook.reelIn();
+        assertTrue(listener.hasRecieved(FishingEvent.Type.HOOK_REELING));
+    }
+
+    @Test
+    void hookFishFiresFishHookedEvent() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.addListener(listener);
+        hook.cast();
+        hook.hookFish(new FakeCatchable());
+        assertTrue(listener.hasRecieved(FishingEvent.Type.FISH_HOOKED));
+    }
+
+    @Test
+    void attemptCatchFiresCaugthOrEscapedEvent() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.cast();
+        hook.hookFish(new FakeCatchable());
+        hook.addListener(listener);
+
+        hook.attemptCatch();
+
+        final boolean firedCaugthOrEscaped = listener.hasRecieved(FishingEvent.Type.FISH_CAUGHT)
+            || listener.hasRecieved(FishingEvent.Type.FISH_ESCAPED);
+        assertTrue(firedCaugthOrEscaped);
+    }
+
+    @Test
+    void removedListenerNoLongerRecievesEvents() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.addListener(listener);
+        hook.removeListener(listener);
+        hook.cast();
+        assertTrue(listener.getRecievedEvents().isEmpty());
+    }
+
+    @Test
+    void onUpgradeWithSpeedTypeUpdatesDropAndReelSpeed() {
+        hook.onUpgrade(new UpgradeEvent(UpgradeType.SPEED, UPGRADE_NEW_LEVEL, UPGRADE_NEW_SPEED));
+
+        hook.cast();
+        hook.update(ONE_SECOND, START_X, BOAT_Y);
+
+        assertEquals(BOAT_Y + UPGRADE_NEW_SPEED, hook.getY(), DELTA);
+    }
+
+    @Test
+    void onUpgradeWithMaxWeigthTypeDoesNotAffectHook() {
+        hook.onUpgrade(new UpgradeEvent(UpgradeType.MAX_WEIGHT, UPGRADE_NEW_LEVEL, UPGRADE_NEW_SPEED));
+
+        hook.cast();
+        hook.update(ONE_SECOND, START_X, BOAT_Y);
+
+        assertEquals(BOAT_Y + DROP_SPEED, hook.getY(), DELTA);
     }
 }

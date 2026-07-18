@@ -3,8 +3,8 @@ package it.unibo.hookmaster.testutil;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unibo.hookmaster.controller.FishingEvent;
-import it.unibo.hookmaster.controller.FishingListener;
+import it.unibo.hookmaster.model.fishing.hook.FishingEvent;
+import it.unibo.hookmaster.model.fishing.hook.FishingListener;
 
 /**
  * A FishingListener that records every event it recieves,
