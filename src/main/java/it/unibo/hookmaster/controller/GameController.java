@@ -5,6 +5,7 @@ package it.unibo.hookmaster.controller;
  * It drives the game loop and connects the
  * model and the view.
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface GameController {
     /**
      * Runs the game loop.

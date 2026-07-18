@@ -1,5 +1,6 @@
 package it.unibo.hookmaster.view;
 
+import it.unibo.hookmaster.controller.phase.MenuInputHandler;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,7 +24,7 @@ import javafx.scene.text.FontWeight;
 /**
  * Main menu view.
  */
-public final class MenuView extends VBox implements View<MenuSnapshot> {
+public final class MenuView extends VBox implements View<MenuSnapshot, MenuInputHandler> {
 
     private static final Color BACKGROUND_COLOR = Color.web("#64aafa");
     private static final Color BUTTON_COLOR = Color.web("#f5bc46");
@@ -44,6 +45,8 @@ public final class MenuView extends VBox implements View<MenuSnapshot> {
 
     private final Scene scene;
     private final Button btnStart;
+
+    private MenuInputHandler inputHandler;
 
     /**
      * Builder for the main menu view.
@@ -66,6 +69,9 @@ public final class MenuView extends VBox implements View<MenuSnapshot> {
         this.btnStart = buildButton("Start game");
         final Button btnLoad = buildButton("Load save");
         final Button btnExit = buildButton("Exit game");
+
+        btnExit.setOnAction(e -> inputHandler.pressExitButton());
+
         btnList.setMaxWidth(scene.getWidth() * BUTTONS_WIDTH_RATIO);
         btnList.setAlignment(Pos.TOP_CENTER);
         btnList.setFillWidth(true);
@@ -107,5 +113,10 @@ public final class MenuView extends VBox implements View<MenuSnapshot> {
         btn.setCursor(Cursor.HAND);
 
         return btn;
+    }
+
+    @Override
+    public void setInputHandler(MenuInputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }

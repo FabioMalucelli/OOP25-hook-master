@@ -1,15 +1,23 @@
 package it.unibo.hookmaster.controller;
 
+import it.unibo.hookmaster.controller.phase.MenuController;
+import it.unibo.hookmaster.controller.phase.MenuInputHandler;
+import it.unibo.hookmaster.controller.phase.Phase;
+import it.unibo.hookmaster.controller.phase.PhaseGraph;
+import it.unibo.hookmaster.view.View;
+import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
+import javafx.animation.AnimationTimer;
+
 /**
  * Implementation of the GameController.
  */
 public class GameControllerImpl implements GameController {
-    private static final long FRAME_TIME = 16; // 60 FPS
+    private final LoopTimer loopTimer = new LoopTimer();
+    private final PhaseGraph phaseGraph;
 
-    /**
-     * Constructs the game controller.
-     */
-    public GameControllerImpl() {
+    public GameControllerImpl(final View<MenuSnapshot, MenuInputHandler> menuView) {
+        this.phaseGraph = new PhaseGraph();
+        this.phaseGraph.registerPhase(Phase.MENU, new MenuController(menuView));
     }
 
     /**
@@ -17,22 +25,23 @@ public class GameControllerImpl implements GameController {
      */
     @Override
     public void run() {
-        long lastTime = System.currentTimeMillis();
-        while (true) {
-            final long currentTime = System.currentTimeMillis();
-            final long deltaTime = currentTime - lastTime;
-            if (deltaTime >= FRAME_TIME) {
-                lastTime = currentTime;
-                tick(deltaTime);
-            }
-        }
+        loopTimer.start();
     }
 
-    /**
-     * Runs an iteration of the game loop, updating the game world and rendering the view.
-     * 
-     * @param deltaTime the amount of milliseconds elapsed since last tick.
-     */
-    private void tick(final long deltaTime) { }
+    private class LoopTimer extends AnimationTimer {
+        private long lastTime = -1;
 
+        @Override
+        public void handle(long now) {
+            if (lastTime < 0) {
+                lastTime = now;
+                phaseGraph.selectPhase(Phase.MENU);
+                return;
+            }
+            final long deltaTime = now - lastTime;
+            lastTime = now;
+            phaseGraph.tick(deltaTime);
+        }
+
+    }
 }
