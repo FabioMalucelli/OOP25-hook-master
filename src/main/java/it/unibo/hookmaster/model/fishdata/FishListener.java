@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model;
+package it.unibo.hookmaster.model.fishdata;
 
 /**
  * Receives notifications about changes in the fish population.

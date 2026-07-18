@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model;
+package it.unibo.hookmaster.model.fishdata;
 
 /**
  * Represents the starting position for a fish.
@@ -6,8 +6,8 @@ package it.unibo.hookmaster.model;
 
 public class Position {
 
-    private final int x;
-    private final int y;
+    private final double x;
+    private final double y;
 
     /**
      * Creates a new speed upgrade instance.
@@ -15,7 +15,7 @@ public class Position {
      * @param x x value of the UI.
      * @param y y value of the UI.
      */
-    public Position(final int x, final int y) {
+    public Position(final double x, final double y) {
         this.x = x;
         this.y = y;
     }
@@ -25,7 +25,7 @@ public class Position {
      * 
      * @return x
      */
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -34,7 +34,7 @@ public class Position {
      * 
      * @return y
      */
-    public int getY() {
+    public double getY() {
         return y;
     }
 }

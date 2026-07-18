@@ -1,6 +1,6 @@
-package it.unibo.hookmaster.model.movement;
+package it.unibo.hookmaster.model.fishdata.movement;
 
-import it.unibo.hookmaster.model.Fish;
+import it.unibo.hookmaster.model.fishdata.Fish;
 
 /**
  * Defines how a fish moves within the map.

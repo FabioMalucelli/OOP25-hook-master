@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model;
+package it.unibo.hookmaster.model.fishdata;
 
 import java.util.ArrayList;
 import java.util.Collections;

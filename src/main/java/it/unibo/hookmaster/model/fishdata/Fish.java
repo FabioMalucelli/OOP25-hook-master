@@ -1,29 +1,19 @@
-package it.unibo.hookmaster.model;
+package it.unibo.hookmaster.model.fishdata;
 
 import java.util.Objects;
 
-import it.unibo.hookmaster.model.movement.MovementStrategy;
+import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Represents a fish instance.
  */
-public class Fish {
+public class Fish implements Catchable {
 
     private final FishType type;
     private Position position;
     private int direction = 1;
     private MovementStrategy movementStrategy;
-
-    /**
-     * Creates a new fish with the default movement strategy for its type.
-     *
-     * @param type the fish species
-     * @param x    initial X position
-     * @param y    initial Y position
-     */
-    public Fish(final FishType type, final int x, final int y) {
-        this(type, new Position(x, y), type.createDefaultMovementStrategy());
-    }
 
     /**
      * Creates a new fish with an explicit movement strategy.
@@ -62,14 +52,14 @@ public class Fish {
     /**
      * @return the fish value
      */
-    public double getEconomicValue() {
+    public int getEconomicValue() {
         return this.type.getEconomicValue();
     }
 
     /**
      * @return the fish speed
      */
-    public int getSpeed() {
+    public double getSpeed() {
         return this.type.getSpeed();
     }
 
@@ -90,14 +80,14 @@ public class Fish {
     /**
      * @return the x position
      */
-    public int getX() {
+    public double getX() {
         return this.position.getX();
     }
 
     /**
      * @return the y position
      */
-    public int getY() {
+    public double getY() {
         return this.position.getY();
     }
 
