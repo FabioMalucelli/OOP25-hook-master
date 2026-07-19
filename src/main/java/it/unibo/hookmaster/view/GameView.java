@@ -129,7 +129,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
                     fish.getX(), fish.getY() + OFFSET_TOP);
         }
 
-        fishesGc.drawImage(loadImage("/boat.png", 300, 150), snapshot.boat().getX(),
+        /*fishesGc.drawImage(loadImage("/boat.png", 300, 150), snapshot.boat().getX(),
                 snapshot.boat().getY());
 
         fishesGc.setLineWidth(2.0);
@@ -137,7 +137,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
                 snapshot.hook().getX() + (50 / 2), snapshot.hook().getY() + (50 / 2));
 
         fishesGc.drawImage(loadImage("/hook.png", 50, 50), snapshot.hook().getX(),
-                snapshot.hook().getY());
+                snapshot.hook().getY());*/
 
         coinsLabel.setText(snapshot.coins() + " C");
     }
