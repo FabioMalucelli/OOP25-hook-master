@@ -9,9 +9,9 @@ public interface WeatherSystem {
      * Advances the weather system by one frame.
      * May trigger a weather change.
      * 
-     * @param deltaTime seconds elapsed since the last frame
+     * @param deltaTime milliseconds elapsed since the last frame
      */
-    void update(double deltaTime);
+    void update(long deltaTime);
 
     /**
      * Gets the currently active weather condition.

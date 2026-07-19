@@ -17,9 +17,9 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
      * actvie movement flags, or advances the catching minigame if one is
      * in progress.
      * 
-     * @param deltaTime second passed since the last frame
+     * @param deltaTime milliseconds passed since the last frame
      */
-    void update(double deltaTime);
+    void update(long deltaTime);
 
     /**
      * Activates the hook left movement.

@@ -3,6 +3,8 @@ package it.unibo.hookmaster.model.weather;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unibo.hookmaster.util.TimeUtils;
+
 /**
  * Strandard implementation of WeatherSystem.
  */
@@ -42,8 +44,9 @@ public final class WeatherSystemImpl implements WeatherSystem {
     }
 
     @Override
-    public void update(final double deltaTime) {
-        timeUntilNextChange -= deltaTime;
+    public void update(final long deltaTime) {
+        final double deltaSeconds = TimeUtils.toSeconds(deltaTime);
+        timeUntilNextChange -= deltaSeconds;
         while (timeUntilNextChange <= 0) {
             changeWeather();
             timeUntilNextChange += randomInterval();

@@ -10,9 +10,9 @@ public interface FishingMinigame {
     /**
      * Advances the minigame state by one frame.
      * 
-     * @param deltaTime second elapsed since the last frame
+     * @param deltaTime milliseconds elapsed since the last frame
      */
-    void update(double deltaTime);
+    void update(long deltaTime);
 
     /**
      * Called when the player presses the catch button.

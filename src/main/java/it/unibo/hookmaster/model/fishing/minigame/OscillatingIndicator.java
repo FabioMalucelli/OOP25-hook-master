@@ -26,7 +26,7 @@ public final class OscillatingIndicator implements IndicatorStrategy {
     }
 
     @Override
-    public void update(final double deltaTime) {
+    public void update(final long deltaTime) {
         final double delta = speed * deltaTime;
         if (movingForward) {
             position += delta;

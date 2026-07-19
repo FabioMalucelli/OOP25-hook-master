@@ -11,9 +11,9 @@ public interface IndicatorStrategy {
     /**
      * Advances the indicator by one frame.
      * 
-     * @param deltaTime seconds passed since the last frame
+     * @param deltaTime milliseconds passed since the last frame
      */
-    void update(double deltaTime);
+    void update(long deltaTime);
 
     /**
      * Gets the curent position of the idicator on the bar.

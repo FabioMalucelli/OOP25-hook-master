@@ -1,6 +1,7 @@
 package it.unibo.hookmaster.model.fishing.minigame;
 
 import it.unibo.hookmaster.model.fishing.Catchable;
+import it.unibo.hookmaster.util.TimeUtils;
 
 /**
  * Standard implementation of FishingMinigame.
@@ -53,7 +54,7 @@ public final class FishingMinigameImpl implements FishingMinigame {
     }
 
     @Override
-    public void update(final double deltaTime) {
+    public void update(final long deltaTime) {
         if (outcome == MinigameOutcome.IN_PROGRESS) {
             indicator.update(deltaTime);
         }

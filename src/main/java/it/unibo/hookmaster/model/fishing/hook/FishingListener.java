@@ -8,7 +8,7 @@ package it.unibo.hookmaster.model.fishing.hook;
 public interface FishingListener {
 
     /**
-     * Called by the FishingController when a notable event occurs.
+     * Called by the Controller when a notable event occurs.
      * 
      * @param event the event carrying type and optional fish data
      */

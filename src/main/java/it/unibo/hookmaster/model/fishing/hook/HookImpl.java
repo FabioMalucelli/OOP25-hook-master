@@ -12,6 +12,7 @@ import it.unibo.hookmaster.model.fishing.minigame.MinigameFactory;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.weather.Weather;
 import it.unibo.hookmaster.model.weather.WeatherEvent;
+import it.unibo.hookmaster.util.TimeUtils;
 
 /**
  * Standard implementation of Hook.
@@ -51,7 +52,7 @@ public final class HookImpl implements Hook {
      * @param startY        the initial Y position
      * @param speed         the movement speed in pixels/second, on both axes
      * @param minX          the left horizontal boundary
-     * @param axX          the right horizontal boundary
+     * @param maxX          the right horizontal boundary
      * @param maxDepth      the maximum depth the hook can reach
      */
     public HookImpl(final double startX, final double startY, 
@@ -66,25 +67,27 @@ public final class HookImpl implements Hook {
     }
 
     @Override
-    public void update(final double deltaTime) {
+    public void update(final long deltaTime) {
         if(currentState == HookState.MINIGAME) {
             if(currentMinigame != null) {
                 currentMinigame.update(deltaTime);
             }
             return;
         }
+
+        final double deltaSeconds = TimeUtils.toSeconds(deltaTime);
         
         if(movingLeft && !movingRight) {
-            x -= speed * deltaTime;
+            x -= speed * deltaSeconds;
         }else if (movingRight && !movingLeft) {
-            x += speed * deltaTime;
+            x += speed * deltaSeconds;
         }
         x = Math.clamp(x, minX, maxX);
 
         if(movingUp && !movingDown) {
-            y -= speed * deltaTime;
+            y -= speed * deltaSeconds;
         }else if (movingDown && !movingUp) {
-            y += speed * deltaTime;
+            y += speed * deltaSeconds;
         }
         if(y > maxDepth) {
             y = maxDepth;
