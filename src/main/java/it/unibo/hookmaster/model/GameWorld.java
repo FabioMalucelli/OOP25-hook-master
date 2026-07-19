@@ -5,6 +5,8 @@ import java.util.List;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishdata.FishManager;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.upgrade.PlayerWallet;
+import it.unibo.hookmaster.model.upgrade.Shop;
 
 /**
  * This interface represents the game world, which is the main model of the game.
@@ -35,4 +37,18 @@ public interface GameWorld {
      * @return the hook
      */
     Hook getHook();
+
+    /**
+     * Returns the shop currently in the game world.
+     * 
+     * @return the shop
+     */
+    Shop getShop();
+
+    /**
+     * Returns the player wallet currently in the game world.
+     * 
+     * @return the player wallet
+     */
+    PlayerWallet getPlayerWallet();
 }

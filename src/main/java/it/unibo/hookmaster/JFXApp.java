@@ -27,7 +27,7 @@ public final class JFXApp extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
 

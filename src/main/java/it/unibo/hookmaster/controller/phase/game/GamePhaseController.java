@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.AbstractPhaseController;
+import it.unibo.hookmaster.model.GameWorld;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 
@@ -15,6 +16,7 @@ import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 public class GamePhaseController extends AbstractPhaseController {
     private final View<GameSnapshot, GameInputHandler> gameView;
     private final Queue<Runnable> scheduledActions = new ArrayDeque<>();
+    private final GameWorld gameWorld;
 
     /**
      * Creates a new GamePhaseController tied to the given game view.
@@ -25,7 +27,8 @@ public class GamePhaseController extends AbstractPhaseController {
         value = "EI_EXPOSE_REP2",
         justification = "The view does not contain any of the controller state, so it is safe to expose it."
     )
-    public GamePhaseController(final View<GameSnapshot, GameInputHandler> gameView) {
+    public GamePhaseController(final GameWorld gameworld, final View<GameSnapshot, GameInputHandler> gameView) {
+        this.gameWorld = gameworld;
         this.gameView = gameView;
         //this.gameView.setInputHandler(new InputHandlerImpl());
     }
@@ -47,6 +50,7 @@ public class GamePhaseController extends AbstractPhaseController {
             final Runnable action = scheduledActions.remove();
             action.run();
         }
+        this.gameWorld.update(deltaTime);
         this.gameView.update(buildSnapshot());
     }
 
@@ -57,7 +61,7 @@ public class GamePhaseController extends AbstractPhaseController {
      * @return a snapshot of the current game state
      */
     private GameSnapshot buildSnapshot() {
-        return null; // TODO: Implement this method to return a proper GameSnapshot
+        return new GameSnapshot(gameWorld.getFishes(), gameWorld.getHook(), gameWorld.getPlayerWallet().getCoins());
     }
 
     /**
