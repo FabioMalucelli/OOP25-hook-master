@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import it.unibo.hookmaster.model.event.UpgradeEvent;
-import it.unibo.hookmaster.model.event.UpgradeObserver;
+import it.unibo.hookmaster.model.upgrade.event.UpgradeEvent;
+import it.unibo.hookmaster.model.upgrade.event.UpgradeObserver;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 
 /**

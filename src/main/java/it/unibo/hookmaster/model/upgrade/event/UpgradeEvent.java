@@ -1,4 +1,4 @@
-package it.unibo.hookmaster.model.event;
+package it.unibo.hookmaster.model.upgrade.event;
 
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 
