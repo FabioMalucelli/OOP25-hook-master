@@ -5,8 +5,6 @@ package it.unibo.hookmaster.model.fishing.hook;
  * states of the Hook.
  */
 public enum HookState {
-    IDLE,       //The hook is on the boat
-    DROPPING,   //The hook is sinking to the bottom
-    REELING,    //The hook is being retrived
-    MINIGAME    //The hook has caught a fish
+    MOVING,     //The hook moves freely in response to directional input and can hook a fish
+    MINIGAME    //The hook is frozen because the catching minigame is in progress
 }

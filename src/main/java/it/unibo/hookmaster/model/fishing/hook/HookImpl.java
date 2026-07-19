@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.hookmaster.model.collision.Collidable;
-import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
-import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.event.UpgradeEvent;
 import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
@@ -29,9 +27,15 @@ public final class HookImpl implements Hook {
     private double y;
 
     //Game attributes (whitch can then be modified using the shop)
-    private double dropSpeed;
-    private double reelSpeed;
+    private double speed;
+    private final double minX;
+    private final double maxX;
     private final double maxDepth;
+
+    private boolean movingLeft;
+    private boolean movingRight;
+    private boolean movingUp;
+    private boolean movingDown;
 
     private HookState currentState;
     private Catchable hookedFish;
@@ -43,76 +47,74 @@ public final class HookImpl implements Hook {
     /**
      * Constructs a new HookImpl.
      *
-     * @param startX        the initial X position (usually the boat's X)
-     * @param startY        the initial Y position (usually the boat's Y)
-     * @param dropSpeed     the speed at which the hook drops
-     * @param reelSpeed     the speed at which the hook is reeled in
+     * @param startX        the initial X position
+     * @param startY        the initial Y position
+     * @param speed         the movement speed in pixels/second, on both axes
+     * @param minX          the left horizontal boundary
+     * @param axX          the right horizontal boundary
      * @param maxDepth      the maximum depth the hook can reach
      */
     public HookImpl(final double startX, final double startY, 
-        final double dropSpeed, final double reelSpeed, final double maxDepth) {
+        final double speed, final double minX, final double maxX, final double maxDepth) {
         this.x = startX;
         this.y = startY;
-        this.dropSpeed = dropSpeed;
-        this.reelSpeed = reelSpeed;
+        this.speed = speed;
+        this.minX = minX;
+        this.maxX = maxX;
         this.maxDepth = maxDepth;
-        this.currentState = HookState.IDLE;
+        this.currentState = HookState.MOVING;
     }
 
     @Override
-    public void update(final double deltaTime, final double boatX, final double boatY) {
-        switch (currentState) {
-            case IDLE:
-                this.x = boatX;
-                this.y = boatY;
-                break;
-            case DROPPING:
-                y += dropSpeed * deltaTime;
-                if (y >= maxDepth) {
-                    y = maxDepth;
-                    currentState = HookState.REELING;
-                }
-                break;
-            case REELING:
-                y -= reelSpeed * deltaTime;
-                if (y <= boatY) {
-                    y = boatY;
-                    currentState = HookState.IDLE;
-                }
-                break;
-            case MINIGAME:
-                //Position frozen while the QTE is running.
-                //still needs to advance(indicator movement).
-                if (currentMinigame != null) {
-                    currentMinigame.update(deltaTime);
-                }
-                break;
+    public void update(final double deltaTime) {
+        if(currentState == HookState.MINIGAME) {
+            if(currentMinigame != null) {
+                currentMinigame.update(deltaTime);
+            }
+            return;
         }
+        
+        if(movingLeft && !movingRight) {
+            x -= speed * deltaTime;
+        }else if (movingRight && !movingLeft) {
+            x += speed * deltaTime;
+        }
+        x = Math.clamp(x, minX, maxX);
+
+        if(movingUp && !movingDown) {
+            y -= speed * deltaTime;
+        }else if (movingDown && !movingUp) {
+            y += speed * deltaTime;
+        }
+        if(y > maxDepth) {
+            y = maxDepth;
+        }
+        
     }
 
     @Override
-    public boolean cast() {
-        if (currentState == HookState.IDLE) {
-            currentState = HookState.DROPPING;
-            fireEvent(new FishingEvent(FishingEvent.Type.HOOK_CAST, null));
-            return true;
-        }
-        return false;
+    public void setMovingLeft(final boolean moving) {
+        this.movingLeft = moving;
     }
 
     @Override
-    public boolean reelIn() {
-        if (currentState == HookState.DROPPING) {
-            currentState = HookState.REELING;
-            fireEvent(new FishingEvent(FishingEvent.Type.HOOK_REELING, null));
-            return true;
-        }
-        return false;
+    public void setMovingRight(final boolean moving) {
+        this.movingRight = moving;
+    }
+
+    @Override
+    public void setMovingUp(final boolean moving) {
+        this.movingUp = moving;
+    }
+
+    @Override
+    public void setMovingDown(final boolean moving) {
+        this.movingDown = moving;
     }
 
     @Override
     public void hookFish(final Catchable fish) {
-        if ((currentState == HookState.DROPPING || currentState == HookState.REELING) && hookedFish == null) {
+        if (currentState == HookState.MOVING && hookedFish == null) {
             this.hookedFish = fish;
             this.currentMinigame = MinigameFactory.create(fish, stormy);
             this.currentState = HookState.MINIGAME;
@@ -140,7 +142,7 @@ public final class HookImpl implements Hook {
             if (!success) {
                 hookedFish = null;
             }
-            currentState = HookState.REELING;
+            currentState = HookState.MOVING;
         }
     }
 
@@ -162,8 +164,7 @@ public final class HookImpl implements Hook {
     @Override
     public void onUpgrade(final UpgradeEvent event) {
         if (event.getUpgradeType() == UpgradeType.SPEED) {
-            this.dropSpeed = event.getNewValue();
-            this.reelSpeed = event.getNewValue();
+            this.speed = event.getNewValue();
         }
     }
 
@@ -179,7 +180,7 @@ public final class HookImpl implements Hook {
 
     @Override
     public void onCollision(final Collidable other) {
-        if ((currentState == HookState.DROPPING || currentState == HookState.REELING) && other instanceof Catchable) {
+        if (currentState == HookState.MOVING && other instanceof Catchable) {
             hookFish((Catchable) other);
         }
     }
@@ -205,13 +206,8 @@ public final class HookImpl implements Hook {
     }
 
     @Override
-    public void setDropSpeed(final double dropSpeed) {
-        this.dropSpeed = dropSpeed;
-    }
-
-    @Override
-    public void setReelSpeed(final double reelSpeed) {
-        this.reelSpeed = reelSpeed;
+    public void setSpeed(final double speed) {
+        this.speed = speed;
     }
 
     @Override

@@ -13,28 +13,41 @@ import it.unibo.hookmaster.model.weather.WeatherObserver;
 public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
 
     /**
-     * Advances the hook position by one frame,and if a minigame is active 
-     * the minigame advances by one frame.
+     * Advances the hook position by one frame based on the currtently
+     * actvie movement flags, or advances the catching minigame if one is
+     * in progress.
      * 
-     * @param deltaTime seconds passed since the last frame
-     * @param boatX     current X of the boat
-     * @param boatY     current Y of the boat
+     * @param deltaTime second passed since the last frame
      */
-    void update(double deltaTime, double boatX, double boatY);
+    void update(double deltaTime);
 
     /**
-     * Casts the hook into the water if its current HookState is IDLE.
+     * Activates the hook left movement.
      * 
-     * @return true if the cast was performed
+     * @param moving true to start moving left, false to stop
      */
-    boolean cast();
+    void setMovingLeft(boolean moving);
 
     /**
-     * Starts reeling the hook if its current HookState is DROPPING.
+     * Activates the hook right movement.
      * 
-     * @return true if the reeling was started.
+     * @param moving true to start moving right, false to stop
      */
-    boolean reelIn();
+    void setMovingRight(boolean moving);
+
+    /**
+     * Activates the hook up movement.
+     * 
+     * @param moving true to start moving up, false to stop
+     */
+    void setMovingUp(boolean moving);
+
+    /**
+     * Activates the hook down movement.
+     * 
+     * @param moving true to start moving down, false to stop
+     */
+    void setMovingDown(boolean moving);
 
     /**
      * Freezes the hook and enters the HookState -> MINIGAME.
@@ -46,14 +59,14 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
 
     /**
      * Resolves the active catching minigame: checks if the indicator was inside the target zone, updates
-     * the hooked-fish,clears the minigame, and resumes reeling.
+     * the hooked-fish,clears the minigame and resumes free movement.
      * 
      * @return true if the catch succeeded
      */
     boolean attemptCatch();
 
     /**
-     * Resolves the minigame and starts reeling.
+     * Resolves the minigame and resumes free movement.
      * On failure the fish reference is cleared.
      * 
      * @param success true if the player caught the fish
@@ -87,7 +100,7 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
     double getX();
 
     /**
-     * Gets the current Y(depth) position of the hook
+     * Gets the current Y position of the hook
      * 
      * @return the Y coordinate in pixels
      */
@@ -111,18 +124,11 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
     void setStormy(boolean stormy);
 
     /**
-     * Sets the dropping speed. Invoked by the shop on upgrade purchase.
+     * Sets the movement speed on both axes. Invoked by the shop on upgrade purchase.
      * 
-     * @param dropSpeed new sinking speed in pixels/second
+     * @param speed new movement speed in pixels/second
      */
-    void setDropSpeed(double dropSpeed);
-
-    /**
-     * Sets the reeling speed. Invoked by the shop on upgrade purchase.
-     * 
-     * @param reelSpeed new reel speed in pixels/second
-     */
-    void setReelSpeed(double reelSpeed);
+    void setSpeed(double speed);
 
     /**
      * Registers a listener to recieve fishing events fired by this hook.

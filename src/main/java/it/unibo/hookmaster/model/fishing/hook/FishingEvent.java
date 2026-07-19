@@ -12,8 +12,6 @@ public final class FishingEvent {
      * Enumerates the kind of events the fishing system can produce.
      */
     public enum Type {
-        HOOK_CAST,          //The hook was cast into water
-        HOOK_REELING,       //The hook is being reeled in (empty or after a failed catch)
         FISH_HOOKED,        //A fish has been hooked and the QTE minigame has started
         FISH_CAUGHT,        //The player succeeded in the QTE and caught the fish
         FISH_ESCAPED,       //The player missed the QTE and the fish escaped
