@@ -1,20 +1,29 @@
 package it.unibo.hookmaster.model.fishdata;
 
 import java.util.Objects;
+import java.util.Random;
 
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
-import it.unibo.hookmaster.model.fishing.Catchable;
+//import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Represents a fish instance.
  */
-public class Fish implements Catchable {
+public class Fish { // implements Catchable {
 
+    private static final double MIN_WEIGHT_RATIO = 0.5;
+    private static final double MAX_WEIGHT_RATIO = 2.0;
+    private static final double MIN_CATCH_DIFFICULTY = 0.1;
+    private static final double MAX_CATCH_DIFFICULTY = 1.0;
+
+    private final double weight;
     private final FishType type;
     private Position position;
     private int direction = 1;
     private MovementStrategy movementStrategy;
     private double speedMultiplier = 1.0;
+
+    private final Random random = new Random();
 
     /**
      * Creates a new fish with an explicit movement strategy.
@@ -27,6 +36,7 @@ public class Fish implements Catchable {
         this.type = type;
         this.position = position;
         this.movementStrategy = Objects.requireNonNull(movementStrategy);
+        this.weight = generateWeight();
     }
 
     /**
@@ -51,10 +61,11 @@ public class Fish implements Catchable {
     }
 
     /**
-     * @return the fish value
+     * @return the dynamically claculated value of the fish
      */
     public int getEconomicValue() {
-        return this.type.getEconomicValue();
+        final double ratio = this.weight / this.type.getBaseWeight();
+        return (int) Math.round(this.type.getBaseEconomicValue() * ratio);
     }
 
     /**
@@ -77,7 +88,16 @@ public class Fish implements Catchable {
      * @return the fish catch difficulty
      */
     public double getCatchDifficulty() {
-        return this.type.getCatchDifficulty();
+        final double ratio = this.weight / this.type.getBaseWeight();
+        final double rawDifficulty = this.type.getBaseCatchDifficulty() * ratio;
+        return Math.max(MIN_CATCH_DIFFICULTY, Math.min(MAX_CATCH_DIFFICULTY, rawDifficulty));
+    }
+
+    /**
+     * @return the fish's weight ratio
+     */
+    public double getWeightRatio() {
+        return weight;
     }
 
     /**
@@ -146,5 +166,19 @@ public class Fish implements Catchable {
      */
     public void update(final double mapWidth, final double mapHeight, final long deltaTime) {
         this.movementStrategy.move(this, mapWidth, mapHeight, deltaTime);
+    }
+
+    /**
+     * Generates a random weight between the min weight possible and the max weight
+     * possible.
+     * 
+     * @return a random value between the lowest weight and the highest weight
+     *         possible
+     */
+    private double generateWeight() {
+        final double baseWeight = this.type.getBaseWeight();
+        final double minWeight = baseWeight * MIN_WEIGHT_RATIO;
+        final double maxWeight = baseWeight * MAX_WEIGHT_RATIO;
+        return minWeight + random.nextDouble() * (maxWeight - minWeight);
     }
 }

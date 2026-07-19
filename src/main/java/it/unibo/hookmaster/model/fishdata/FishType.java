@@ -8,35 +8,39 @@ import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
  */
 public enum FishType {
 
-    GREATWHITE("Shark", true, 100, .6, 1.0, false),
-    ANCHOVY("Anchovy", false, 5, .9, 0.1, false),
-    CLOWNFISH("Clownfish", false, 10, 1, 0.1, false),
-    TUNA("Tuna", false, 20, 1.5, .55, false),
-    MARLIN("Marlin", true, 50, 1.5, .8, false),
-    ZEBRAFISH("Zebra fish", false, 20, 1.5, .3, false),
-    BUTTERFLYFISH("Butterfly fish", false, 5, .8, .3, false),
-    SAWSHARK("Saw shark", true, 50, 1, .9, false),
-    ANGLER("Angler", true, 200, .8, 1, true);
+    GREATWHITE("Great White Shark", true, 100, 15, 1.0, 900.0, false),
+    ANCHOVY("Anchovy", false, 5, 2, 0.1, 0.02, false),
+    CLOWNFISH("Clownfish", false, 10, 3, 0.1, 0.03, false),
+    TUNA("Tuna", false, 20, 10, .55, 5.0, false),
+    MARLIN("Marlin", true, 50, 10, .8, 60.0, true),
+    ZEBRAFISH("Zebra fish", false, 20, 1.5, .3, 5, false),
+    BUTTERFLYFISH("Butterfly fish", false, 5, .8, .3, 5, false),
+    SAWSHARK("Saw shark", true, 50, 1, .9, 5, false),
+    ANGLER("Angler", true, 200, .8, 1, 5, true);
 
     private final String name;
     private final boolean predator;
-    private final int economicValue;
+    private final int baseEconomicValue;
     private final double speed;
-    private final double catchDifficulty;
+    private final double baseCatchDifficulty;
+    private final double baseWeight;
     private final boolean stormOnly;
 
-    FishType(final String name, final boolean predator, final int economicValue,
-            final double speed, final double catchDifficulty, final boolean stormOnly) {
+    FishType(final String name, final boolean predator, final int baseEconomicValue, final double speed,
+            final double baseCatchDifficulty,
+            final double baseWeight, final boolean stormOnly) {
+
         this.name = name;
         this.predator = predator;
-        this.economicValue = economicValue;
+        this.baseEconomicValue = baseEconomicValue;
         this.speed = speed;
-        this.catchDifficulty = catchDifficulty;
+        this.baseCatchDifficulty = baseCatchDifficulty;
+        this.baseWeight = baseWeight;
         this.stormOnly = stormOnly;
     }
 
     /**
-     * @return the name of the fish
+     * @return the name of the species
      */
     public String getName() {
         return name;
@@ -50,39 +54,42 @@ public enum FishType {
     }
 
     /**
-     * @return the value of the fish
+     * @return the base value of the fish
      */
-    public int getEconomicValue() {
-        return economicValue;
+    public int getBaseEconomicValue() {
+        return baseEconomicValue;
     }
 
     /**
-     * @return the speed of the fish
+     * @return the speed for the fish
      */
     public double getSpeed() {
         return speed;
     }
 
     /**
-     * @return the catch difficulty of the fish
+     * @return the base catch difficulty for the fish
      */
-    public double getCatchDifficulty() {
-        return catchDifficulty;
+    public double getBaseCatchDifficulty() {
+        return baseCatchDifficulty;
     }
 
     /**
-     * @return true if this species only spawns during stormy weather
+     * @return the reference weight for this fish in kg
+     */
+    public double getBaseWeight() {
+        return baseWeight;
+    }
+
+    /**
+     * @return if the fish only spawns during a storm
      */
     public boolean isStormOnly() {
         return stormOnly;
     }
 
     /**
-     * Creates the default movement strategy for this species.
-     * Predators start with a straight-line patrol, can later switch to chase when a
-     * prey is detected.
-     *
-     * @return a new movement strategy instance
+     * @return the default movement
      */
     public MovementStrategy createDefaultMovementStrategy() {
         return new LinearMovement();
