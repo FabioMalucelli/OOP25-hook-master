@@ -10,9 +10,6 @@ import java.util.Random;
  */
 public class FishSpawner {
 
-    private static final double MIN_Y_RATIO = 0.30;
-    private static final double MAX_Y_RATIO = 0.95;
-
     private final double mapWidth;
     private final double mapHeight;
     private final Random random = new Random();
@@ -58,8 +55,6 @@ public class FishSpawner {
     }
 
     private double randomYWithinBand() {
-        final double minY = mapHeight * MIN_Y_RATIO;
-        final double maxY = mapHeight * MAX_Y_RATIO;
-        return minY + random.nextDouble(maxY - minY);
+        return random.nextDouble(mapHeight);
     }
 }

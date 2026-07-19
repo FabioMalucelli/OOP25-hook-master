@@ -8,11 +8,11 @@ import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
  */
 public enum FishType {
 
-    GREATWHITE("Great White Shark", true, 100, 15, 1.0, 20.0, false),
+    GREATWHITE("Great White Shark", true, 100, 7, 1.0, 20.0, false),
     ANCHOVY("Anchovy", false, 5, 2, 0.1, 2, false),
     CLOWNFISH("Clownfish", false, 10, 3, 5, 0.03, false),
-    TUNA("Tuna", false, 20, 10, .55, 15.0, false),
-    MARLIN("Marlin", true, 50, 10, .8, 15.0, false),
+    TUNA("Tuna", false, 20, 7, .55, 15.0, false),
+    MARLIN("Marlin", true, 50, 7, .8, 15.0, false),
     ZEBRAFISH("Zebra fish", false, 20, 1.5, 5, 5, false),
     BUTTERFLYFISH("Butterfly fish", false, 5, 3, .3, 5, false),
     SAWSHARK("Saw shark", true, 50, 1, 19, 5, false),
