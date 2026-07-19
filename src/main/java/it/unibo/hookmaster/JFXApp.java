@@ -21,6 +21,8 @@ import javafx.stage.Stage;
  */
 public final class JFXApp extends Application {
 
+    private static final double SKY_RATIO = 64 / 360;
+
     private final Rectangle2D bounds = Screen.getPrimary().getBounds();
     private final Scene scene = new Scene(new Label("Loading..."), bounds.getWidth(), bounds.getHeight());
 
