@@ -87,11 +87,4 @@ public enum FishType {
     public boolean isStormOnly() {
         return stormOnly;
     }
-
-    /**
-     * @return the default movement
-     */
-    public MovementStrategy createDefaultMovementStrategy() {
-        return new LinearMovement();
-    }
 }

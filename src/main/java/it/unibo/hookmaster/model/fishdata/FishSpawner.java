@@ -1,5 +1,9 @@
 package it.unibo.hookmaster.model.fishdata;
 
+import it.unibo.hookmaster.model.fishdata.movement.DiagonalMovement;
+import it.unibo.hookmaster.model.fishdata.movement.LinearMovement;
+import it.unibo.hookmaster.model.fishdata.movement.MeanderingMovement;
+import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.weather.Weather;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +13,10 @@ import java.util.Random;
  * Creates new eligible fish at the edges of the map.
  */
 public class FishSpawner {
+
+    private static final double MIN_DIAGONAL_RATIO = 0.2;
+    private static final double MAX_DIAGONAL_RATIO = 0.5;
+    private static final int MOVEMENT_STRATEGY_COUNT = 3;
 
     private final double mapWidth;
     private final double mapHeight;
@@ -39,7 +47,7 @@ public class FishSpawner {
         final double x = fromLeft ? -50 : mapWidth + 50;
         final double y = randomYWithinBand();
 
-        final Fish fish = new Fish(type, new Position(x, y), type.createDefaultMovementStrategy());
+        final Fish fish = new Fish(type, new Position(x, y), randomMovementStrategy());
         fish.setDirection(fromLeft ? 1 : -1);
         return fish;
     }
@@ -52,6 +60,20 @@ public class FishSpawner {
             }
         }
         return eligible;
+    }
+
+    private MovementStrategy randomMovementStrategy() {
+        final int choice = random.nextInt(MOVEMENT_STRATEGY_COUNT);
+        switch (choice) {
+            case 0:
+                return new LinearMovement();
+            case 1:
+                final double ratio = MIN_DIAGONAL_RATIO
+                        + random.nextDouble() * (MAX_DIAGONAL_RATIO - MIN_DIAGONAL_RATIO);
+                return new DiagonalMovement(ratio);
+            default:
+                return new MeanderingMovement();
+        }
     }
 
     private double randomYWithinBand() {
