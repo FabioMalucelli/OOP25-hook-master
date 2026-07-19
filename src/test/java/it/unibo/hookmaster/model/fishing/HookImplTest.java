@@ -155,7 +155,7 @@ class HookImplTest {
         hook.update(FIVE_SECONDS);
 
         assertEquals(xBeforeMinigame, hook.getX(), DELTA);
-        assertEquals(yBeforeMinigame, hook.getX(), DELTA);
+        assertEquals(yBeforeMinigame, hook.getY(), DELTA);
     }
 
     @Test
@@ -199,7 +199,7 @@ class HookImplTest {
         //A rectangle faraway must not intersect.
         final CollisionArea faraway = new CollisionAreaRectangle(FARAWAY_RECT_ORIGIN, FARAWAY_RECT_ORIGIN, 
             FARAWAY_RECT_SIZE, FARAWAY_RECT_SIZE);
-        assertTrue(rectCirclePredicate.test(faraway, area));
+        assertFalse(rectCirclePredicate.test(faraway, area));
     }
 
     @Test
@@ -307,12 +307,12 @@ class HookImplTest {
     void hookFishFiresFishTooHeavyEventForRejectedFish() {
         final RecordingFishingListener listener = new RecordingFishingListener();
         hook.addListener(listener);
-        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, "BorderlineFish", MAX_WEIGHT);
+        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, "HeavyFish", HEAVY_FISH_WEIGHT);
 
         hook.hookFish(heavyFish);
 
         assertTrue(listener.hasRecieved(FishingEvent.Type.FISH_TOO_HEAVY));
-        assertTrue(listener.hasRecieved(FishingEvent.Type.FISH_HOOKED));
+        assertFalse(listener.hasRecieved(FishingEvent.Type.FISH_HOOKED));
     }
 
     @Test
