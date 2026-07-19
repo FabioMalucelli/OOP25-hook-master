@@ -136,6 +136,10 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
      */
     void setSpeed(double speed);
 
+    double getMaxWeight();
+
+    void setMaxWeight(double maxWeight);
+
     /**
      * Registers a listener to recieve fishing events fired by this hook.
      * 

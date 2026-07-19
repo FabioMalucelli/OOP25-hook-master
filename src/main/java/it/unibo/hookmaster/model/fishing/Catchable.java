@@ -27,4 +27,11 @@ public interface Catchable {
      * @return the name of the species
      */
     String getName();
+
+    /**
+     * Gets the weight of this entity.
+     * 
+     * @return the weight
+     */
+    double getWeight();
 }

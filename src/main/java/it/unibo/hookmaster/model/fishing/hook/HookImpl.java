@@ -29,6 +29,8 @@ public final class HookImpl implements Hook {
 
     //Game attributes (whitch can then be modified using the shop)
     private double speed;
+    private double maxWeight;
+
     private final double minX;
     private final double maxX;
     private final double maxDepth;
@@ -56,13 +58,14 @@ public final class HookImpl implements Hook {
      * @param maxDepth      the maximum depth the hook can reach
      */
     public HookImpl(final double startX, final double startY, 
-        final double speed, final double minX, final double maxX, final double maxDepth) {
+        final double speed, final double minX, final double maxX, final double maxDepth, final double maxWeight) {
         this.x = startX;
         this.y = startY;
         this.speed = speed;
         this.minX = minX;
         this.maxX = maxX;
         this.maxDepth = maxDepth;
+        this.maxWeight = maxWeight;
         this.currentState = HookState.MOVING;
     }
 
@@ -125,12 +128,17 @@ public final class HookImpl implements Hook {
 
     @Override
     public void hookFish(final Catchable fish) {
-        if (currentState == HookState.MOVING && hookedFish == null) {
-            this.hookedFish = fish;
-            this.currentMinigame = MinigameFactory.create(fish, stormy);
-            this.currentState = HookState.MINIGAME;
-            fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
+        if (currentState != HookState.MOVING && hookedFish != null) {
+            return;
         }
+        if (fish.getWeight() > maxWeight) {
+            fireEvent(new FishingEvent(FishingEvent.Type.FISH_TOO_HEAVY, fish));
+            return;
+        }
+        this.hookedFish = fish;
+        this.currentMinigame = MinigameFactory.create(fish, stormy);
+        this.currentState = HookState.MINIGAME;
+        fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
     }
 
     @Override
@@ -174,8 +182,15 @@ public final class HookImpl implements Hook {
 
     @Override
     public void onUpgrade(final UpgradeEvent event) {
-        if (event.getUpgradeType() == UpgradeType.SPEED) {
-            this.speed = event.getNewValue();
+        switch (event.getUpgradeType()) {
+            case SPEED:
+                this.speed = event.getNewValue();
+                break;
+            case MAX_WEIGHT:
+                this.maxWeight = event.getNewValue();
+                break;
+            default:
+                break;
         }
     }
 
@@ -219,6 +234,16 @@ public final class HookImpl implements Hook {
     @Override
     public void setSpeed(final double speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public double getMaxWeight() {
+        return maxWeight;
+    }
+
+    @Override
+    public void setMaxWeight(final double maxWeight) {
+        this.maxWeight = maxWeight;
     }
 
     @Override

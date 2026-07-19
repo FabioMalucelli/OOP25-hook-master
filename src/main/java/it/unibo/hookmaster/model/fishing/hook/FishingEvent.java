@@ -15,6 +15,7 @@ public final class FishingEvent {
         FISH_HOOKED,        //A fish has been hooked and the QTE minigame has started
         FISH_CAUGHT,        //The player succeeded in the QTE and caught the fish
         FISH_ESCAPED,       //The player missed the QTE and the fish escaped
+        FISH_TOO_HEAVY      //The fish is too heavy for the hook
     }
 
     private final Type type;
