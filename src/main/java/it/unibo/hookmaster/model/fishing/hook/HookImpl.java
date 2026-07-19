@@ -60,7 +60,8 @@ public final class HookImpl implements Hook {
      * @param maxWeight     the initial maximum weight the hook can catch
      */
     public HookImpl(final double startX, final double startY, 
-        final double speed, final double minX, final double maxX, final double minY, final double maxDepth, final double maxWeight) {
+        final double speed, final double minX, final double maxX, final double minY,
+            final double maxDepth, final double maxWeight) {
         this.x = startX;
         this.y = startY;
         this.speed = speed;
@@ -74,32 +75,32 @@ public final class HookImpl implements Hook {
 
     @Override
     public void update(final long deltaTime) {
-        if(currentState == HookState.MINIGAME) {
-            if(currentMinigame != null) {
+        if (currentState == HookState.MINIGAME) {
+            if (currentMinigame != null) {
                 currentMinigame.update(deltaTime);
             }
             return;
         }
 
         final double deltaSeconds = TimeUtils.toSeconds(deltaTime);
-        
-        if(movingLeft && !movingRight) {
+
+        if (movingLeft && !movingRight) {
             x -= speed * deltaSeconds;
-        }else if (movingRight && !movingLeft) {
+        } else if (movingRight && !movingLeft) {
             x += speed * deltaSeconds;
         }
         x = Math.clamp(x, minX, maxX);
 
-        if(movingUp && !movingDown) {
+        if (movingUp && !movingDown) {
             y -= speed * deltaSeconds;
-        }else if (movingDown && !movingUp) {
+        } else if (movingDown && !movingUp) {
             y += speed * deltaSeconds;
         }
-        if(y > maxDepth) {
+        if (y > maxDepth) {
             y = maxDepth;
         }
         y = Math.clamp(y, minY, maxDepth);
-        
+ 
     }
 
     @Override
@@ -193,8 +194,6 @@ public final class HookImpl implements Hook {
             case MAX_WEIGHT:
                 this.maxWeight = event.getNewValue();
                 break;
-            default:
-                break;
         }
     }
 
@@ -255,6 +254,7 @@ public final class HookImpl implements Hook {
         listeners.add(listener);
     }
 
+    @Override
     public void removeListener(final FishingListener listener) {
         listeners.remove(listener);
     }

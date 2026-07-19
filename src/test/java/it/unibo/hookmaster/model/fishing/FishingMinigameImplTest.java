@@ -17,6 +17,9 @@ import it.unibo.hookmaster.testutil.FakeIndicatorStrategy;
  */
 class FishingMinigameImplTest {
 
+    private static final long ONE_SECOND = 1000L;
+    private static final long HALF_SECOMD = 500L;
+
     @Test
     void startsInProgress() {
         final FakeIndicatorStrategy indicator = new FakeIndicatorStrategy(0.0);
@@ -75,7 +78,7 @@ class FishingMinigameImplTest {
         minigame.attemptCatch();
 
         final int callsBefore = indicator.getUpdateCallCount();
-        minigame.update(1000L);
+        minigame.update(ONE_SECOND);
         assertEquals(callsBefore, indicator.getUpdateCallCount());
     }
 
@@ -84,7 +87,7 @@ class FishingMinigameImplTest {
         final FakeIndicatorStrategy indicator = new FakeIndicatorStrategy(0.0);
         final FishingMinigameImpl minigame = new FishingMinigameImpl(new FakeCatchable(), indicator);
 
-        minigame.update(500L);
+        minigame.update(HALF_SECOMD);
         assertEquals(1, indicator.getUpdateCallCount());
     }
 

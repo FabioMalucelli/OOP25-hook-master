@@ -42,7 +42,7 @@ class HookImplTest {
     private static final double DELTA = 1e-9;
     private static final long ONE_SECOND = 1000L;
     private static final long FIVE_SECONDS = 5000L;
-    private static final long LARGE_TIME_STEP = 1000000L;
+    private static final long LARGE_TIME_STEP = 1_000_000L;
     private static final double HOOK_TEST_X = 100.0;
     private static final double HOOK_TEST_Y = 100.0;
     private static final double OVERLAPPING_RECT_ORIGIN = 95.0;
@@ -57,7 +57,7 @@ class HookImplTest {
 
     @BeforeEach
     void setUp() {
-        hook = new HookImpl(START_X, START_Y, SPEED, MIN_X, MAX_X,MIN_Y, MAX_DEPTH, MAX_WEIGHT);
+        hook = new HookImpl(START_X, START_Y, SPEED, MIN_X, MAX_X, MIN_Y, MAX_DEPTH, MAX_WEIGHT);
     }
 
     @Test
@@ -183,7 +183,7 @@ class HookImplTest {
 
     @Test
     void collisionAreaIsCenteredOnCurrentPosition() {
-        final HookImpl positionedHook = new HookImpl(HOOK_TEST_X, HOOK_TEST_Y, SPEED, MIN_X, MAX_X,MIN_Y, MAX_DEPTH, MAX_WEIGHT);
+        final HookImpl positionedHook = new HookImpl(HOOK_TEST_X, HOOK_TEST_Y, SPEED, MIN_X, MAX_X, MIN_Y, MAX_DEPTH, MAX_WEIGHT);
         final CollisionAreaCircle area = positionedHook.getCollisionArea();
         assertNotNull(area);
         assertEquals(HOOK_TEST_X, area.getCenterX(), DELTA);
@@ -212,7 +212,7 @@ class HookImplTest {
 
     @Test
     void collsionWithNonCatchableIsIgnored() {
-        hook.onCollision((new FakeCollidable()));
+        hook.onCollision(new FakeCollidable());
         assertEquals(HookState.MOVING, hook.getCurrentState());
         assertNull(hook.getCurrentMinigame());
     }
@@ -312,7 +312,7 @@ class HookImplTest {
         hook.hookFish(heavyFish);
 
         assertTrue(listener.hasRecieved(FishingEvent.Type.FISH_TOO_HEAVY));
-        assertTrue(listener.hasRecieved((FishingEvent.Type.FISH_HOOKED)));
+        assertTrue(listener.hasRecieved(FishingEvent.Type.FISH_HOOKED));
     }
 
     @Test
@@ -327,9 +327,9 @@ class HookImplTest {
     }
 
     @Test
-    void getMaxWeightReturnsCurrentValue() {
+    void maxWeightReturnsCurrentValue() {
         assertEquals(MAX_WEIGHT, hook.getMaxWeight(), DELTA);
         hook.setMaxWeight(HEAVY_FISH_WEIGHT);
-        assertEquals(HEAVY_FISH_WEIGHT, hook.getMaxWeight(),DELTA);
+        assertEquals(HEAVY_FISH_WEIGHT, hook.getMaxWeight(), DELTA);
     }
 }

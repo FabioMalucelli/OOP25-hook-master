@@ -33,7 +33,7 @@ public final class FakeCatchable implements Catchable, Collidable {
     }
 
     /**
-     * Constructs a fake fish with the given proprieties and a default always catchable weight
+     * Constructs a fake fish with the given proprieties and a default always catchable weight.
      * 
      * @param economicValue     value returned by getEconomicValue()
      * @param catchDifficulty   value returned by getCatchDifficulty()

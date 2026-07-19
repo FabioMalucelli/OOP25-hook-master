@@ -106,12 +106,12 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
     double getX();
 
     /**
-     * Gets the current Y position of the hook
+     * Gets the current Y position of the hook.
      * 
      * @return the Y coordinate in pixels
      */
     double getY();
-    
+
     @Override
     CollisionAreaCircle getCollisionArea();
 
@@ -136,8 +136,18 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
      */
     void setSpeed(double speed);
 
+    /**
+     * Gets the current maximum weight the hook can catch.
+     * 
+     * @return the current max weight
+     */
     double getMaxWeight();
 
+    /**
+     * Sets the maximum weight the hook can catch.
+     * 
+     * @param maxWeight the new max weight
+     */
     void setMaxWeight(double maxWeight);
 
     /**
