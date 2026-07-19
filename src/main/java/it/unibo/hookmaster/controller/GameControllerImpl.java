@@ -17,6 +17,8 @@ import javafx.animation.AnimationTimer;
  * Implementation of the GameController.
  */
 public class GameControllerImpl implements GameController {
+    private static final long MIN_TICK_INTERVAL = 16_000_000; // 16 ms in nanoseconds, ~60 tick/s
+
     private final LoopTimer loopTimer = new LoopTimer();
     private final PhaseGraph phaseGraph;
     private final GameWorld gameWorld;
@@ -62,6 +64,9 @@ public class GameControllerImpl implements GameController {
             if (lastTime < 0) {
                 lastTime = now;
                 phaseGraph.selectPhase(Phase.MENU);
+                return;
+            }
+            if (now - lastTime < MIN_TICK_INTERVAL) {
                 return;
             }
             final long deltaTime = (now - lastTime) / 1_000_000;
