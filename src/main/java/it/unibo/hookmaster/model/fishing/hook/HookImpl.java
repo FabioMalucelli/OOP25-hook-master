@@ -32,6 +32,7 @@ public final class HookImpl implements Hook {
 
     private final double minX;
     private final double maxX;
+    private final double minY;
     private final double maxDepth;
 
     private boolean movingLeft;
@@ -54,15 +55,18 @@ public final class HookImpl implements Hook {
      * @param speed         the movement speed in pixels/second, on both axes
      * @param minX          the left horizontal boundary
      * @param maxX          the right horizontal boundary
+     * @param minY          the minimum Y the hook can reach
      * @param maxDepth      the maximum depth the hook can reach
+     * @param maxWeight     the initial maximum weight the hook can catch
      */
     public HookImpl(final double startX, final double startY, 
-        final double speed, final double minX, final double maxX, final double maxDepth, final double maxWeight) {
+        final double speed, final double minX, final double maxX, final double minY, final double maxDepth, final double maxWeight) {
         this.x = startX;
         this.y = startY;
         this.speed = speed;
         this.minX = minX;
         this.maxX = maxX;
+        this.minY = minY;
         this.maxDepth = maxDepth;
         this.maxWeight = maxWeight;
         this.currentState = HookState.MOVING;
@@ -94,6 +98,7 @@ public final class HookImpl implements Hook {
         if(y > maxDepth) {
             y = maxDepth;
         }
+        y = Math.clamp(y, minY, maxDepth);
         
     }
 

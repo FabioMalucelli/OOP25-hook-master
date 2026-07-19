@@ -34,6 +34,7 @@ class HookImplTest {
     private static final double SPEED = 10.0;
     private static final double MIN_X = 0.0;
     private static final double MAX_X = 200.0;
+    private static final double MIN_Y = -200.0;
     private static final double MAX_DEPTH = 100.0;
     private static final double MAX_WEIGHT = 100.0;
     private static final double HEAVY_FISH_WEIGHT = 150.0;
@@ -56,7 +57,7 @@ class HookImplTest {
 
     @BeforeEach
     void setUp() {
-        hook = new HookImpl(START_X, START_Y, SPEED, MIN_X, MAX_X, MAX_DEPTH, MAX_WEIGHT);
+        hook = new HookImpl(START_X, START_Y, SPEED, MIN_X, MAX_X,MIN_Y, MAX_DEPTH, MAX_WEIGHT);
     }
 
     @Test
@@ -182,7 +183,7 @@ class HookImplTest {
 
     @Test
     void collisionAreaIsCenteredOnCurrentPosition() {
-        final HookImpl positionedHook = new HookImpl(HOOK_TEST_X, HOOK_TEST_Y, SPEED, MIN_X, MAX_X, MAX_DEPTH, MAX_WEIGHT);
+        final HookImpl positionedHook = new HookImpl(HOOK_TEST_X, HOOK_TEST_Y, SPEED, MIN_X, MAX_X,MIN_Y, MAX_DEPTH, MAX_WEIGHT);
         final CollisionAreaCircle area = positionedHook.getCollisionArea();
         assertNotNull(area);
         assertEquals(HOOK_TEST_X, area.getCenterX(), DELTA);
