@@ -1,5 +1,6 @@
 package it.unibo.hookmaster.view;
 
+import java.util.Locale;
 import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
@@ -14,10 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -30,17 +27,21 @@ import javafx.scene.text.FontWeight;
  */
 public final class GameView extends StackPane implements View<GameSnapshot, GameInputHandler> {
 
-    private static final Color BUTTON_COLOR = Color.web("#f5bc46");
-    private static final Color BUTTON_HOVER_COLOR = Color.web("#f8c663");
-    private static final Color TEXT_COLOR = Color.web("#8f480a");
-    private static final Color BORDER = Color.web("#4d1b0d");
+    private static final Color DARK_BACKGROUND_COLOR = Color.web("#4d1b0d");
+    private static final Color BUTTON_COLOR = Color.web("#4d1b0d");
+    private static final Color BUTTON_HOVER_COLOR = Color.web("#f5bc46");
+    private static final Color TEXT_COLOR = Color.web("#ffffff");
+    private static final Color COINS_TEXT_COLOR = Color.web("#f5bc46");
 
     private static final double BUTTON_FONT_SIZE = 18;
     private static final double BUTTON_PADDING = 14;
     private static final double SPACING_RATIO = 0.01;
-
     private static final double CORNER_RADII = 7;
-    private static final double BORDER_WIDTH = 2;
+    private static final double COINS_LABEL_FONT_SIZE = 18;
+    private static final double COINS_LABEL_PADDING = 15;
+    private static final double HUD_PADDING = 15;
+
+    private static final double OFFSET_TOP = 20;
 
     private final Scene scene;
     private final Canvas mapCanvas;
@@ -48,6 +49,11 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private final GraphicsContext fishesGc;
     private final Label coinsLabel;
 
+    /**
+     * Contructs the main game view.
+     * 
+     * @param scene the main game scene.
+     */
     public GameView(final Scene scene) {
         this.scene = scene;
         this.mapCanvas = new Canvas(scene.getWidth(), scene.getHeight());
@@ -55,6 +61,12 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         this.fishesGc = fishesCanvas.getGraphicsContext2D();
 
         coinsLabel = new Label("0 C");
+        coinsLabel.setTextFill(COINS_TEXT_COLOR);
+        coinsLabel.setFont(Font.font("", FontWeight.BOLD, COINS_LABEL_FONT_SIZE));
+        coinsLabel.setBackground(new Background(new BackgroundFill(DARK_BACKGROUND_COLOR,
+                new CornerRadii(CORNER_RADII), Insets.EMPTY)));
+        coinsLabel.setPadding(new Insets(COINS_LABEL_PADDING));
+
         final Button shopButton = new Button("Open shop");
         shopButton.setTextFill(TEXT_COLOR);
         shopButton.setFont(Font.font("", FontWeight.NORMAL, BUTTON_FONT_SIZE));
@@ -68,9 +80,6 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
                 new Background(new BackgroundFill(BUTTON_HOVER_COLOR, radii, Insets.EMPTY));
         shopButton.setBackground(background);
 
-        shopButton.setBorder(new Border(new BorderStroke(BORDER, BorderStrokeStyle.SOLID, radii,
-                new BorderWidths(BORDER_WIDTH))));
-
         shopButton.setOnMouseEntered(e -> shopButton.setBackground(backgroundHover));
         shopButton.setOnMouseExited(e -> shopButton.setBackground(background));
 
@@ -78,11 +87,11 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
 
         final HBox hud = new HBox(scene.getWidth() * SPACING_RATIO);
         hud.setAlignment(Pos.CENTER_RIGHT);
-        hud.setPadding(new Insets(15));
+        hud.setPadding(new Insets(HUD_PADDING));
         hud.setMaxSize(scene.getWidth(), scene.getHeight() * 0.1);
         hud.getChildren().addAll(coinsLabel, shopButton);
 
-        StackPane.setAlignment(hud, Pos.TOP_RIGHT);
+        setAlignment(hud, Pos.TOP_RIGHT);
 
         final GraphicsContext gc = mapCanvas.getGraphicsContext2D();
         gc.drawImage(loadImage("/map/background.png", scene.getWidth(), scene.getHeight()), 0, 0);
@@ -110,14 +119,14 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      * {@inheritDoc}
      */
     @Override
-    public void update(GameSnapshot snapshot) {
+    public void update(final GameSnapshot snapshot) {
         // Tieni conto del offest sopra e sotto
         fishesGc.clearRect(0, 0, fishesCanvas.getWidth(), fishesCanvas.getHeight());
 
         for (final Fish fish : snapshot.fishes()) {
             fishesGc.drawImage(
-                    loadImage("/fishes/" + fish.getType().name().toLowerCase() + ".png", 50, 0),
-                    fish.getX(), fish.getY());
+                    loadImage("/fishes/" + fish.getType().name().toLowerCase(Locale.getDefault()) + ".png", 50, 0),
+                    fish.getX(), fish.getY() + OFFSET_TOP);
         }
 
         fishesGc.drawImage(loadImage("/boat.png", 300, 150), snapshot.boat().getX(),
@@ -137,7 +146,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      * {@inheritDoc}
      */
     @Override
-    public void setInputHandler(GameInputHandler inputHandler) {
+    public void setInputHandler(final GameInputHandler inputHandler) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setInputHandler'");
     }

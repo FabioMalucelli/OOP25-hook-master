@@ -1,12 +1,12 @@
 package it.unibo.hookmaster.view;
 
-import it.unibo.hookmaster.controller.ShopController;
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
-import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -26,182 +26,140 @@ import javafx.scene.text.FontWeight;
  */
 public final class ShopView extends BorderPane implements View<ShopSnapshot, MenuInputHandler> {
 
-    private static final Color BACKGROUND_COLOR = Color.web("#1d5f9e");
-    private static final Color DARK_BACKGROUND_COLOR = Color.web("#132038");
-    private static final Color COIN_COLOR = Color.web("#ffd900");
-    private static final Color CLOSE_BTN_COLOR = Color.web("#e8703a");
-    private static final Color BUY_BUTTON_COLOR = Color.web("#3f8f3f");
-    private static final Color BUY_BUTTON_DISABLED_COLOR = Color.web("#7a817a");
+    private static final Color BACKGROUND_COLOR = Color.web("#3971b1");
+    private static final Color DARK_BACKGROUND_COLOR = Color.web("#182030");
+    private static final Color BUY_BUTTON_COLOR = Color.web("#1da75b");
+    private static final Color BUY_BUTTON_HOVER_COLOR = Color.web("#1fb864");
+    private static final Color CLOSE_BUTTON_COLOR = Color.web("#d14532");
+    private static final Color CLOSE_BUTTON_HOVER_COLOR = Color.web("#e74d38");
+    private static final Color COINS_TEXT_COLOR = Color.web("#f5bc46");
+    private static final Color TEXT_COLOR = Color.web("#ffffff");
 
-    private static final double SIDE_MARGIN_RATIO = 0.08;
+    private static final double MARGIN_RATIO = 0.2;
+    private static final double COINS_BOX_SPACING = 5;
+    private static final double CORNER_RADII = 7;
+    private static final double COINS_BOX_PADDING = 20;
+    private static final double COINS_LABEL_FONT_SIZE = 18;
+    private static final double TITLE_FONT_SIZE = 48;
+    private static final double UPGRADES_CONTAINER_SPACING = 25;
+    private static final double UPGRADES_CONTAINER_PADDING = 40;
+    private static final double UPGRADES_CONTAINER_MARGIN_VERTICAL = 30;
+    private static final double BUTTON_FONT_SIZE = 18;
+    private static final double BUTTON_PADDING_VERTICAL = 14;
+    private static final double BUTTON_PREF_WIDTH = 200;
+    private static final double UPGRADE_TEXT_SPACING = 5;
+    private static final double UPGRADE_TITLE_FONT_SIZE = 20;
+    private static final double UPGRADE_DESC_FONT_SIZE = 18;
 
-    private static final int CONTENT_WRAPPER_SPACING = 25;
-    private static final int CONTENT_WRAPPER_SPACING_TOP = 10;
-    private static final int CONTENT_WRAPPER_SPACING_BOTTOM = 20;
-    private static final int UPGRADES_LIST_SPACING = 18;
-    private static final int UPGRADES_LIST_PADDING_TOP = 5;
-
-    private static final int COINS_BOX_SPACING = 4;
-    private static final int COINS_BOX_PADDING_VERTICAL = 12;
-    private static final int COINS_BOX_PADDING_HORIZONTAL = 22;
-    private static final int COINS_LABEL_FONT_SIZE = 22;
-    private static final int COINS_VALUE_FONT_SIZE = 20;
-
-    private static final int TITLE_FONT_SIZE = 38;
-
-    private static final int BUTTON_FONT_SIZE = 18;
-    private static final int BUTTON_PADDING_VERTICAL = 14;
-    private static final int BUTTON_PADDING_HORIZONTAL = 26;
-    private static final int BUY_BUTTON_MIN_WIDTH = 150;
-
-    private static final int UPGRADE_BOX_SPACING = 20;
-    private static final int UPGRADE_BOX_PADDING_VERTICAL = 20;
-    private static final int UPGRADE_BOX_PADDING_HORIZONTAL = 25;
-    private static final int UPGRADE_INFO_SPACING = 6;
-    private static final int UPGRADE_TITLE_FONT_SIZE = 22;
-    private static final int UPGRADE_DESCRIPTION_FONT_SZIE = 18;
-
-    private final double width;
-    private final double height;
-    private final ShopController controller;
+    private final Scene scene;
+    private final Label coinsValueLabel;
+    private final VBox upgradesContainer;
 
     /**
-     * View constructor.
+     * Contructs the shop view.
      * 
-     * @param width view width
-     * @param height view height
-     * @param controller shop controller
+     * @param scene the main game scene.
      */
-    public ShopView(final double width, final double height, final ShopController controller) {
-        this.width = width;
-        this.height = height;
-        this.controller = controller;
-        build();
-    }
+    public ShopView(final Scene scene) {
+        this.scene = scene;
 
-    /**
-     * Builds the view.
-     */
-    public void build() {
-        setPrefSize(width, height);
         setBackground(new Background(
                 new BackgroundFill(BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        setPadding(new Insets(scene.getHeight() * MARGIN_RATIO, scene.getWidth() * MARGIN_RATIO,
+                scene.getHeight() * MARGIN_RATIO, scene.getWidth() * MARGIN_RATIO));
 
-        final double sideMargin = width * SIDE_MARGIN_RATIO;
+        final BorderPane header = new BorderPane();
 
-        final VBox contentWrapper = new VBox(CONTENT_WRAPPER_SPACING);
-        contentWrapper.setPadding(new Insets(CONTENT_WRAPPER_SPACING_TOP, sideMargin,
-                CONTENT_WRAPPER_SPACING_BOTTOM, sideMargin));
-
-        contentWrapper.getChildren().addAll(buildHeader(), buildUpgradesList());
-
-        setCenter(contentWrapper);
-    }
-
-    private HBox buildHeader() {
         final VBox coinsBox = new VBox(COINS_BOX_SPACING);
-        coinsBox.setPadding(new Insets(COINS_BOX_PADDING_VERTICAL, COINS_BOX_PADDING_HORIZONTAL,
-                COINS_BOX_PADDING_VERTICAL, COINS_BOX_PADDING_HORIZONTAL));
-        coinsBox.setBackground(new Background(
-                new BackgroundFill(DARK_BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        coinsBox.setBackground(new Background(new BackgroundFill(DARK_BACKGROUND_COLOR,
+                new CornerRadii(CORNER_RADII), Insets.EMPTY)));
+        coinsBox.setPadding(new Insets(COINS_BOX_PADDING));
 
-        final Label coinsLabel = new Label("Total coins: ");
-        coinsLabel.setTextFill(COIN_COLOR);
-        coinsLabel.setFont(Font.font("", FontWeight.BOLD, COINS_LABEL_FONT_SIZE));
-        final Label coinsValue = new Label(controller.getCoins() + " C");
-        coinsValue.setTextFill(Color.WHITE);
-        coinsValue.setFont(Font.font("", FontWeight.NORMAL, COINS_VALUE_FONT_SIZE));
+        final Label coinsTitleLabel = new Label("Total Coins: ");
+        coinsTitleLabel.setTextFill(COINS_TEXT_COLOR);
+        coinsTitleLabel.setFont(Font.font("", FontWeight.BOLD, COINS_LABEL_FONT_SIZE));
 
-        coinsBox.getChildren().addAll(coinsLabel, coinsValue);
+        coinsValueLabel = new Label("0 C");
+        coinsValueLabel.setTextFill(TEXT_COLOR);
+        coinsValueLabel.setFont(Font.font("", FontWeight.NORMAL, COINS_LABEL_FONT_SIZE));
 
-        final Label titleLabel = new Label("Upgrades shop");
-        titleLabel.setTextFill(Color.WHITE);
+        coinsBox.getChildren().addAll(coinsTitleLabel, coinsValueLabel);
+        header.setLeft(coinsBox);
+        setAlignment(coinsBox, Pos.CENTER_LEFT);
+
+        final Label titleLabel = new Label("Upgrades");
+        titleLabel.setTextFill(TEXT_COLOR);
         titleLabel.setFont(Font.font("", FontWeight.BOLD, TITLE_FONT_SIZE));
-        titleLabel.setMaxWidth(width);
-        titleLabel.setAlignment(Pos.CENTER);
-        HBox.setHgrow(titleLabel, Priority.ALWAYS);
+        header.setCenter(titleLabel);
 
-        final Button closeShopBtn = new Button("Close shop");
-        closeShopBtn.setTextFill(Color.WHITE);
-        closeShopBtn.setFont(Font.font("", FontWeight.BOLD, BUTTON_FONT_SIZE));
-        closeShopBtn.setPadding(new Insets(BUTTON_PADDING_VERTICAL, BUTTON_PADDING_HORIZONTAL,
-                BUTTON_PADDING_VERTICAL, BUTTON_PADDING_HORIZONTAL));
-        closeShopBtn.setBackground(new Background(
-                new BackgroundFill(CLOSE_BTN_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        final Button closeButton =
+                buildButton("Close shop", CLOSE_BUTTON_COLOR, CLOSE_BUTTON_HOVER_COLOR);
+        header.setRight(closeButton);
+        setAlignment(closeButton, Pos.CENTER_RIGHT);
 
-        final HBox header = new HBox();
-        header.setPrefWidth(width);
-        header.setAlignment(Pos.CENTER);
-        header.getChildren().addAll(coinsBox, titleLabel, closeShopBtn);
+        this.setTop(header);
 
-        return header;
+        upgradesContainer = new VBox(UPGRADES_CONTAINER_SPACING);
+        upgradesContainer.setBackground(new Background(new BackgroundFill(DARK_BACKGROUND_COLOR,
+                new CornerRadii(CORNER_RADII), Insets.EMPTY)));
+        upgradesContainer.setPadding(new Insets(UPGRADES_CONTAINER_PADDING));
+        setMargin(upgradesContainer, new Insets(UPGRADES_CONTAINER_MARGIN_VERTICAL, 0,
+                UPGRADES_CONTAINER_MARGIN_VERTICAL, 0));
+
+        this.setCenter(upgradesContainer);
     }
 
-    private HBox buildUpgradeBox(final UpgradeType type, final String name,
-            final String description, final int level, final int maxLevel, final int price,
-            final boolean canUpgrade) {
-        final Label titleLabel = new Label(name + "(" + level + "/" + maxLevel + ")");
-        titleLabel.setTextFill(Color.WHITE);
+    private Button buildButton(final String text, final Color baseColor, final Color hoverColor) {
+        final Button btn = new Button(text);
+        btn.setTextFill(TEXT_COLOR);
+        btn.setFont(Font.font("", FontWeight.NORMAL, BUTTON_FONT_SIZE));
+        btn.setPadding(new Insets(BUTTON_PADDING_VERTICAL, 0, BUTTON_PADDING_VERTICAL, 0));
+        btn.setPrefWidth(BUTTON_PREF_WIDTH);
+
+        final CornerRadii radii = new CornerRadii(CORNER_RADII);
+        final Background background =
+                new Background(new BackgroundFill(baseColor, radii, Insets.EMPTY));
+        final Background backgroundHover =
+                new Background(new BackgroundFill(hoverColor, radii, Insets.EMPTY));
+        btn.setBackground(background);
+
+        btn.setOnMouseEntered(e -> btn.setBackground(backgroundHover));
+        btn.setOnMouseExited(e -> btn.setBackground(background));
+
+        btn.setCursor(Cursor.HAND);
+
+        return btn;
+    }
+
+    private HBox buildUpgradeRow(final String title, final String description, final int level,
+            final int maxLevel, final int cost, final boolean canUpgrade) {
+        final HBox row = new HBox();
+        row.setAlignment(Pos.CENTER_LEFT);
+
+        final VBox textBox = new VBox(UPGRADE_TEXT_SPACING);
+        final Label titleLabel = new Label(title + " (" + level + "/" + maxLevel + ")");
+        titleLabel.setTextFill(TEXT_COLOR);
         titleLabel.setFont(Font.font("", FontWeight.BOLD, UPGRADE_TITLE_FONT_SIZE));
 
-        final Label descriptionLabel = new Label(description);
-        descriptionLabel.setTextFill(Color.WHITE);
-        descriptionLabel.setFont(Font.font("", FontWeight.NORMAL, UPGRADE_DESCRIPTION_FONT_SZIE));
-        descriptionLabel.setWrapText(true);
+        final Label descLabel = new Label(description);
+        descLabel.setTextFill(TEXT_COLOR);
+        descLabel.setFont(Font.font("", FontWeight.NORMAL, UPGRADE_DESC_FONT_SIZE));
+        descLabel.setWrapText(true);
 
-        final VBox infoBox = new VBox(UPGRADE_INFO_SPACING);
-        infoBox.getChildren().addAll(titleLabel, descriptionLabel);
-        infoBox.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(infoBox, Priority.ALWAYS);
+        textBox.getChildren().addAll(titleLabel, descLabel);
 
         final Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        final Button buyBtn = new Button("Buy (" + price + " C)");
-        buyBtn.setTextFill(Color.WHITE);
-        buyBtn.setFont(Font.font("", FontWeight.BOLD, BUTTON_FONT_SIZE));
-        buyBtn.setPadding(new Insets(BUTTON_PADDING_VERTICAL, BUTTON_PADDING_HORIZONTAL,
-                BUTTON_PADDING_VERTICAL, BUTTON_PADDING_HORIZONTAL));
-        buyBtn.setMinWidth(BUY_BUTTON_MIN_WIDTH);
+        final Button upgradeButton =
+                buildButton("Upgrade (" + cost + " C)", BUY_BUTTON_COLOR, BUY_BUTTON_HOVER_COLOR);
 
-        if (canUpgrade) {
-            buyBtn.setBackground(new Background(
-                    new BackgroundFill(BUY_BUTTON_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
-        } else {
-            buyBtn.setBackground(new Background(new BackgroundFill(BUY_BUTTON_DISABLED_COLOR,
-                    CornerRadii.EMPTY, Insets.EMPTY)));
-            buyBtn.setDisable(true);
+        if (!canUpgrade) {
+            upgradeButton.setDisable(true);
         }
 
-        buyBtn.setOnAction(e -> {
-            controller.buyUpgrade(type);
-        });
-
-        final HBox upgradeBox = new HBox(UPGRADE_BOX_SPACING);
-        upgradeBox.setAlignment(Pos.CENTER_LEFT);
-        upgradeBox
-                .setPadding(new Insets(UPGRADE_BOX_PADDING_VERTICAL, UPGRADE_BOX_PADDING_HORIZONTAL,
-                        UPGRADE_BOX_PADDING_VERTICAL, UPGRADE_BOX_PADDING_HORIZONTAL));
-        upgradeBox.setBackground(new Background(
-                new BackgroundFill(DARK_BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        upgradeBox.getChildren().addAll(infoBox, spacer, buyBtn);
-
-        return upgradeBox;
-    }
-
-    private VBox buildUpgradesList() {
-        final VBox listBox = new VBox(UPGRADES_LIST_SPACING);
-        listBox.setPadding(new Insets(UPGRADES_LIST_PADDING_TOP, 0, 0, 0));
-
-        for (final Upgrade upgrade : controller.getUpgrades()) {
-            listBox.getChildren()
-                    .add(buildUpgradeBox(upgrade.getType(), upgrade.getName(),
-                            upgrade.getDescription(), upgrade.getLevel(), upgrade.getMaxLevel(),
-                            upgrade.getCost(), upgrade.canUpgrade(controller.getCoins())));
-        }
-
-        return listBox;
+        row.getChildren().addAll(textBox, spacer, upgradeButton);
+        return row;
     }
 
     /**
@@ -209,24 +167,29 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Men
      */
     @Override
     public void select() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'select'");
+        this.scene.setRoot(this);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void update(ShopSnapshot snapshot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public void update(final ShopSnapshot snapshot) {
+        this.coinsValueLabel.setText(snapshot.coins() + " C");
+
+        for (final Upgrade upgrade : snapshot.upgrades()) {
+            upgradesContainer.getChildren()
+                    .add(buildUpgradeRow(upgrade.getName(), upgrade.getDescription(),
+                            upgrade.getLevel(), upgrade.getMaxLevel(), upgrade.getCost(),
+                            upgrade.canUpgrade(snapshot.coins())));
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setInputHandler(MenuInputHandler inputHandler) {
+    public void setInputHandler(final MenuInputHandler inputHandler) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setInputHandler'");
     }
