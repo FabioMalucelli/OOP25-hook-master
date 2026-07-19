@@ -11,13 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Owns the population of live fish, drives their movement each tick,
- * handles spawning/removal, and notifies registered listeners of any
- * change. Also reacts to weather changes, adjusting fish speed and
- * filtering which species are eligible to spawn.
+ * Handles the population of fishes, their movements, spawn and removal.
  */
 public class FishManager implements WeatherObserver {
 
+    private static final int TARGET_FISH_COUNT = 20;
     private static final double STORM_SPEED_MULTIPLIER = 1.5;
     private static final double CLEAR_SPEED_MULTIPLIER = 1.0;
     private static final int OUT_OF_BOUNDS_MARGIN = 100;
@@ -30,11 +28,10 @@ public class FishManager implements WeatherObserver {
     private Weather currentWeather;
 
     /**
-     * Creates a new fish manager.
+     * Creates a new fish manager and populates it.
      *
      * @param spawner       the spawner used to create new fish
-     * @param weatherSystem the weather system driving spawn eligibility and fish
-     *                      speed
+     * @param weatherSystem the weather system driving spawn eligibility
      * @param mapWidth      the horizontal size of the map
      * @param mapHeight     the vertical size of the map
      */
@@ -45,6 +42,7 @@ public class FishManager implements WeatherObserver {
         this.mapHeight = mapHeight;
         this.currentWeather = weatherSystem.getCurrentWeather();
         weatherSystem.addObserver(this);
+        replenish();
     }
 
     /**
@@ -79,17 +77,16 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
-     * @return an unmodifiable view of the currently live fish
+     * @return a view of the currently live fish.
      */
     public List<Fish> getFishes() {
         return Collections.unmodifiableList(this.fishes);
     }
 
     /**
-     * Spawns a new fish via the spawner, applies the current weather's
-     * speed effect, and notifies listeners.
+     * Spawns a new fish and applies it's speed.
      */
-    public void spawnFish() {
+    private void spawnFish() {
         final Fish fish = this.spawner.spawnFish(this.currentWeather);
         applyWeatherSpeedEffect(fish);
         this.fishes.add(fish);
@@ -99,7 +96,7 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
-     * Advances the simulation by one tick: moves every fish and removes those that have left the map.
+     * Moves every fish and removes those that have left the map.
      * 
      * @param deltaTime the time
      */
@@ -120,11 +117,11 @@ public class FishManager implements WeatherObserver {
                 }
             }
         }
+        replenish();
     }
 
     /**
-     * Removes a specific fish (e.g. because it was caught) and
-     * notifies listeners.
+     * Removes a specific fish and notifies listeners.
      *
      * @param fish the fish to remove
      */
@@ -133,6 +130,16 @@ public class FishManager implements WeatherObserver {
             for (final FishListener listener : this.listeners) {
                 listener.onFishRemoved(fish);
             }
+            replenish();
+        }
+    }
+
+    /**
+     * Adds a new fish when another one disappears.
+     */
+    private void replenish() {
+        while (this.fishes.size() < TARGET_FISH_COUNT) {
+            spawnFish();
         }
     }
 

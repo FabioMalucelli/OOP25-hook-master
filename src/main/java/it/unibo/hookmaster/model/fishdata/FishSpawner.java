@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Creates new fish at the map edges, choosing species eligible under
- * the current weather condition.
+ * Creates new eligible fish at the edges of the map.
  */
 public class FishSpawner {
 
@@ -30,9 +29,7 @@ public class FishSpawner {
     }
 
     /**
-     * Spawns a fish at a random edge (left or right), at a random height
-     * within the allowed vertical band, choosing only among species
-     * eligible under the given weather condition.
+     * Spawns an eligible species at a random edge and height within bounds.
      *
      * @param currentWeather the current weather, used to filter eligible species
      * @return new fish
