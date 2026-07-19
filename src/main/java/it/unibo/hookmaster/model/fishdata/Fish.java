@@ -4,12 +4,12 @@ import java.util.Objects;
 import java.util.Random;
 
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
-//import it.unibo.hookmaster.model.fishing.Catchable;
+import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Represents a fish instance.
  */
-public class Fish { // implements Catchable {
+public class Fish implements Catchable {
 
     private static final double MIN_WEIGHT_RATIO = 0.5;
     private static final double MAX_WEIGHT_RATIO = 2.0;
