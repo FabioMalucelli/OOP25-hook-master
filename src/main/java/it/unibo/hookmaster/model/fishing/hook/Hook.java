@@ -50,6 +50,12 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
     void setMovingDown(boolean moving);
 
     /**
+     * Stops the hook on both axes at once.
+     * Equivalent to setMovingLeft, setMovingRight, setMovingUp, setMovingDown with false
+     */
+    void stopMoving();
+
+    /**
      * Freezes the hook and enters the HookState -> MINIGAME.
      * Should be called when the hook collides with a fish.
      * 

@@ -116,6 +116,14 @@ public final class HookImpl implements Hook {
     }
 
     @Override
+    public void stopMoving() {
+        this.movingLeft = false;
+        this.movingRight = false;
+        this.movingUp = false;
+        this.movingDown = false;
+    }
+
+    @Override
     public void hookFish(final Catchable fish) {
         if (currentState == HookState.MOVING && hookedFish == null) {
             this.hookedFish = fish;
