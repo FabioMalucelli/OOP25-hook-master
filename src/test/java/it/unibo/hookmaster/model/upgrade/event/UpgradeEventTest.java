@@ -1,11 +1,10 @@
-package it.unibo.hookmaster.model.event;
+package it.unibo.hookmaster.model.upgrade.event;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
-import it.unibo.hookmaster.model.upgrade.event.UpgradeEvent;
 
 class UpgradeEventTest {
 
