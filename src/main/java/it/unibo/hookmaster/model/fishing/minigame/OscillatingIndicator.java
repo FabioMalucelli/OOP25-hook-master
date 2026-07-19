@@ -1,5 +1,7 @@
 package it.unibo.hookmaster.model.fishing.minigame;
 
+import it.unibo.hookmaster.util.TimeUtils;
+
 /**
  * Strategy Pattern - concrete: the indicator moves linearly
  * back and forth between 0.0 and 1.0 at a constant speed.
@@ -27,7 +29,8 @@ public final class OscillatingIndicator implements IndicatorStrategy {
 
     @Override
     public void update(final long deltaTime) {
-        final double delta = speed * deltaTime;
+        final double deltaSeconds = TimeUtils.toSeconds(deltaTime);
+        final double delta = speed * deltaSeconds;
         if (movingForward) {
             position += delta;
             if (position >= MAX) {

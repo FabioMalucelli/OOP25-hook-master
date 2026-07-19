@@ -21,7 +21,7 @@ public final class FakeIndicatorStrategy implements IndicatorStrategy {
     }
 
     @Override
-    public void update(final double deltaTime) {
+    public void update(final long deltaTime) {
         updateCallCount++;
     }
 

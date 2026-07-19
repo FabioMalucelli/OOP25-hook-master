@@ -1,7 +1,6 @@
 package it.unibo.hookmaster.model.fishing.minigame;
 
 import it.unibo.hookmaster.model.fishing.Catchable;
-import it.unibo.hookmaster.util.TimeUtils;
 
 /**
  * Standard implementation of FishingMinigame.

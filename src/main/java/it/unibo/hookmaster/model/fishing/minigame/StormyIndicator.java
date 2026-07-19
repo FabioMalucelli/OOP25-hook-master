@@ -1,5 +1,7 @@
 package it.unibo.hookmaster.model.fishing.minigame;
 
+import it.unibo.hookmaster.util.TimeUtils;
+
 /**
  * Strategy Pattern - concrete: the indicator moves at varying speed, simulating rough weather conditions.
  * The speed constantly varies around base speed, so the indicator accelerates and decelerates unpredictably
@@ -34,11 +36,12 @@ public final class StormyIndicator implements IndicatorStrategy {
     }
 
     @Override
-    public void update(final double deltaTime) {
-        elapsed += deltaTime;
+    public void update(final long deltaTime) {
+        final double deltaSeconds = TimeUtils.toSeconds(deltaTime);
+        elapsed += deltaSeconds;
         //Speed oscillates: baseSpeed +/- TURBULANCE * baseSpeed
         final double currentSpeed = baseSpeed * (1.0 + TURBULENCE * Math.sin(elapsed * 3.5));
-        final double delta = currentSpeed * deltaTime;
+        final double delta = currentSpeed * deltaSeconds;
         if (movingForward) {
             position += delta;
             if (position >= MAX) {

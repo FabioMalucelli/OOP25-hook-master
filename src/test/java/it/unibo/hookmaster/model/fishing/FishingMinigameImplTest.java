@@ -75,7 +75,7 @@ class FishingMinigameImplTest {
         minigame.attemptCatch();
 
         final int callsBefore = indicator.getUpdateCallCount();
-        minigame.update(1.0);
+        minigame.update(1000L);
         assertEquals(callsBefore, indicator.getUpdateCallCount());
     }
 
@@ -84,7 +84,7 @@ class FishingMinigameImplTest {
         final FakeIndicatorStrategy indicator = new FakeIndicatorStrategy(0.0);
         final FishingMinigameImpl minigame = new FishingMinigameImpl(new FakeCatchable(), indicator);
 
-        minigame.update(0.5);
+        minigame.update(500L);
         assertEquals(1, indicator.getUpdateCallCount());
     }
 

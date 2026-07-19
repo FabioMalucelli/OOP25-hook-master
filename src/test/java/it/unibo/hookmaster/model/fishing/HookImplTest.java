@@ -36,9 +36,9 @@ class HookImplTest {
     private static final double MAX_X = 200.0;
     private static final double MAX_DEPTH = 100.0;
     private static final double DELTA = 1e-9;
-    private static final double ONE_SECOND = 1.0;
-    private static final double FIVE_SECONDS = 5.0;
-    private static final double LARGE_TIME_STEP = 1000.0;
+    private static final long ONE_SECOND = 1000L;
+    private static final long FIVE_SECONDS = 5000L;
+    private static final long LARGE_TIME_STEP = 1000000L;
     private static final double HOOK_TEST_X = 100.0;
     private static final double HOOK_TEST_Y = 100.0;
     private static final double OVERLAPPING_RECT_ORIGIN = 95.0;
