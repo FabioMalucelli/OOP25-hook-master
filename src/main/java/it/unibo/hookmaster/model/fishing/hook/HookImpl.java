@@ -5,11 +5,10 @@ import java.util.List;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
-import it.unibo.hookmaster.model.event.UpgradeEvent;
+import it.unibo.hookmaster.model.upgrade.event.UpgradeEvent;
 import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
 import it.unibo.hookmaster.model.fishing.minigame.MinigameFactory;
-import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.weather.Weather;
 import it.unibo.hookmaster.model.weather.WeatherEvent;
 import it.unibo.hookmaster.util.TimeUtils;

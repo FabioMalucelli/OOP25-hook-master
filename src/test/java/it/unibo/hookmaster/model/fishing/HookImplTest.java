@@ -14,7 +14,7 @@ import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.collision.CollisionPredicate;
 import it.unibo.hookmaster.model.collision.CollisionPredicates;
-import it.unibo.hookmaster.model.event.UpgradeEvent;
+import it.unibo.hookmaster.model.upgrade.event.UpgradeEvent;
 import it.unibo.hookmaster.model.fishing.hook.FishingEvent;
 import it.unibo.hookmaster.model.fishing.hook.HookImpl;
 import it.unibo.hookmaster.model.fishing.hook.HookState;
@@ -35,6 +35,9 @@ class HookImplTest {
     private static final double MIN_X = 0.0;
     private static final double MAX_X = 200.0;
     private static final double MAX_DEPTH = 100.0;
+    private static final double MAX_WEIGHT = 100.0;
+    private static final double HEAVY_FISH_WEIGHT = 150.0;
+    private static final double LIGHT_FISH_WEIGHT = 50.0;
     private static final double DELTA = 1e-9;
     private static final long ONE_SECOND = 1000L;
     private static final long FIVE_SECONDS = 5000L;
@@ -53,7 +56,7 @@ class HookImplTest {
 
     @BeforeEach
     void setUp() {
-        hook = new HookImpl(START_X, START_Y, SPEED, MIN_X, MAX_X, MAX_DEPTH);
+        hook = new HookImpl(START_X, START_Y, SPEED, MIN_X, MAX_X, MAX_DEPTH, MAX_WEIGHT);
     }
 
     @Test
@@ -179,7 +182,7 @@ class HookImplTest {
 
     @Test
     void collisionAreaIsCenteredOnCurrentPosition() {
-        final HookImpl positionedHook = new HookImpl(HOOK_TEST_X, HOOK_TEST_Y, SPEED, MIN_X, MAX_X, MAX_DEPTH);
+        final HookImpl positionedHook = new HookImpl(HOOK_TEST_X, HOOK_TEST_Y, SPEED, MIN_X, MAX_X, MAX_DEPTH, MAX_WEIGHT);
         final CollisionAreaCircle area = positionedHook.getCollisionArea();
         assertNotNull(area);
         assertEquals(HOOK_TEST_X, area.getCenterX(), DELTA);
@@ -266,13 +269,66 @@ class HookImplTest {
     }
 
     @Test
-    void onUpgradeWithMaxWeightTypeDoesNotAffectHook() {
+    void onUpgradeWithMaxWeightTypeDoesNotAffectSpeed() {
         hook.onUpgrade(new UpgradeEvent(UpgradeType.MAX_WEIGHT, UPGRADE_NEW_LEVEL, UPGRADE_NEW_SPEED));
 
         hook.setMovingDown(true);
         hook.update(ONE_SECOND);
 
-        //Speed  must remain the original constructor value.
         assertEquals(START_Y + SPEED, hook.getY(), DELTA);
+    }
+
+    @Test
+    void hookFishRejectsFishHeavierThanMaxWeight() {
+        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, "HeavyFish", HEAVY_FISH_WEIGHT);
+        hook.hookFish(heavyFish);
+        assertEquals(HookState.MOVING, hook.getCurrentState());
+        assertNull(hook.getHookedFish());
+        assertNull(hook.getCurrentMinigame());
+    }
+
+    @Test
+    void hookFishAcceptFishAtOrBelowMaxWeight() {
+        final FakeCatchable lightFish = new FakeCatchable(10, 0.5, "HeavyFish", LIGHT_FISH_WEIGHT);
+        hook.hookFish(lightFish);
+        assertEquals(HookState.MINIGAME, hook.getCurrentState());
+        assertEquals(lightFish, hook.getHookedFish());
+    }
+
+    @Test
+    void hookFishAcceptsFishExactlyAtMaxWeight() {
+        final FakeCatchable borderLineFish = new FakeCatchable(10, 0.5, "BorderlineFish", MAX_WEIGHT);
+        hook.hookFish(borderLineFish);
+        assertEquals(HookState.MINIGAME, hook.getCurrentState());
+    }
+
+    @Test
+    void hookFishFiresFishTooHeavyEventForRejectedFish() {
+        final RecordingFishingListener listener = new RecordingFishingListener();
+        hook.addListener(listener);
+        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, "BorderlineFish", MAX_WEIGHT);
+
+        hook.hookFish(heavyFish);
+
+        assertTrue(listener.hasRecieved(FishingEvent.Type.FISH_TOO_HEAVY));
+        assertTrue(listener.hasRecieved((FishingEvent.Type.FISH_HOOKED)));
+    }
+
+    @Test
+    void onUpgradeWithMaxWeighTypeUpdatesMaxWeight() {
+        hook.onUpgrade(new UpgradeEvent(UpgradeType.MAX_WEIGHT, UPGRADE_NEW_LEVEL, HEAVY_FISH_WEIGHT));
+
+        //A fish that used to be too heavy is now catchable after the upgrade.
+        final FakeCatchable fish = new FakeCatchable(10, 0.5, "PreviouslyTooHeavy", HEAVY_FISH_WEIGHT);
+        hook.hookFish(fish);
+
+        assertEquals(HookState.MINIGAME, hook.getCurrentState());
+    }
+
+    @Test
+    void getMaxWeightReturnsCurrentValue() {
+        assertEquals(MAX_WEIGHT, hook.getMaxWeight(), DELTA);
+        hook.setMaxWeight(HEAVY_FISH_WEIGHT);
+        assertEquals(HEAVY_FISH_WEIGHT, hook.getMaxWeight(),DELTA);
     }
 }

@@ -2,7 +2,7 @@ package it.unibo.hookmaster.model.fishing.hook;
 
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
-import it.unibo.hookmaster.model.event.UpgradeObserver;
+import it.unibo.hookmaster.model.upgrade.event.UpgradeObserver;
 import it.unibo.hookmaster.model.fishing.Catchable;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
 import it.unibo.hookmaster.model.weather.WeatherObserver;
