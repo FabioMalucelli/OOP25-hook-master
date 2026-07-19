@@ -49,6 +49,8 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private final GraphicsContext fishesGc;
     private final Label coinsLabel;
 
+    private GameInputHandler inputHandler;
+
     /**
      * Contructs the main game view.
      * 
@@ -147,7 +149,6 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      */
     @Override
     public void setInputHandler(final GameInputHandler inputHandler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setInputHandler'");
+        this.inputHandler = inputHandler;
     }
 }
