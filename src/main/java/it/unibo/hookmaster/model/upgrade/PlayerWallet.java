@@ -1,9 +1,9 @@
 package it.unibo.hookmaster.model.upgrade;
 
 /**
- * Class for holding the player state.
+ * Class for holding the player balance.
  */
-public final class Player {
+public final class PlayerWallet {
 
     private int coins;
 

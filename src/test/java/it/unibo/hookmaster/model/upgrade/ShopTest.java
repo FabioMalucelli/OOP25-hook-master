@@ -16,12 +16,12 @@ class ShopTest {
     private static final int EXPECTED_LEVEL = 2;
 
     private Shop shop;
-    private Player player;
+    private PlayerWallet playerWallet;
 
     @BeforeEach
     void setUp() {
         shop = new Shop();
-        player = new Player();
+        playerWallet = new PlayerWallet();
     }
 
     @Test
@@ -31,20 +31,20 @@ class ShopTest {
 
     @Test
     void testBuyUpgrade() {
-        player.addCoins(COINS);
+        playerWallet.addCoins(COINS);
 
         final Upgrade upgrade = shop.getUpgrades().stream()
                 .filter(u -> u.getType() == UpgradeType.SPEED).findFirst().orElseThrow();
 
-        shop.buy(UpgradeType.SPEED, player);
+        shop.buy(UpgradeType.SPEED, playerWallet);
 
-        assertEquals(EXPECTED_COINS, player.getCoins());
+        assertEquals(EXPECTED_COINS, playerWallet.getCoins());
         assertEquals(EXPECTED_LEVEL, upgrade.getLevel());
 
-        shop.buy(UpgradeType.SPEED, player);
+        shop.buy(UpgradeType.SPEED, playerWallet);
 
-        assertEquals(EXPECTED_COINS, player.getCoins());
+        assertEquals(EXPECTED_COINS, playerWallet.getCoins());
         assertEquals(EXPECTED_LEVEL, upgrade.getLevel());
-        assertFalse(upgrade.canUpgrade(player.getCoins()));
+        assertFalse(upgrade.canUpgrade(playerWallet.getCoins()));
     }
 }

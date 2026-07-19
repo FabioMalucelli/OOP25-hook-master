@@ -31,12 +31,12 @@ public final class Shop {
      * Attempts to purchase the specified upgrade and spends the player coins.
      * 
      * @param type the type of upgrade to buy.
-     * @param player the player balance.
+     * @param playerWallet the player balance.
      */
-    public void buy(final UpgradeType type, final Player player) {
+    public void buy(final UpgradeType type, final PlayerWallet playerWallet) {
         final Upgrade upgrade = this.upgrades.get(type);
-        if (upgrade.canUpgrade(player.getCoins())) {
-            player.spendCoins(upgrade.getCost());
+        if (upgrade.canUpgrade(playerWallet.getCoins())) {
+            playerWallet.spendCoins(upgrade.getCost());
             upgrade.upgrade();
         }
     }

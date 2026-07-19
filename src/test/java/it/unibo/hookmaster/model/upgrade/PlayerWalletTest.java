@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class PlayerTest {
+class PlayerWalletTest {
 
     private static final int INITIAL_COINS = 0;
     private static final int EXTRA_COINS = 5;
@@ -14,32 +14,32 @@ class PlayerTest {
     private static final int EXPECTED_COINS_AFTER_FIRST_SPENDING = 1;
     private static final int SECOND_SPENDING = 7;
 
-    private Player player;
+    private PlayerWallet playerWallet;
 
     @BeforeEach
     void setUp() {
-        player = new Player();
+        playerWallet = new PlayerWallet();
     }
 
     @Test
     void testInitialCoins() {
-        assertEquals(INITIAL_COINS, player.getCoins());
+        assertEquals(INITIAL_COINS, playerWallet.getCoins());
     }
 
     @Test
     void testAddCoins() {
-        player.addCoins(EXTRA_COINS);
-        assertEquals(EXPECTED_TOTAL_COINS, player.getCoins());
+        playerWallet.addCoins(EXTRA_COINS);
+        assertEquals(EXPECTED_TOTAL_COINS, playerWallet.getCoins());
     }
 
     @Test
     void testSpendCoinsOnlyWhenEnoughBalance() {
-        player.addCoins(EXTRA_COINS);
+        playerWallet.addCoins(EXTRA_COINS);
 
-        player.spendCoins(FIRST_SPENDING);
-        assertEquals(EXPECTED_COINS_AFTER_FIRST_SPENDING, player.getCoins());
+        playerWallet.spendCoins(FIRST_SPENDING);
+        assertEquals(EXPECTED_COINS_AFTER_FIRST_SPENDING, playerWallet.getCoins());
 
-        player.spendCoins(SECOND_SPENDING);
-        assertEquals(EXPECTED_COINS_AFTER_FIRST_SPENDING, player.getCoins());
+        playerWallet.spendCoins(SECOND_SPENDING);
+        assertEquals(EXPECTED_COINS_AFTER_FIRST_SPENDING, playerWallet.getCoins());
     }
 }
