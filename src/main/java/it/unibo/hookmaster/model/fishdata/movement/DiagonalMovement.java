@@ -1,26 +1,29 @@
 package it.unibo.hookmaster.model.fishdata.movement;
 
-import java.util.Random;
-
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishdata.Position;
+import java.util.Random;
 
 /**
- * Moves a fish in a diagonal line, stopping at the edges.
+ * Moves a fish in a diagonal line, bouncing vertically between two
+ * horizontal bands (30% and 95% of map height). When a bound is
+ * reached, the fish pauses its vertical movement for a short random
+ * period, swimming straight, before resuming diagonally in the
+ * opposite direction.
  */
 public final class DiagonalMovement implements MovementStrategy {
 
     private static final double MIN_Y_RATIO = 0.30;
     private static final double MAX_Y_RATIO = 0.95;
-    private static final int MIN_PAUSE_FRAMES = 40;
-    private static final int MAX_PAUSE_FRAMES = 100;
+    private static final long MIN_PAUSE_MILLIS = 700;
+    private static final long MAX_PAUSE_MILLIS = 1700;
 
     private final double verticalRatio;
     private final Random random = new Random();
 
     private int verticalDirection = 1;
     private boolean paused;
-    private int pauseFramesRemaining;
+    private long pauseMillisRemaining;
 
     /**
      * Creates a diagonal movement strategy.
@@ -33,21 +36,22 @@ public final class DiagonalMovement implements MovementStrategy {
     }
 
     @Override
-    public void move(final Fish fish, final int mapWidth, final int mapHeight) {
-        final double newX = fish.getX() + fish.getSpeed() * fish.getDirection();
+    public void move(final Fish fish, final double mapWidth, final double mapHeight, final long deltaTime) {
+        final double frameScale = MovementTime.frameScale(deltaTime);
+        final double newX = fish.getX() + (fish.getSpeed() * fish.getDirection() * frameScale);
         double newY = fish.getY();
 
         if (paused) {
-            pauseFramesRemaining--;
-            if (pauseFramesRemaining <= 0) {
+            pauseMillisRemaining -= deltaTime;
+            if (pauseMillisRemaining <= 0) {
                 paused = false;
             }
         } else {
-            final int verticalSpeed = (int) Math.round(fish.getSpeed() * verticalRatio);
+            final int verticalSpeed = (int) Math.round(fish.getSpeed() * verticalRatio * frameScale);
             newY = fish.getY() + verticalSpeed * verticalDirection;
 
-            final int minY = (int) Math.round(mapHeight * MIN_Y_RATIO);
-            final int maxY = (int) Math.round(mapHeight * MAX_Y_RATIO);
+            final double minY = mapHeight * MIN_Y_RATIO;
+            final double maxY = mapHeight * MAX_Y_RATIO;
 
             if (newY <= minY) {
                 newY = minY;
@@ -65,6 +69,7 @@ public final class DiagonalMovement implements MovementStrategy {
 
     private void startPause() {
         this.paused = true;
-        this.pauseFramesRemaining = MIN_PAUSE_FRAMES + random.nextInt(MAX_PAUSE_FRAMES - MIN_PAUSE_FRAMES);
+        this.pauseMillisRemaining = MIN_PAUSE_MILLIS
+                + (long) (random.nextDouble() * (MAX_PAUSE_MILLIS - MIN_PAUSE_MILLIS));
     }
 }

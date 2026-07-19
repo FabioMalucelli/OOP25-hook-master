@@ -14,6 +14,7 @@ public class Fish implements Catchable {
     private Position position;
     private int direction = 1;
     private MovementStrategy movementStrategy;
+    private double speedMultiplier = 1.0;
 
     /**
      * Creates a new fish with an explicit movement strategy.
@@ -57,10 +58,19 @@ public class Fish implements Catchable {
     }
 
     /**
-     * @return the fish speed
+     * @return the effective fish speed, including any active multiplier
      */
     public double getSpeed() {
-        return this.type.getSpeed();
+        return Math.round(this.type.getSpeed() * this.speedMultiplier);
+    }
+
+    /**
+     * Sets a multiplier applied to the base speed.
+     *
+     * @param speedMultiplier the multiplier, 1.0 meaning no change
+     */
+    public void setSpeedMultiplier(final double speedMultiplier) {
+        this.speedMultiplier = speedMultiplier;
     }
 
     /**
@@ -132,8 +142,9 @@ public class Fish implements Catchable {
      *
      * @param mapWidth  the horizontal size of the map
      * @param mapHeight the vertical size of the map
+     * @param deltaTime the time
      */
-    public void update(final int mapWidth, final int mapHeight) {
-        this.movementStrategy.move(this, mapWidth, mapHeight);
+    public void update(final double mapWidth, final double mapHeight, final long deltaTime) {
+        this.movementStrategy.move(this, mapWidth, mapHeight, deltaTime);
     }
 }

@@ -1,29 +1,29 @@
 package it.unibo.hookmaster.model.fishdata.movement;
 
-import java.util.Random;
-
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishdata.Position;
 
+import java.util.Random;
+
 /**
- * Moves a fish alternating between straight horizontal swimming and brief vertical turns.
+ * Moves a fish alternating between straight horizontal swimming and vertical swimming.
  */
 public final class MeanderingMovement implements MovementStrategy {
 
     private static final double MIN_Y_RATIO = 0.30;
     private static final double MAX_Y_RATIO = 0.95;
-    private static final int MIN_STRAIGHT_FRAMES = 60;
-    private static final int MAX_STRAIGHT_FRAMES = 150;
-    private static final int MIN_TURN_FRAMES = 20;
-    private static final int MAX_TURN_FRAMES = 50;
-    private static final int MIN_PAUSE_FRAMES = 40;
-    private static final int MAX_PAUSE_FRAMES = 100;
+    private static final long MIN_STRAIGHT_MILLIS = 1000;
+    private static final long MAX_STRAIGHT_MILLIS = 2500;
+    private static final long MIN_TURN_MILLIS = 330;
+    private static final long MAX_TURN_MILLIS = 830;
+    private static final long MIN_PAUSE_MILLIS = 700;
+    private static final long MAX_PAUSE_MILLIS = 1700;
     private static final double TURN_VERTICAL_SPEED_FACTOR = 0.5;
 
     private final Random random = new Random();
 
     private Phase phase = Phase.STRAIGHT;
-    private int framesRemaining = randomStraightDuration();
+    private long millisRemaining = randomStraightDuration();
     private int verticalDirection = 1;
 
     private enum Phase {
@@ -31,15 +31,16 @@ public final class MeanderingMovement implements MovementStrategy {
     }
 
     @Override
-    public void move(final Fish fish, final int mapWidth, final int mapHeight) {
-        final int minY = (int) Math.round(mapHeight * MIN_Y_RATIO);
-        final int maxY = (int) Math.round(mapHeight * MAX_Y_RATIO);
+    public void move(final Fish fish, final double mapWidth, final double mapHeight, final long deltaTime) {
+        final double frameScale = MovementTime.frameScale(deltaTime);
+        final double minY = mapHeight * MIN_Y_RATIO;
+        final double maxY = mapHeight * MAX_Y_RATIO;
 
-        final double newX = fish.getX() + fish.getSpeed() * fish.getDirection();
+        final double newX = fish.getX() + (fish.getSpeed() * fish.getDirection() * frameScale);
         double newY = fish.getY();
 
         if (phase == Phase.TURNING) {
-            final int verticalSpeed = (int) Math.round(fish.getSpeed() * TURN_VERTICAL_SPEED_FACTOR);
+            final int verticalSpeed = (int) Math.round(fish.getSpeed() * TURN_VERTICAL_SPEED_FACTOR * frameScale);
             newY = fish.getY() + verticalSpeed * verticalDirection;
 
             if (newY <= minY) {
@@ -54,17 +55,18 @@ public final class MeanderingMovement implements MovementStrategy {
         }
 
         fish.setPosition(new Position(newX, newY));
-        advancePhase();
+        advancePhase(deltaTime);
     }
 
     private void startPause() {
         this.phase = Phase.PAUSED;
-        this.framesRemaining = MIN_PAUSE_FRAMES + random.nextInt(MAX_PAUSE_FRAMES - MIN_PAUSE_FRAMES);
+        this.millisRemaining = MIN_PAUSE_MILLIS
+                + (long) (random.nextDouble() * (MAX_PAUSE_MILLIS - MIN_PAUSE_MILLIS));
     }
 
-    private void advancePhase() {
-        framesRemaining--;
-        if (framesRemaining > 0) {
+    private void advancePhase(final long deltaTime) {
+        millisRemaining -= deltaTime;
+        if (millisRemaining > 0) {
             return;
         }
 
@@ -72,24 +74,24 @@ public final class MeanderingMovement implements MovementStrategy {
             case STRAIGHT:
                 phase = Phase.TURNING;
                 verticalDirection = random.nextBoolean() ? 1 : -1;
-                framesRemaining = randomTurnDuration();
+                millisRemaining = randomTurnDuration();
                 break;
             case TURNING:
                 phase = Phase.STRAIGHT;
-                framesRemaining = randomStraightDuration();
+                millisRemaining = randomStraightDuration();
                 break;
             case PAUSED:
                 phase = Phase.TURNING;
-                framesRemaining = randomTurnDuration();
+                millisRemaining = randomTurnDuration();
                 break;
         }
     }
 
-    private int randomStraightDuration() {
-        return MIN_STRAIGHT_FRAMES + random.nextInt(MAX_STRAIGHT_FRAMES - MIN_STRAIGHT_FRAMES);
+    private long randomStraightDuration() {
+        return MIN_STRAIGHT_MILLIS + (long) (random.nextDouble() * (MAX_STRAIGHT_MILLIS - MIN_STRAIGHT_MILLIS));
     }
 
-    private int randomTurnDuration() {
-        return MIN_TURN_FRAMES + random.nextInt(MAX_TURN_FRAMES - MIN_TURN_FRAMES);
+    private long randomTurnDuration() {
+        return MIN_TURN_MILLIS + (long) (random.nextDouble() * (MAX_TURN_MILLIS - MIN_TURN_MILLIS));
     }
 }
