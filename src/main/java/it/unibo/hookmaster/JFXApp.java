@@ -3,6 +3,8 @@ package it.unibo.hookmaster;
 import it.unibo.hookmaster.controller.GameControllerImpl;
 import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
+import it.unibo.hookmaster.model.GameWorld;
+import it.unibo.hookmaster.model.GameWorldImpl;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
@@ -21,7 +23,7 @@ import javafx.stage.Stage;
  */
 public final class JFXApp extends Application {
 
-    private static final double SKY_RATIO = 64 / 360;
+    private static final double SKY_RATIO = 64.0 / 360;
 
     private final Rectangle2D bounds = Screen.getPrimary().getBounds();
     private final Scene scene = new Scene(new Label("Loading..."), bounds.getWidth(), bounds.getHeight());
@@ -29,12 +31,13 @@ public final class JFXApp extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         primaryStage.setScene(scene);
-        //primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
 
+        GameWorld gameWorld = new GameWorldImpl(bounds.getWidth(), bounds.getHeight() * (1 - SKY_RATIO));
         View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
         View<GameSnapshot, GameInputHandler> gameView = new GameView(scene);
-        new GameControllerImpl(menuView, gameView).run();
+        new GameControllerImpl(gameWorld,menuView, gameView).run();
     }
 }

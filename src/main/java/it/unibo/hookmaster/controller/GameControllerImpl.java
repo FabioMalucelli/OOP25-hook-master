@@ -30,10 +30,11 @@ public class GameControllerImpl implements GameController {
      * @param gameView the view of the game phase
      */
     public GameControllerImpl(
+        final GameWorld gameWorld,
         final View<MenuSnapshot, MenuInputHandler> menuView,
         final View<GameSnapshot, GameInputHandler> gameView
     ) {
-        this.gameWorld = new GameWorldImpl(800, 600);
+        this.gameWorld = gameWorld;
         this.phaseGraph = new PhaseGraph();
         this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(menuView));
         this.phaseGraph.registerPhase(Phase.GAME, new GamePhaseController(gameWorld, gameView));

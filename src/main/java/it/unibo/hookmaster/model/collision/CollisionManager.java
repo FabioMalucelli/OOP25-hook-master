@@ -27,5 +27,5 @@ public interface CollisionManager {
      *     that the specific implementation may require the collidables to be registered
      *     before hand in order to keep a state for optimization purposes.
      */
-    void checkCollisions(List<Collidable> collidables);
+    void checkCollisions(List<? extends Collidable> collidables);
 }

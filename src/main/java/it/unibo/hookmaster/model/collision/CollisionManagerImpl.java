@@ -39,7 +39,7 @@ public final class CollisionManagerImpl implements CollisionManager {
      * {@inheritDoc}
      */
     @Override
-    public void checkCollisions(final List<Collidable> collidables) {
+    public void checkCollisions(final List<? extends Collidable> collidables) {
         for (int i = 0; i < collidables.size(); i++) {
             final Collidable first = collidables.get(i);
             final CollisionArea firstArea = first.getCollisionArea();
