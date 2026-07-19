@@ -1,5 +1,11 @@
 package it.unibo.hookmaster.model;
 
+import java.util.List;
+
+import it.unibo.hookmaster.model.fishdata.Fish;
+import it.unibo.hookmaster.model.fishdata.FishManager;
+import it.unibo.hookmaster.model.fishing.hook.Hook;
+
 /**
  * This interface represents the game world, which is the main model of the game.
  * It contains all the game entities and their states, and it is responsible for updating them.
@@ -15,4 +21,18 @@ public interface GameWorld {
      *     This is the time elapsed since the last frame.
      */
     void update(long deltaTime);
+
+    /**
+     * Returns the list of fishes currently in the game world.
+     * 
+     * @return the list of fishes
+     */
+    List<Fish> getFishes();
+
+    /**
+     * Returns the hook currently in the game world.
+     * 
+     * @return the hook
+     */
+    Hook getHook();
 }

@@ -62,6 +62,7 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
         final Button btnLoad = buildButton("Load save");
         final Button btnExit = buildButton("Exit game");
 
+        btnStart.setOnAction(e -> inputHandler.pressPlayButton());
         btnExit.setOnAction(e -> inputHandler.pressExitButton());
 
         btnList.setMaxWidth(scene.getWidth() * BUTTONS_WIDTH_RATIO);

@@ -27,7 +27,7 @@ public class GamePhaseController extends AbstractPhaseController {
     )
     public GamePhaseController(final View<GameSnapshot, GameInputHandler> gameView) {
         this.gameView = gameView;
-        this.gameView.setInputHandler(new InputHandlerImpl());
+        //this.gameView.setInputHandler(new InputHandlerImpl());
     }
 
     /**
@@ -57,7 +57,7 @@ public class GamePhaseController extends AbstractPhaseController {
      * @return a snapshot of the current game state
      */
     private GameSnapshot buildSnapshot() {
-        return new GameSnapshot(null, null, null, 0);
+        return null; // TODO: Implement this method to return a proper GameSnapshot
     }
 
     /**
