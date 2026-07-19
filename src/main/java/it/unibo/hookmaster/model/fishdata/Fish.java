@@ -3,19 +3,26 @@ package it.unibo.hookmaster.model.fishdata;
 import java.util.Objects;
 import java.util.Random;
 
+import it.unibo.hookmaster.model.collision.Collidable;
+import it.unibo.hookmaster.model.collision.CollisionArea;
+import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Represents a fish instance.
  */
-public class Fish implements Catchable {
+public class Fish implements Catchable, Collidable {
 
     private static final double MIN_WEIGHT_RATIO = 0.5;
     private static final double MAX_WEIGHT_RATIO = 2.0;
     private static final double MIN_CATCH_DIFFICULTY = 0.1;
     private static final double MAX_CATCH_DIFFICULTY = 1.0;
+    private static final double BASE_SPRITE_WIDTH = 40.0;
+    private static final double BASE_SPRITE_HEIGHT = 24.0;
 
+    private CollisionReaction collisionReaction = other -> {
+    };
     private final double weight;
     private final FishType type;
     private Position position;
@@ -49,6 +56,7 @@ public class Fish implements Catchable {
     /**
      * @return the fish name
      */
+    @Override
     public String getName() {
         return this.type.getName();
     }
@@ -61,8 +69,9 @@ public class Fish implements Catchable {
     }
 
     /**
-     * @return the dynamically claculated value of the fish
+     * @return the value of the fish based on it's weight
      */
+    @Override
     public int getEconomicValue() {
         final double ratio = this.weight / this.type.getBaseWeight();
         return (int) Math.round(this.type.getBaseEconomicValue() * ratio);
@@ -85,8 +94,9 @@ public class Fish implements Catchable {
     }
 
     /**
-     * @return the fish catch difficulty
+     * @return the catch difficulty of the fish
      */
+    @Override
     public double getCatchDifficulty() {
         final double ratio = this.weight / this.type.getBaseWeight();
         final double rawDifficulty = this.type.getBaseCatchDifficulty() * ratio;
@@ -96,7 +106,8 @@ public class Fish implements Catchable {
     /**
      * @return the fish's weight ratio
      */
-    public double getWeightRatio() {
+    @Override
+    public double getWeight() {
         return weight;
     }
 
@@ -147,8 +158,7 @@ public class Fish implements Catchable {
     }
 
     /**
-     * Replaces the current movement strategy (a predator entering
-     * "chase mode", or a fish joining a school).
+     * Replaces the current movement strategy.
      *
      * @param movementStrategy the new strategy
      */
@@ -157,8 +167,7 @@ public class Fish implements Catchable {
     }
 
     /**
-     * Advances this fish by one simulation step, delegating to the
-     * current movement strategy.
+     * Advances this fish by one simulation step.
      *
      * @param mapWidth  the horizontal size of the map
      * @param mapHeight the vertical size of the map
@@ -169,16 +178,42 @@ public class Fish implements Catchable {
     }
 
     /**
-     * Generates a random weight between the min weight possible and the max weight
-     * possible.
+     * Generates a random weight between the min weight and the max weight possible.
      * 
-     * @return a random value between the lowest weight and the highest weight
-     *         possible
+     * @return random value between the lowest weight and the highest weight
      */
     private double generateWeight() {
         final double baseWeight = this.type.getBaseWeight();
         final double minWeight = baseWeight * MIN_WEIGHT_RATIO;
         final double maxWeight = baseWeight * MAX_WEIGHT_RATIO;
         return minWeight + random.nextDouble() * (maxWeight - minWeight);
+    }
+
+    /**
+     * @return the hitbox
+     */
+    @Override
+    public CollisionArea getCollisionArea() {
+        final double sizeRatio = this.weight / this.type.getBaseWeight();
+        final double width = BASE_SPRITE_WIDTH * sizeRatio;
+        final double height = BASE_SPRITE_HEIGHT * sizeRatio;
+        return new CollisionAreaRectangle(this.getX(), this.getY(), width, height);
+    }
+
+    /**
+     * @param other reaction to a collision
+     */
+    @Override
+    public void onCollision(final Collidable other) {
+        this.collisionReaction.react(other);
+    }
+
+    /**
+     * Sets the reaction to trigger when this fish collides with another collidable.
+     *
+     * @param collisionReaction the reaction to apply on collision
+     */
+    public void setCollisionReaction(final CollisionReaction collisionReaction) {
+        this.collisionReaction = Objects.requireNonNull(collisionReaction);
     }
 }

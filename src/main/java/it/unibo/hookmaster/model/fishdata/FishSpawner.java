@@ -14,8 +14,8 @@ public class FishSpawner {
     private static final double MIN_Y_RATIO = 0.30;
     private static final double MAX_Y_RATIO = 0.95;
 
-    private final int mapWidth;
-    private final int mapHeight;
+    private final double mapWidth;
+    private final double mapHeight;
     private final Random random = new Random();
 
     /**
@@ -24,7 +24,7 @@ public class FishSpawner {
      * @param mapWidth  the horizontal size of the map
      * @param mapHeight the vertical size of the map
      */
-    public FishSpawner(final int mapWidth, final int mapHeight) {
+    public FishSpawner(final double mapWidth, final double mapHeight) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
     }
@@ -42,8 +42,8 @@ public class FishSpawner {
         final FishType type = eligibleTypes.get(random.nextInt(eligibleTypes.size()));
 
         final boolean fromLeft = random.nextBoolean();
-        final int x = fromLeft ? -50 : mapWidth + 50;
-        final int y = randomYWithinBand();
+        final double x = fromLeft ? -50 : mapWidth + 50;
+        final double y = randomYWithinBand();
 
         final Fish fish = new Fish(type, new Position(x, y), type.createDefaultMovementStrategy());
         fish.setDirection(fromLeft ? 1 : -1);
@@ -60,9 +60,9 @@ public class FishSpawner {
         return eligible;
     }
 
-    private int randomYWithinBand() {
-        final int minY = (int) Math.round(mapHeight * MIN_Y_RATIO);
-        final int maxY = (int) Math.round(mapHeight * MAX_Y_RATIO);
-        return minY + random.nextInt(maxY - minY);
+    private double randomYWithinBand() {
+        final double minY = mapHeight * MIN_Y_RATIO;
+        final double maxY = mapHeight * MAX_Y_RATIO;
+        return minY + random.nextDouble(maxY - minY);
     }
 }
