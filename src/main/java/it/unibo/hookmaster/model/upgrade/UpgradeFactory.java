@@ -1,6 +1,6 @@
 package it.unibo.hookmaster.model.upgrade;
 
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import it.unibo.hookmaster.model.upgrade.strategies.LinearUpgradeValueStrategy;
 import it.unibo.hookmaster.model.upgrade.upgrades.MaxWeightUpgrade;
@@ -25,10 +25,11 @@ public final class UpgradeFactory {
     /**
      * Factory method that generates the different upgrades.
      *
-     * @return a map ({@link EnumMap}) mapping each upgrade type to its upgrade instance.
+     * @return an ordered map ({@link LinkedHashMap}) mapping each upgrade type to its upgrade
+     *         instance.
      */
     public static Map<UpgradeType, Upgrade> generateUpgrades() {
-        final Map<UpgradeType, Upgrade> upgrades = new EnumMap<>(UpgradeType.class);
+        final Map<UpgradeType, Upgrade> upgrades = new LinkedHashMap<>();
         upgrades.put(UpgradeType.MAX_WEIGHT, new MaxWeightUpgrade(
                 new LinearUpgradeValueStrategy(MAX_WEIGHT_BASE, MAX_WEIGHT_STEP)));
         upgrades.put(UpgradeType.SPEED,
