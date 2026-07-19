@@ -52,7 +52,7 @@ public class GameWorldImpl implements GameWorld {
         if (hook.getCurrentState() != HookState.MINIGAME) {
             weatherSystem.update(deltaTime);
             fishManager.update(deltaTime);
-            //collisionManager.checkCollisions(getCollidables());
+            collisionManager.checkCollisions(getCollidables());
         }
     }
 

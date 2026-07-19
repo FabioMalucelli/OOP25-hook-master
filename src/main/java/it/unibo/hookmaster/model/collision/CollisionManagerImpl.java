@@ -32,7 +32,7 @@ public final class CollisionManagerImpl implements CollisionManager {
         // Register the predicate for both orderings of the area types,
         // as we don't know in which order the collidables will be checked for collisions.
         collisionPredicates.put(Pair.of(firstArea, secondArea), predicate);
-        collisionPredicates.put(Pair.of(secondArea, firstArea), predicate);
+        collisionPredicates.put(Pair.of(secondArea, firstArea), (second, first) -> predicate.test(first, second));
     }
 
     /**
