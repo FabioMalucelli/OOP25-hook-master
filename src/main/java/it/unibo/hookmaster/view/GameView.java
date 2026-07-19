@@ -41,7 +41,8 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private static final double COINS_LABEL_PADDING = 15;
     private static final double HUD_PADDING = 15;
 
-    private static final double OFFSET_TOP = 20;
+    private final double OFFSET_TOP;
+    private static final double SKY_RATIO = 64.0 / 360;
 
     private final Scene scene;
     private final Canvas mapCanvas;
@@ -62,6 +63,8 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         this.fishesCanvas = new Canvas(scene.getWidth(), scene.getHeight());
         this.fishesGc = fishesCanvas.getGraphicsContext2D();
 
+        OFFSET_TOP = fishesCanvas.getHeight() * SKY_RATIO;
+
         coinsLabel = new Label("0 C");
         coinsLabel.setTextFill(COINS_TEXT_COLOR);
         coinsLabel.setFont(Font.font("", FontWeight.BOLD, COINS_LABEL_FONT_SIZE));
@@ -69,7 +72,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
                 new CornerRadii(CORNER_RADII), Insets.EMPTY)));
         coinsLabel.setPadding(new Insets(COINS_LABEL_PADDING));
 
-        final Button shopButton = new Button("Open shop");
+        final Button shopButton = new Button("Open shop" + OFFSET_TOP);
         shopButton.setTextFill(TEXT_COLOR);
         shopButton.setFont(Font.font("", FontWeight.NORMAL, BUTTON_FONT_SIZE));
         shopButton.setPadding(new Insets(BUTTON_PADDING));
