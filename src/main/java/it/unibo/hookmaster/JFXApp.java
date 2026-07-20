@@ -23,10 +23,12 @@ import javafx.stage.Stage;
  */
 public final class JFXApp extends Application {
 
-    private static final double SKY_RATIO = 64.0 / 360;
+    public static final double SKY_RATIO = 64.0 / 360.0;
+    private static final double SEABED_RATIO = 14.0 / 360.0;
 
     private final Rectangle2D bounds = Screen.getPrimary().getBounds();
-    private final Scene scene = new Scene(new Label("Loading..."), bounds.getWidth(), bounds.getHeight());
+    private final Scene scene =
+            new Scene(new Label("Loading..."), bounds.getWidth(), bounds.getHeight());
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
@@ -35,9 +37,10 @@ public final class JFXApp extends Application {
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
 
-        GameWorld gameWorld = new GameWorldImpl(bounds.getWidth(), bounds.getHeight() * (1 - SKY_RATIO));
+        GameWorld gameWorld = new GameWorldImpl(bounds.getWidth(),
+                (bounds.getHeight() * (1 - SKY_RATIO)) - (bounds.getHeight() * SEABED_RATIO));
         View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
         View<GameSnapshot, GameInputHandler> gameView = new GameView(scene);
-        new GameControllerImpl(gameWorld,menuView, gameView).run();
+        new GameControllerImpl(gameWorld, menuView, gameView).run();
     }
 }

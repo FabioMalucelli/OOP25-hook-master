@@ -1,8 +1,14 @@
 package it.unibo.hookmaster.view;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import it.unibo.hookmaster.JFXApp;
 import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
+import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
+import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.Fish;
+import it.unibo.hookmaster.model.fishing.hook.Hook;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -41,8 +47,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private static final double COINS_LABEL_PADDING = 15;
     private static final double HUD_PADDING = 15;
 
-    private final double OFFSET_TOP;
-    private static final double SKY_RATIO = 64.0 / 360;
+    private static final String FISHES_IMAGES_PATH = "/fishes/";
 
     private final Scene scene;
     private final Canvas mapCanvas;
@@ -50,6 +55,8 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private final GraphicsContext fishesGc;
     private final Label coinsLabel;
 
+    private final Map<String, Image> imagesCache = new HashMap<>();
+    private final double offset;
     private GameInputHandler inputHandler;
 
     /**
@@ -63,7 +70,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         this.fishesCanvas = new Canvas(scene.getWidth(), scene.getHeight());
         this.fishesGc = fishesCanvas.getGraphicsContext2D();
 
-        OFFSET_TOP = fishesCanvas.getHeight() * SKY_RATIO;
+        this.offset = JFXApp.SKY_RATIO * fishesCanvas.getHeight();
 
         coinsLabel = new Label("0 C");
         coinsLabel.setTextFill(COINS_TEXT_COLOR);
@@ -72,7 +79,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
                 new CornerRadii(CORNER_RADII), Insets.EMPTY)));
         coinsLabel.setPadding(new Insets(COINS_LABEL_PADDING));
 
-        final Button shopButton = new Button("Open shop" + OFFSET_TOP);
+        final Button shopButton = new Button("Open shop");
         shopButton.setTextFill(TEXT_COLOR);
         shopButton.setFont(Font.font("", FontWeight.NORMAL, BUTTON_FONT_SIZE));
         shopButton.setPadding(new Insets(BUTTON_PADDING));
@@ -125,24 +132,41 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      */
     @Override
     public void update(final GameSnapshot snapshot) {
-        // Tieni conto del offest sopra e sotto
         fishesGc.clearRect(0, 0, fishesCanvas.getWidth(), fishesCanvas.getHeight());
 
         for (final Fish fish : snapshot.fishes()) {
-            fishesGc.drawImage(
-                    loadImage("/fishes/" + fish.getType().name().toLowerCase(Locale.getDefault()) + ".png", 50, 0),
-                    fish.getX(), fish.getY() + OFFSET_TOP);
+            final String path = FISHES_IMAGES_PATH
+                    + fish.getType().name().toLowerCase(Locale.getDefault()) + ".png";
+            final Image image = imagesCache.computeIfAbsent(path,
+                    i -> new Image(path, fishesCanvas.getWidth(), 0, true, true));
+            final CollisionAreaRectangle collisionArea = fish.getCollisionArea();
+            fishesGc.save();
+            fishesGc.translate(
+                    fish.getDirection() == 1 ? fish.getX() : fish.getX() + collisionArea.getWidth(),
+                    fish.getY() + offset);
+            fishesGc.scale(fish.getDirection(), 1);
+            fishesGc.drawImage(image, 0, 0, collisionArea.getWidth(), collisionArea.getHeight());
+            fishesGc.restore();
         }
 
-        /*fishesGc.drawImage(loadImage("/boat.png", 300, 150), snapshot.boat().getX(),
-                snapshot.boat().getY());
+        final Hook hook = snapshot.hook();
+        final CollisionAreaCircle collisionArea = hook.getCollisionArea();
+        final double size = collisionArea.getRadius() * 2;
 
-        fishesGc.setLineWidth(2.0);
-        fishesGc.strokeLine(snapshot.boat().getX() + (300 / 2), snapshot.boat().getY() + (150 / 2),
-                snapshot.hook().getX() + (50 / 2), snapshot.hook().getY() + (50 / 2));
+        final Image boatImage = imagesCache.computeIfAbsent("/boat.png", i -> new Image("/boat.png",
+                fishesCanvas.getWidth(), fishesCanvas.getHeight(), true, true));
+        final double boatWidth = fishesCanvas.getWidth() * 0.1;
+        final double boatHeight = boatWidth / (boatImage.getWidth() / boatImage.getHeight());
+        fishesGc.drawImage(boatImage, hook.getX() - (boatWidth / 2), offset - boatHeight, boatWidth,
+                boatHeight);
 
-        fishesGc.drawImage(loadImage("/hook.png", 50, 50), snapshot.hook().getX(),
-                snapshot.hook().getY());*/
+        fishesGc.setLineWidth(2.5);
+        fishesGc.strokeLine(hook.getX(), offset - (boatHeight / 2), hook.getX() + (size / 2),
+                hook.getY() + offset + (size / 2));
+
+        final Image hookImage = imagesCache.computeIfAbsent("/hook.png", i -> new Image("/hook.png",
+                fishesCanvas.getWidth(), fishesCanvas.getHeight(), true, true));
+        fishesGc.drawImage(hookImage, hook.getX(), hook.getY() + offset, size, size);
 
         coinsLabel.setText(snapshot.coins() + " C");
     }
