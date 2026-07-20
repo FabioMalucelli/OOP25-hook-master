@@ -53,11 +53,12 @@ public class GamePhaseController extends AbstractPhaseController {
      */
     @Override
     protected void tick(final long deltaTime) {
-        this.gameWorld.update(deltaTime);
-        this.gameView.update(buildSnapshot());
         if (this.gameWorld.getHook().getCurrentState() == HookState.MINIGAME) {
             getGraph().selectPhase(Phase.MINIGAME);
+            return;
         }
+        this.gameWorld.update(deltaTime);
+        this.gameView.update(buildSnapshot());
     }
 
     /**

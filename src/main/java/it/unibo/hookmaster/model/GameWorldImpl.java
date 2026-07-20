@@ -9,6 +9,7 @@ import it.unibo.hookmaster.model.collision.CollisionPredicates;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishdata.FishManager;
 import it.unibo.hookmaster.model.fishdata.FishSpawner;
+import it.unibo.hookmaster.model.fishing.hook.FishingEvent;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
 import it.unibo.hookmaster.model.fishing.hook.HookImpl;
 import it.unibo.hookmaster.model.fishing.hook.HookState;
@@ -41,6 +42,12 @@ public class GameWorldImpl implements GameWorld {
         final FishSpawner spawner = new FishSpawner(x, y);
         this.fishManager = new FishManager(spawner, weatherSystem, x, y);
         shop.addObserver(hook);
+        hook.addListener(e -> {
+            if (e.getType() == FishingEvent.Type.FISH_CAUGHT) {
+                fishManager.removeFish((Fish) e.getFish());
+                playerWallet.addCoins(e.getFish().getEconomicValue());
+            }
+        });
     }
 
     /**

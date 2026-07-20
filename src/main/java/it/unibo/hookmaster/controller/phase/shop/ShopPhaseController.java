@@ -3,6 +3,7 @@ package it.unibo.hookmaster.controller.phase.shop;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.AbstractPhaseController;
 import it.unibo.hookmaster.model.GameWorld;
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 
@@ -42,7 +43,6 @@ public class ShopPhaseController extends AbstractPhaseController {
      */
     @Override
     protected void tick(final long deltaTime) {
-        this.gameWorld.update(deltaTime);
         this.shopView.update(buildSnapshot());
     }
 
@@ -60,5 +60,12 @@ public class ShopPhaseController extends AbstractPhaseController {
      * Implementation of the ShopInputHandler interface.
      */
     private final class InputHandlerImpl implements ShopInputHandler {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void pressBuyBtn(UpgradeType upgradeType) {
+            gameWorld.getShop().buy(upgradeType, gameWorld.getPlayerWallet());
+        }
     }
 }

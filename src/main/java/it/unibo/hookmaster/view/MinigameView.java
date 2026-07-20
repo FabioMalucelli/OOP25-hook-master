@@ -70,8 +70,11 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, M
         this.getChildren().addAll(infoLabel, minigamStackPane);
 
         this.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.SPACE) {
-                infoLabel.setText("PREMUTO");
+            switch (e.getCode()) {
+                case ESCAPE -> inputHandler.pressEsc();
+                case SPACE -> inputHandler.pressSpace();
+                default -> {
+                }
             }
         });
     }

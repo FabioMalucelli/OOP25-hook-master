@@ -2,11 +2,14 @@ package it.unibo.hookmaster.controller.phase.minigame;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.AbstractPhaseController;
+import it.unibo.hookmaster.controller.phase.Phase;
 import it.unibo.hookmaster.model.GameWorld;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.fishing.hook.HookState;
 import it.unibo.hookmaster.model.fishing.minigame.FishingMinigame;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.MinigameSnapshot;
+import javafx.application.Platform;
 
 /**
  * Controller for the game phase of the game.
@@ -44,6 +47,10 @@ public class MinigamePhaseController extends AbstractPhaseController {
      */
     @Override
     protected void tick(final long deltaTime) {
+        if (this.gameWorld.getHook().getCurrentState() != HookState.MINIGAME) {
+            getGraph().selectPhase(Phase.GAME);
+            return;
+        }
         this.gameWorld.update(deltaTime);
         this.minigameView.update(buildSnapshot());
     }
@@ -63,5 +70,20 @@ public class MinigamePhaseController extends AbstractPhaseController {
      * Implementation of the MinigameInputHandler interface.
      */
     private final class InputHandlerImpl implements MinigameInputHandler {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void pressEsc() {
+            getGraph().selectPhase(Phase.MENU);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void pressSpace() {
+            gameWorld.getHook().attemptCatch();
+        }
     }
 }
