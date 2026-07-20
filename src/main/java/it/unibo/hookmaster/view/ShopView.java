@@ -100,6 +100,8 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Sho
         header.setRight(closeButton);
         setAlignment(closeButton, Pos.CENTER_RIGHT);
 
+        closeButton.setOnAction(e -> inputHandler.pressBackBtn());
+
         this.setTop(header);
 
         upgradesContainer = new VBox(UPGRADES_CONTAINER_SPACING);
