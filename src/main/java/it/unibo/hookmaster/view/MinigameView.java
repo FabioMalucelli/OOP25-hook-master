@@ -55,7 +55,7 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, M
         this.setBackground(
                 new Background(new BackgroundFill(BACKGROUND_COLOR, radii, Insets.EMPTY)));
 
-        final Label infoLabel = new Label(scene.getWidth() + " " + scene.getHeight());
+        final Label infoLabel = new Label("Press SPACE when the indicator is in the green area.");
         infoLabel.setTextFill(Color.WHITE);
         infoLabel.setFont(Font.font("", FontWeight.BOLD, 18));
 
