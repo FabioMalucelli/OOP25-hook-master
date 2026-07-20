@@ -1,6 +1,7 @@
 package it.unibo.hookmaster.view;
 
 import it.unibo.hookmaster.controller.phase.shop.ShopInputHandler;
+import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 import javafx.geometry.Insets;
@@ -133,8 +134,9 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Sho
         return btn;
     }
 
-    private HBox buildUpgradeRow(final String title, final String description, final int level,
-            final int maxLevel, final int cost, final boolean canUpgrade) {
+    private HBox buildUpgradeRow(final UpgradeType type, final String title,
+            final String description, final int level, final int maxLevel, final int cost,
+            final boolean canUpgrade) {
         final HBox row = new HBox();
         row.setAlignment(Pos.CENTER_LEFT);
 
@@ -160,6 +162,8 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Sho
             upgradeButton.setDisable(true);
         }
 
+        upgradeButton.setOnAction(e -> inputHandler.pressBuyBtn(type));
+
         row.getChildren().addAll(textBox, spacer, upgradeButton);
         return row;
     }
@@ -182,9 +186,9 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Sho
         upgradesContainer.getChildren().clear();
         for (final Upgrade upgrade : snapshot.upgrades()) {
             upgradesContainer.getChildren()
-                    .add(buildUpgradeRow(upgrade.getName(), upgrade.getDescription(),
-                            upgrade.getLevel(), upgrade.getMaxLevel(), upgrade.getCost(),
-                            upgrade.canUpgrade(snapshot.coins())));
+                    .add(buildUpgradeRow(upgrade.getType(), upgrade.getName(),
+                            upgrade.getDescription(), upgrade.getLevel(), upgrade.getMaxLevel(),
+                            upgrade.getCost(), upgrade.canUpgrade(snapshot.coins())));
         }
     }
 
