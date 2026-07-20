@@ -39,7 +39,7 @@ public class FishSpawner {
      * @param currentWeather the current weather, used to filter eligible species
      * @return new fish
      */
-    public Fish spawnFish(final Weather currentWeather) {
+    public Fish spawnFish(final FishManager fishManager, final Weather currentWeather) {
         final List<FishType> eligibleTypes = eligibleTypes(currentWeather);
         final FishType type = eligibleTypes.get(random.nextInt(eligibleTypes.size()));
 
@@ -47,7 +47,10 @@ public class FishSpawner {
         final double x = fromLeft ? -50 : mapWidth + 50;
         final double y = randomYWithinBand();
 
-        final Fish fish = new Fish(type, new Position(x, y), randomMovementStrategy());
+        Fish fish = new FishImpl(type, new Position(x, y), randomMovementStrategy());
+        if (type.isPredator()) {
+            fish = new PredatorFishImpl(fishManager, fish);
+        }
         fish.setDirection(fromLeft ? 1 : -1);
         return fish;
     }

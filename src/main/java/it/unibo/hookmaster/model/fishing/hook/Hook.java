@@ -60,8 +60,9 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
      * Should be called when the hook collides with a fish.
      * 
      * @param fish the fish that has been hooked
+     * @return true if the fish was hooked
      */
-    void hookFish(Catchable fish);
+    boolean hookFish(Catchable fish);
 
     /**
      * Resolves the active catching minigame: checks if the indicator was inside the target zone, updates

@@ -16,6 +16,8 @@ public interface Collidable {
      * Method called when a collision occurs with another Collidable object.
      *
      * @param other The other Collidable object involved in the collision.
+     * @return true if the other object should be removed from the game, false otherwise.
+     *     (the event is still fired on the other object, even if this method returns true)
      */
-    void onCollision(Collidable other);
+    boolean onCollision(Collidable other);
 }

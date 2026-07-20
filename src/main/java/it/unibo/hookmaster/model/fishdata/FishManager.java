@@ -68,7 +68,7 @@ public class FishManager implements WeatherObserver {
      * Spawns a new fish and applies it's speed.
      */
     private void spawnFish() {
-        final Fish fish = this.spawner.spawnFish(this.currentWeather);
+        final Fish fish = this.spawner.spawnFish(this, this.currentWeather);
         applyWeatherSpeedEffect(fish);
         this.fishes.add(fish);
     }

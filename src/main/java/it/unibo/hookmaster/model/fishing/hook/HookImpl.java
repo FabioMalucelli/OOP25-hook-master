@@ -132,18 +132,19 @@ public final class HookImpl implements Hook {
     }
 
     @Override
-    public void hookFish(final Catchable fish) {
+    public boolean hookFish(final Catchable fish) {
         if (currentState != HookState.MOVING && hookedFish != null) {
-            return;
+            return false;
         }
         if (fish.getWeight() > maxWeight) {
             fireEvent(new FishingEvent(FishingEvent.Type.FISH_TOO_HEAVY, fish));
-            return;
+            return false;
         }
         this.hookedFish = fish;
         this.currentMinigame = MinigameFactory.create(fish, stormy);
         this.currentState = HookState.MINIGAME;
         fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
+        return true;
     }
 
     @Override
@@ -208,10 +209,11 @@ public final class HookImpl implements Hook {
     }
 
     @Override
-    public void onCollision(final Collidable other) {
+    public boolean onCollision(final Collidable other) {
         if (currentState == HookState.MOVING && other instanceof Catchable) {
-            hookFish((Catchable) other);
+            return hookFish((Catchable) other);
         }
+        return false;
     }
 
     @Override
