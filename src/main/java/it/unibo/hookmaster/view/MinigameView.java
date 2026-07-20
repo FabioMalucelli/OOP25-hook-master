@@ -20,7 +20,8 @@ import javafx.scene.text.FontWeight;
 /**
  * Represents the mini game view.
  */
-public final class MinigameView extends VBox implements View<MinigameSnapshot, MinigameInputHandler> {
+public final class MinigameView extends VBox
+        implements View<MinigameSnapshot, MinigameInputHandler> {
 
     private static final Color BACKGROUND_COLOR = Color.web("#3971b1");
     private static final Color INDICATOR_COLOR = Color.web("#d63a3a");
@@ -76,6 +77,7 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, M
                 default -> {
                 }
             }
+            e.consume();
         });
     }
 
