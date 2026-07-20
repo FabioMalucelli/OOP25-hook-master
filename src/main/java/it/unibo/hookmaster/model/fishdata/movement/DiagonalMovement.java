@@ -1,16 +1,18 @@
 package it.unibo.hookmaster.model.fishdata.movement;
 
+import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishdata.Position;
 import java.util.Random;
 
 /**
- * Moves a fish in a diagonal line.
+ * Moves a fish in a diagonal line, bouncing vertically off the top
+ * and bottom edges of the map. When a bound is reached, the fish
+ * pauses its vertical movement for a short random period, swimming
+ * straight, before resuming diagonally in the opposite direction.
  */
 public final class DiagonalMovement implements MovementStrategy {
 
-    private static final double MIN_Y_RATIO = 0.30;
-    private static final double MAX_Y_RATIO = 0.95;
     private static final long MIN_PAUSE_MILLIS = 700;
     private static final long MAX_PAUSE_MILLIS = 1700;
 
@@ -42,14 +44,14 @@ public final class DiagonalMovement implements MovementStrategy {
                 paused = false;
             }
         } else {
+            final CollisionAreaRectangle collisionArea = fish.getCollisionArea();
+            final double maxY = mapHeight - collisionArea.getHeight();
+
             final int verticalSpeed = (int) Math.round(fish.getSpeed() * verticalRatio * frameScale);
             newY = fish.getY() + verticalSpeed * verticalDirection;
 
-            final double minY = mapHeight * MIN_Y_RATIO;
-            final double maxY = mapHeight * MAX_Y_RATIO;
-
-            if (newY <= minY) {
-                newY = minY;
+            if (newY <= 0) {
+                newY = 0;
                 verticalDirection = 1;
                 startPause();
             } else if (newY >= maxY) {

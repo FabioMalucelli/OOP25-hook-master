@@ -193,7 +193,7 @@ public class Fish implements Catchable, Collidable {
     @Override
     public CollisionAreaRectangle getCollisionArea() {
         final double baseArea = type.getBaseWidth() * type.getBaseHeight();
-        final double targetArea = weight * 50; // Fattore di cale che dipende dalla granezza dello schermo
+        final double targetArea = weight * 50;
         final double scaleFacotr = Math.sqrt(targetArea / baseArea);
         final double width = type.getBaseWidth() * scaleFacotr;
         final double height = type.getBaseHeight() * scaleFacotr;
