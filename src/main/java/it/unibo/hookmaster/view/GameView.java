@@ -106,8 +106,11 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         setAlignment(hud, Pos.TOP_RIGHT);
 
         final GraphicsContext gc = mapCanvas.getGraphicsContext2D();
-        gc.drawImage(loadImage("/map/background.png", scene.getWidth(), scene.getHeight()), 0, 0);
-        gc.drawImage(loadImage("/map/sand.png", scene.getWidth(), scene.getHeight()), 0, 0);
+        gc.drawImage(
+                new Image("/map/background.png", scene.getWidth(), scene.getHeight(), false, true),
+                0, 0);
+        gc.drawImage(new Image("/map/sand.png", scene.getWidth(), scene.getHeight(), false, true),
+                0, 0);
 
         this.getChildren().addAll(mapCanvas, fishesCanvas, hud);
 
@@ -135,10 +138,6 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         });
 
         shopButton.setOnAction(e -> inputHandler.pressShopBtn());
-    }
-
-    private Image loadImage(final String path, final double width, final double height) {
-        return new Image(GameView.class.getResourceAsStream(path), width, height, true, true);
     }
 
     /**
