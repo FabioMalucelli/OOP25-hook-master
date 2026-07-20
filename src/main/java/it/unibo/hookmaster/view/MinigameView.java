@@ -5,6 +5,7 @@ import it.unibo.hookmaster.controller.phase.minigame.MinigameInputHandler;
 import it.unibo.hookmaster.view.snapshot.MinigameSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
@@ -43,10 +44,10 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, M
      * 
      * @param gameView the game view to append this view to.
      */
-    public MinigameView(final StackPane gameView) {
+    public MinigameView(final Scene scene, final StackPane gameView) {
         this.gameView = gameView;
 
-        this.setMaxSize(gameView.getWidth() * SIZE_RATIO, gameView.getHeight() * SIZE_RATIO);
+        this.setMaxSize(scene.getWidth() * SIZE_RATIO, scene.getHeight() * SIZE_RATIO);
         this.setSpacing(15);
         this.setPadding(new Insets(15));
         this.setAlignment(Pos.CENTER);
@@ -54,7 +55,7 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, M
         this.setBackground(
                 new Background(new BackgroundFill(BACKGROUND_COLOR, radii, Insets.EMPTY)));
 
-        final Label infoLabel = new Label("Press SPACE when the indicator is in the green area.");
+        final Label infoLabel = new Label(scene.getWidth() + " " + scene.getHeight());
         infoLabel.setTextFill(Color.WHITE);
         infoLabel.setFont(Font.font("", FontWeight.BOLD, 18));
 

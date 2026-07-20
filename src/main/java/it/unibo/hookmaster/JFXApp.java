@@ -45,7 +45,7 @@ public final class JFXApp extends Application {
                 (bounds.getHeight() * (1 - SKY_RATIO)) - (bounds.getHeight() * SEABED_RATIO));
         View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
         GameView gameView = new GameView(scene);
-        View<MinigameSnapshot, MinigameInputHandler> minigameView = new MinigameView(gameView);
+        View<MinigameSnapshot, MinigameInputHandler> minigameView = new MinigameView(scene, gameView);
         View<ShopSnapshot, ShopInputHandler> shopView = new ShopView(scene);
         new GameControllerImpl(gameWorld, menuView, gameView, minigameView, shopView).run();
     }
