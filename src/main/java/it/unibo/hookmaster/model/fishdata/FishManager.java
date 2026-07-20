@@ -21,7 +21,6 @@ public class FishManager implements WeatherObserver {
     private static final int OUT_OF_BOUNDS_MARGIN = 100;
 
     private final List<Fish> fishes = new ArrayList<>();
-    private final List<FishListener> listeners = new ArrayList<>();
     private final FishSpawner spawner;
     private final double mapWidth;
     private final double mapHeight;
@@ -59,24 +58,6 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
-     * Registers a listener that will be notified of future changes.
-     *
-     * @param listener the listener to add
-     */
-    public void addListener(final FishListener listener) {
-        this.listeners.add(Objects.requireNonNull(listener));
-    }
-
-    /**
-     * Unregisters a previously added listener.
-     *
-     * @param listener the listener to remove
-     */
-    public void removeListener(final FishListener listener) {
-        this.listeners.remove(listener);
-    }
-
-    /**
      * @return a view of the currently live fish.
      */
     public List<Fish> getFishes() {
@@ -90,9 +71,6 @@ public class FishManager implements WeatherObserver {
         final Fish fish = this.spawner.spawnFish(this.currentWeather);
         applyWeatherSpeedEffect(fish);
         this.fishes.add(fish);
-        for (final FishListener listener : this.listeners) {
-            listener.onFishSpawned(fish);
-        }
     }
 
     /**
@@ -108,13 +86,6 @@ public class FishManager implements WeatherObserver {
 
             if (isOutOfBounds(fish)) {
                 iterator.remove();
-                for (final FishListener listener : this.listeners) {
-                    listener.onFishRemoved(fish);
-                }
-            } else {
-                for (final FishListener listener : this.listeners) {
-                    listener.onFishMoved(fish);
-                }
             }
         }
         replenish();
@@ -127,9 +98,6 @@ public class FishManager implements WeatherObserver {
      */
     public void removeFish(final Fish fish) {
         if (this.fishes.remove(fish)) {
-            for (final FishListener listener : this.listeners) {
-                listener.onFishRemoved(fish);
-            }
             replenish();
         }
     }

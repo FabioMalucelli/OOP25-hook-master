@@ -5,14 +5,14 @@ package it.unibo.hookmaster.model.fishdata;
  */
 public enum FishType {
 
-    GREATWHITE("Great White Shark", true, 100, 7, 1.0, 190, false, 48, 32),
-    ANCHOVY("Anchovy", false, 5, 2, 0.1, 15, false, 16, 16),
-    TUNA("Tuna", false, 20, 7, .55, 15, false, 48, 32),
-    MARLIN("Marlin", true, 50, 7, .8, 15, false, 60, 32),
+    GREATWHITE("Great White Shark", true, 100, 1.2, 1.0, 150, false, 48, 32),
+    ANCHOVY("Anchovy", false, 5, 1.7, 0.1, 15, false, 16, 16),
+    TUNA("Tuna", false, 20, 2, .55, 70, false, 48, 32),
+    MARLIN("Marlin", true, 50, 1.54, .8, 90, false, 60, 32),
     ZEBRAFISH("Zebra fish", false, 20, 1.5, 5, 25, false, 32, 32),
-    BUTTERFLYFISH("Butterfly fish", false, 5, 3, .3, 15, false, 24, 16),
-    CLOWNFISH("Clownfish", false, 10, 3, 6, 15, false, 16, 16),
-    SAWSHARK("Saw shark", true, 50, 1, 19, 190, false, 48, 32),
+    BUTTERFLYFISH("Butterfly fish", false, 5, 1.6, .3, 15, false, 24, 16),
+    CLOWNFISH("Clownfish", false, 10, 1.3, 6, 15, false, 16, 16),
+    SAWSHARK("Saw shark", true, 50, 1, 19, 130, false, 48, 32),
     ANGLER("Angler", true, 200, .8, 1, 50, true, 32, 24);
 
     private final String name;
@@ -24,7 +24,6 @@ public enum FishType {
     private final boolean stormOnly;
     private final double baseWidth;
     private final double baseHeight;
-
 
     FishType(final String name, final boolean predator, final int baseEconomicValue, final double speed,
             final double baseCatchDifficulty,
@@ -90,14 +89,14 @@ public enum FishType {
         return stormOnly;
     }
 
-        /**
+    /**
      * @return base width for the fish
      */
     public double getBaseWidth() {
         return baseWidth;
     }
 
-        /**
+    /**
      * @return base height for the fish
      */
     public double getBaseHeight() {

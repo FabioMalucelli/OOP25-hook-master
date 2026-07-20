@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.Random;
 
 import it.unibo.hookmaster.model.collision.Collidable;
-import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.fishing.Catchable;
