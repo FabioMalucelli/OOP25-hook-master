@@ -179,6 +179,7 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Sho
     public void update(final ShopSnapshot snapshot) {
         this.coinsValueLabel.setText(snapshot.coins() + " C");
 
+        upgradesContainer.getChildren().clear();
         for (final Upgrade upgrade : snapshot.upgrades()) {
             upgradesContainer.getChildren()
                     .add(buildUpgradeRow(upgrade.getName(), upgrade.getDescription(),
