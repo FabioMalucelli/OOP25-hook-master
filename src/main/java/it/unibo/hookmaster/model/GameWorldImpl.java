@@ -37,7 +37,7 @@ public class GameWorldImpl implements GameWorld {
      * @param y the height of the map
      */
     public GameWorldImpl(final double x, final double y) {
-        this.hook = new HookImpl(x / 2, 0, 0, 0, x, 0, y, 0);
+        this.hook = new HookImpl(x / 2, 0, 1000, 0, x, 0, y, 0);
         final FishSpawner spawner = new FishSpawner(x, y);
         this.fishManager = new FishManager(spawner, weatherSystem, x, y);
         shop.addObserver(hook);

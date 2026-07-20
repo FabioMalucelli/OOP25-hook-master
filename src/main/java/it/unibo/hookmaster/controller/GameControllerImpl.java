@@ -5,12 +5,18 @@ import it.unibo.hookmaster.controller.phase.PhaseGraph;
 import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
 import it.unibo.hookmaster.controller.phase.game.GamePhaseController;
 import it.unibo.hookmaster.controller.phase.menu.MenuPhaseController;
+import it.unibo.hookmaster.controller.phase.minigame.MinigameInputHandler;
+import it.unibo.hookmaster.controller.phase.minigame.MinigamePhaseController;
+import it.unibo.hookmaster.controller.phase.shop.ShopInputHandler;
+import it.unibo.hookmaster.controller.phase.shop.ShopPhaseController;
 import it.unibo.hookmaster.model.GameWorld;
 import it.unibo.hookmaster.model.GameWorldImpl;
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
+import it.unibo.hookmaster.view.snapshot.MinigameSnapshot;
+import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 import javafx.animation.AnimationTimer;
 
 /**
@@ -21,7 +27,6 @@ public class GameControllerImpl implements GameController {
 
     private final LoopTimer loopTimer = new LoopTimer();
     private final PhaseGraph phaseGraph;
-    private final GameWorld gameWorld;
 
     /**
      * Creates the default controller.
@@ -32,12 +37,15 @@ public class GameControllerImpl implements GameController {
     public GameControllerImpl(
         final GameWorld gameWorld,
         final View<MenuSnapshot, MenuInputHandler> menuView,
-        final View<GameSnapshot, GameInputHandler> gameView
+        final View<GameSnapshot, GameInputHandler> gameView,
+        final View<MinigameSnapshot, MinigameInputHandler> minigameView,
+        final View<ShopSnapshot, ShopInputHandler> shopView
     ) {
-        this.gameWorld = gameWorld;
         this.phaseGraph = new PhaseGraph();
         this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(menuView));
         this.phaseGraph.registerPhase(Phase.GAME, new GamePhaseController(gameWorld, gameView));
+        this.phaseGraph.registerPhase(Phase.MINIGAME, new MinigamePhaseController(gameWorld, minigameView));
+        this.phaseGraph.registerPhase(Phase.SHOP, new ShopPhaseController(gameWorld, shopView));
     }
 
     /**

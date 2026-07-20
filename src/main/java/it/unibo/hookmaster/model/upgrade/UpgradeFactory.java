@@ -14,7 +14,7 @@ public final class UpgradeFactory {
 
     private static final int MAX_WEIGHT_BASE = 30;
     private static final double MAX_WEIGHT_STEP = 20;
-    private static final int SPEED_BASE = 1;
+    private static final int SPEED_BASE = 30;
     private static final double SPEED_STEP = 1.5;
 
     /**

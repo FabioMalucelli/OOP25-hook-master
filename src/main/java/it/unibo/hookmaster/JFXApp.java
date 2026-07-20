@@ -1,15 +1,19 @@
 package it.unibo.hookmaster;
 
 import it.unibo.hookmaster.controller.GameControllerImpl;
-import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
+import it.unibo.hookmaster.controller.phase.minigame.MinigameInputHandler;
+import it.unibo.hookmaster.controller.phase.shop.ShopInputHandler;
 import it.unibo.hookmaster.model.GameWorld;
 import it.unibo.hookmaster.model.GameWorldImpl;
 import it.unibo.hookmaster.view.View;
-import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
+import it.unibo.hookmaster.view.snapshot.MinigameSnapshot;
+import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 import it.unibo.hookmaster.view.GameView;
 import it.unibo.hookmaster.view.MenuView;
+import it.unibo.hookmaster.view.ShopView;
+import it.unibo.hookmaster.view.MinigameView;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -40,7 +44,9 @@ public final class JFXApp extends Application {
         GameWorld gameWorld = new GameWorldImpl(bounds.getWidth(),
                 (bounds.getHeight() * (1 - SKY_RATIO)) - (bounds.getHeight() * SEABED_RATIO));
         View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
-        View<GameSnapshot, GameInputHandler> gameView = new GameView(scene);
-        new GameControllerImpl(gameWorld, menuView, gameView).run();
+        GameView gameView = new GameView(scene);
+        View<MinigameSnapshot, MinigameInputHandler> minigameView = new MinigameView(gameView);
+        View<ShopSnapshot, ShopInputHandler> shopView = new ShopView(scene);
+        new GameControllerImpl(gameWorld, menuView, gameView, minigameView, shopView).run();
     }
 }

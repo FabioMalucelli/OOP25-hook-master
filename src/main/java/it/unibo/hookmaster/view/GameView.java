@@ -110,6 +110,31 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         gc.drawImage(loadImage("/map/sand.png", scene.getWidth(), scene.getHeight()), 0, 0);
 
         this.getChildren().addAll(mapCanvas, fishesCanvas, hud);
+
+        this.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case W -> inputHandler.pressW();
+                case A -> inputHandler.pressA();
+                case S -> inputHandler.pressS();
+                case D -> inputHandler.pressD();
+                case ESCAPE -> inputHandler.pressEsc();
+                default -> {
+                }
+            }
+        });
+
+        this.setOnKeyReleased(e -> {
+            switch (e.getCode()) {
+                case W -> inputHandler.releaseW();
+                case A -> inputHandler.releaseA();
+                case S -> inputHandler.releaseS();
+                case D -> inputHandler.releaseD();
+                default -> {
+                }
+            }
+        });
+
+        shopButton.setOnAction(e -> inputHandler.pressShopBtn());
     }
 
     private Image loadImage(final String path, final double width, final double height) {

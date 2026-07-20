@@ -1,11 +1,11 @@
 package it.unibo.hookmaster.controller.phase.game;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.AbstractPhaseController;
+import it.unibo.hookmaster.controller.phase.Phase;
 import it.unibo.hookmaster.model.GameWorld;
+import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.fishing.hook.HookState;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 
@@ -15,7 +15,6 @@ import it.unibo.hookmaster.view.snapshot.GameSnapshot;
  */
 public class GamePhaseController extends AbstractPhaseController {
     private final View<GameSnapshot, GameInputHandler> gameView;
-    private final Queue<Runnable> scheduledActions = new ArrayDeque<>();
     private final GameWorld gameWorld;
 
     /**
@@ -30,7 +29,7 @@ public class GamePhaseController extends AbstractPhaseController {
     public GamePhaseController(final GameWorld gameworld, final View<GameSnapshot, GameInputHandler> gameView) {
         this.gameWorld = gameworld;
         this.gameView = gameView;
-        //this.gameView.setInputHandler(new InputHandlerImpl());
+        this.gameView.setInputHandler(new InputHandlerImpl());
     }
 
     /**
@@ -38,6 +37,14 @@ public class GamePhaseController extends AbstractPhaseController {
      */
     @Override
     protected void select() {
+        // Reset the hook state and clear any scheduled actions when the game phase is selected.
+        // This is to avoid any unexpected behavior when switching between phases in which
+        // the hook could keep moving in a direction even if the user is not pressing any key.
+        final Hook hook = gameWorld.getHook();
+        hook.setMovingDown(false);
+        hook.setMovingUp(false);
+        hook.setMovingLeft(false);
+        hook.setMovingRight(false);
         this.gameView.select();
     }
 
@@ -46,12 +53,11 @@ public class GamePhaseController extends AbstractPhaseController {
      */
     @Override
     protected void tick(final long deltaTime) {
-        while (!scheduledActions.isEmpty()) {
-            final Runnable action = scheduledActions.remove();
-            action.run();
-        }
         this.gameWorld.update(deltaTime);
         this.gameView.update(buildSnapshot());
+        if (this.gameWorld.getHook().getCurrentState() == HookState.MINIGAME) {
+            getGraph().selectPhase(Phase.MINIGAME);
+        }
     }
 
     /**
@@ -66,6 +72,9 @@ public class GamePhaseController extends AbstractPhaseController {
 
     /**
      * Implementation of the GameInputHandler interface.
+     * All the operations are performed directly on the game world,
+     * because, since the game loop is running in the same thread as the view,
+     * we are sure that the input events are not processed in the middle of a tick.
      */
     private final class InputHandlerImpl implements GameInputHandler {
         /**
@@ -73,8 +82,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressW() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressW'");
+            gameWorld.getHook().setMovingUp(true);
         }
 
         /**
@@ -82,8 +90,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void releaseW() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'releaseW'");
+            gameWorld.getHook().setMovingUp(false);
         }
 
         /**
@@ -91,8 +98,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressA() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressA'");
+            gameWorld.getHook().setMovingLeft(true);
         }
 
         /**
@@ -100,8 +106,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void releaseA() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'releaseA'");
+            gameWorld.getHook().setMovingLeft(false);
         }
 
         /**
@@ -109,8 +114,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressS() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressS'");
+            gameWorld.getHook().setMovingDown(true);
         }
 
         /**
@@ -118,8 +122,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void releaseS() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'releaseS'");
+            gameWorld.getHook().setMovingDown(false);
         }
 
         /**
@@ -127,8 +130,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressD() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressD'");
+            gameWorld.getHook().setMovingRight(true);
         }
 
         /**
@@ -136,8 +138,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void releaseD() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'releaseD'");
+            gameWorld.getHook().setMovingRight(false);
         }
 
         /**
@@ -145,8 +146,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressShopBtn() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressShopBtn'");
+            getGraph().selectPhase(Phase.SHOP);
         }
 
         /**
@@ -154,8 +154,7 @@ public class GamePhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressEsc() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressEsc'");
+            getGraph().selectPhase(Phase.MENU);
         }
 
     }

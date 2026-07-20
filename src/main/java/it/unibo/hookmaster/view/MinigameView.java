@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.view;
 
 import javafx.scene.paint.Color;
-import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
+import it.unibo.hookmaster.controller.phase.minigame.MinigameInputHandler;
 import it.unibo.hookmaster.view.snapshot.MinigameSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,7 +19,7 @@ import javafx.scene.text.FontWeight;
 /**
  * Represents the mini game view.
  */
-public final class MinigameView extends VBox implements View<MinigameSnapshot, GameInputHandler> {
+public final class MinigameView extends VBox implements View<MinigameSnapshot, MinigameInputHandler> {
 
     private static final Color BACKGROUND_COLOR = Color.web("#3971b1");
     private static final Color INDICATOR_COLOR = Color.web("#d63a3a");
@@ -35,6 +35,8 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, G
     private final Rectangle backgroundBar;
     private final Rectangle targetZone;
     private final Rectangle indicator;
+
+    private MinigameInputHandler inputHandler;
 
     /**
      * Contructs the mini game view.
@@ -100,8 +102,7 @@ public final class MinigameView extends VBox implements View<MinigameSnapshot, G
      * {@inheritDoc}
      */
     @Override
-    public void setInputHandler(final GameInputHandler inputHandler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setInputHandler'");
+    public void setInputHandler(final MinigameInputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }

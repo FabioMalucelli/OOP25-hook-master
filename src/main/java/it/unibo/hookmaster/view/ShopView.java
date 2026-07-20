@@ -1,6 +1,6 @@
 package it.unibo.hookmaster.view;
 
-import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
+import it.unibo.hookmaster.controller.phase.shop.ShopInputHandler;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 import javafx.geometry.Insets;
@@ -24,7 +24,7 @@ import javafx.scene.text.FontWeight;
 /**
  * Represents the shop view.
  */
-public final class ShopView extends BorderPane implements View<ShopSnapshot, MenuInputHandler> {
+public final class ShopView extends BorderPane implements View<ShopSnapshot, ShopInputHandler> {
 
     private static final Color BACKGROUND_COLOR = Color.web("#3971b1");
     private static final Color DARK_BACKGROUND_COLOR = Color.web("#182030");
@@ -54,6 +54,8 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Men
     private final Scene scene;
     private final Label coinsValueLabel;
     private final VBox upgradesContainer;
+
+    private ShopInputHandler inputHandler;
 
     /**
      * Contructs the shop view.
@@ -189,8 +191,7 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Men
      * {@inheritDoc}
      */
     @Override
-    public void setInputHandler(final MenuInputHandler inputHandler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setInputHandler'");
+    public void setInputHandler(final ShopInputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }
