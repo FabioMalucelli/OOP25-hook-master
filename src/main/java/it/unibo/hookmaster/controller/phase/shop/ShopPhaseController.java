@@ -38,6 +38,7 @@ public class ShopPhaseController extends AbstractPhaseController {
      */
     @Override
     protected void select() {
+        needsRefresh = true;
         this.shopView.select();
     }
 
