@@ -6,10 +6,7 @@ import it.unibo.hookmaster.model.fishdata.Position;
 import java.util.Random;
 
 /**
- * Moves a fish in a diagonal line, bouncing vertically off the top
- * and bottom edges of the map. When a bound is reached, the fish
- * pauses its vertical movement for a short random period, swimming
- * straight, before resuming diagonally in the opposite direction.
+ * Moves a fish in a diagonal line.
  */
 public final class DiagonalMovement implements MovementStrategy {
 
