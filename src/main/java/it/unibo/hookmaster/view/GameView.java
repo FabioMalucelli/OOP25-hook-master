@@ -96,6 +96,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         shopButton.setOnMouseExited(e -> shopButton.setBackground(background));
 
         shopButton.setCursor(Cursor.HAND);
+        shopButton.setFocusTraversable(false);
 
         final HBox hud = new HBox(scene.getWidth() * SPACING_RATIO);
         hud.setAlignment(Pos.CENTER_RIGHT);
