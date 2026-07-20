@@ -13,6 +13,7 @@ import javafx.application.Platform;
  */
 public class MenuPhaseController extends AbstractPhaseController {
     private final View<MenuSnapshot, MenuInputHandler> menuView;
+    private boolean isGameStarted = false;
 
     /**
      * Creates a new MenuPhaseController tied to the given menu view.
@@ -41,7 +42,7 @@ public class MenuPhaseController extends AbstractPhaseController {
      */
     @Override
     protected void tick(final long deltaTime) {
-        this.menuView.update(new MenuSnapshot(false));
+        this.menuView.update(new MenuSnapshot(isGameStarted));
     }
 
     /**
@@ -55,6 +56,7 @@ public class MenuPhaseController extends AbstractPhaseController {
          */
         @Override
         public void pressPlayButton() {
+            isGameStarted = true;
             getGraph().selectPhase(Phase.GAME);
         }
 

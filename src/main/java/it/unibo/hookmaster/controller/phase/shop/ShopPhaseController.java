@@ -2,10 +2,12 @@ package it.unibo.hookmaster.controller.phase.shop;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.AbstractPhaseController;
+import it.unibo.hookmaster.controller.phase.Phase;
 import it.unibo.hookmaster.model.GameWorld;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
+import javafx.application.Platform;
 
 /**
  * Controller for the game phase of the game.
@@ -14,6 +16,7 @@ import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
 public class ShopPhaseController extends AbstractPhaseController {
     private final View<ShopSnapshot, ShopInputHandler> shopView;
     private final GameWorld gameWorld;
+    private boolean needsRefresh = true;
 
     /**
      * Creates a new MinigamePhaseController tied to the given minigame view.
@@ -43,7 +46,10 @@ public class ShopPhaseController extends AbstractPhaseController {
      */
     @Override
     protected void tick(final long deltaTime) {
-        this.shopView.update(buildSnapshot());
+        if (needsRefresh) {
+            this.shopView.update(buildSnapshot());
+            this.needsRefresh = false;
+        }
     }
 
     /**
@@ -66,6 +72,15 @@ public class ShopPhaseController extends AbstractPhaseController {
         @Override
         public void pressBuyBtn(UpgradeType upgradeType) {
             gameWorld.getShop().buy(upgradeType, gameWorld.getPlayerWallet());
+            needsRefresh = true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void pressBackBtn() {
+            getGraph().selectPhase(Phase.GAME);
         }
     }
 }

@@ -43,9 +43,14 @@ public class GameWorldImpl implements GameWorld {
         this.fishManager = new FishManager(spawner, weatherSystem, x, y);
         shop.addObserver(hook);
         hook.addListener(e -> {
-            if (e.getType() == FishingEvent.Type.FISH_CAUGHT) {
-                fishManager.removeFish((Fish) e.getFish());
-                playerWallet.addCoins(e.getFish().getEconomicValue());
+            switch (e.getType()) {
+                case FISH_CAUGHT:
+                    playerWallet.addCoins(e.getFish().getEconomicValue());
+                case FISH_ESCAPED:
+                    fishManager.removeFish((Fish) e.getFish());
+                    break;
+                default:
+                    break;
             }
         });
     }

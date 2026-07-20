@@ -13,4 +13,9 @@ public interface ShopInputHandler {
      * @param upgradeType the type of upgrade the user wants to buy
      */
     void pressBuyBtn(UpgradeType upgradeType);
+
+    /**
+     * Called when the user presses the back button in the shop.
+     */
+    void pressBackBtn();
 }
