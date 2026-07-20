@@ -3,7 +3,6 @@ package it.unibo.hookmaster.model;
 import java.util.List;
 
 import it.unibo.hookmaster.model.fishdata.Fish;
-import it.unibo.hookmaster.model.fishdata.FishManager;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
 import it.unibo.hookmaster.model.upgrade.PlayerWallet;
 import it.unibo.hookmaster.model.upgrade.Shop;

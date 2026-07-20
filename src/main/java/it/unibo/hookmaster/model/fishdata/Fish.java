@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.Random;
 
 import it.unibo.hookmaster.model.collision.Collidable;
-import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.fishing.Catchable;
@@ -193,7 +192,7 @@ public class Fish implements Catchable, Collidable {
      * @return the hitbox
      */
     @Override
-    public CollisionArea getCollisionArea() {
+    public CollisionAreaRectangle getCollisionArea() {
         final double sizeRatio = this.weight / this.type.getBaseWeight();
         final double width = BASE_SPRITE_WIDTH * sizeRatio;
         final double height = BASE_SPRITE_HEIGHT * sizeRatio;
