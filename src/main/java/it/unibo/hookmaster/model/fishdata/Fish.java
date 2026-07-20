@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import it.unibo.hookmaster.model.collision.Collidable;
+import it.unibo.hookmaster.model.collision.CollisionArea;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.fishing.Catchable;
@@ -13,12 +14,10 @@ import it.unibo.hookmaster.model.fishing.Catchable;
  */
 public class Fish implements Catchable, Collidable {
 
-    private static final double MIN_WEIGHT_RATIO = 0.5;
+    private static final double MIN_WEIGHT_RATIO = 1.0;
     private static final double MAX_WEIGHT_RATIO = 2.0;
     private static final double MIN_CATCH_DIFFICULTY = 0.1;
     private static final double MAX_CATCH_DIFFICULTY = 1.0;
-    private static final double BASE_SPRITE_WIDTH = 40.0;
-    private static final double BASE_SPRITE_HEIGHT = 24.0;
 
     private CollisionReaction collisionReaction = other -> {
     };
@@ -193,9 +192,11 @@ public class Fish implements Catchable, Collidable {
      */
     @Override
     public CollisionAreaRectangle getCollisionArea() {
-        final double sizeRatio = this.weight / this.type.getBaseWeight();
-        final double width = BASE_SPRITE_WIDTH * sizeRatio;
-        final double height = BASE_SPRITE_HEIGHT * sizeRatio;
+        final double baseArea = type.getBaseWidth() * type.getBaseHeight();
+        final double targetArea = weight * 50; // Fattore di cale che dipende dalla granezza dello schermo
+        final double scaleFacotr = Math.sqrt(targetArea / baseArea);
+        final double width = type.getBaseWidth() * scaleFacotr;
+        final double height = type.getBaseHeight() * scaleFacotr;
         return new CollisionAreaRectangle(this.getX(), this.getY(), width, height);
     }
 

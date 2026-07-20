@@ -8,15 +8,16 @@ import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
  */
 public enum FishType {
 
-    GREATWHITE("Great White Shark", true, 100, 7, 1.0, 20.0, false),
+    /*GREATWHITE("Great White Shark", true, 100, 7, 1.0, 20.0, false),
     ANCHOVY("Anchovy", false, 5, 2, 0.1, 2, false),
     CLOWNFISH("Clownfish", false, 10, 3, 5, 0.03, false),
     TUNA("Tuna", false, 20, 7, .55, 15.0, false),
     MARLIN("Marlin", true, 50, 7, .8, 15.0, false),
     ZEBRAFISH("Zebra fish", false, 20, 1.5, 5, 5, false),
-    BUTTERFLYFISH("Butterfly fish", false, 5, 3, .3, 5, false),
-    SAWSHARK("Saw shark", true, 50, 1, 19, 5, false),
-    ANGLER("Angler", true, 200, .8, 1, 15, true);
+    BUTTERFLYFISH("Butterfly fish", false, 5, 3, .3, 5, false),*/
+    CLOWNFISH("Clownfish", false, 10, 3, 5, 10, false, 16, 16),
+    SAWSHARK("Saw shark", true, 50, 1, 19, 100, false, 48, 32),
+    ANGLER("Angler", true, 200, .8, 1, 50, false, 32, 24);
 
     private final String name;
     private final boolean predator;
@@ -25,10 +26,13 @@ public enum FishType {
     private final double baseCatchDifficulty;
     private final double baseWeight;
     private final boolean stormOnly;
+    private final double baseWidth;
+    private final double baseHeight;
+
 
     FishType(final String name, final boolean predator, final int baseEconomicValue, final double speed,
             final double baseCatchDifficulty,
-            final double baseWeight, final boolean stormOnly) {
+            final double baseWeight, final boolean stormOnly, final double baseWidth, final double baseHeight) {
 
         this.name = name;
         this.predator = predator;
@@ -37,6 +41,8 @@ public enum FishType {
         this.baseCatchDifficulty = baseCatchDifficulty;
         this.baseWeight = baseWeight;
         this.stormOnly = stormOnly;
+        this.baseWidth = baseWidth;
+        this.baseHeight = baseHeight;
     }
 
     /**
@@ -86,5 +92,19 @@ public enum FishType {
      */
     public boolean isStormOnly() {
         return stormOnly;
+    }
+
+        /**
+     * @return base width for the fish
+     */
+    public double getBaseWidth() {
+        return baseWidth;
+    }
+
+        /**
+     * @return base height for the fish
+     */
+    public double getBaseHeight() {
+        return baseHeight;
     }
 }
