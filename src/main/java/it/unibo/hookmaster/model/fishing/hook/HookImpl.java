@@ -29,6 +29,7 @@ public final class HookImpl implements Hook {
     //Game attributes (whitch can then be modified using the shop)
     private double speed;
     private double maxWeight;
+    private double minigameEase;
 
     private final double minX;
     private final double maxX;
@@ -141,7 +142,7 @@ public final class HookImpl implements Hook {
             return false;
         }
         this.hookedFish = fish;
-        this.currentMinigame = MinigameFactory.create(fish, stormy);
+        this.currentMinigame = MinigameFactory.create(fish, minigameEase, stormy);
         this.currentState = HookState.MINIGAME;
         fireEvent(new FishingEvent(FishingEvent.Type.FISH_HOOKED, fish));
         return true;
@@ -194,6 +195,9 @@ public final class HookImpl implements Hook {
                 break;
             case MAX_WEIGHT:
                 this.maxWeight = event.getNewValue();
+                break;
+            case MINIGAME_EASE:
+                this.minigameEase = event.getNewValue();
                 break;
         }
     }

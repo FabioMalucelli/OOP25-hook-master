@@ -9,9 +9,9 @@ import it.unibo.hookmaster.model.upgrade.strategies.UpgradeValueStrategy;
 public final class MaxWeightUpgrade extends AbstractUpgrade {
 
     private static final UpgradeType TYPE = UpgradeType.MAX_WEIGHT;
-    private static final String UPGRADE_NAME = "Peso massimo";
-    private static final String UPGRADE_DESCRIPTION = "Aumenta il peso massimo";
-    private static final int MAX_LEVEL = 10;
+    private static final String UPGRADE_NAME = "Max Weight";
+    private static final String UPGRADE_DESCRIPTION = "Increases the maximum weight the hook can catch, allowing for larger fish to be caught.";
+    private static final int MAX_LEVEL = 30;
 
     /**
      * Constructs a new max weight upgrade using the specified value strategy.

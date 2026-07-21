@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import it.unibo.hookmaster.model.upgrade.strategies.LinearUpgradeValueStrategy;
 import it.unibo.hookmaster.model.upgrade.upgrades.MaxWeightUpgrade;
+import it.unibo.hookmaster.model.upgrade.upgrades.MinigameEaseUpgrade;
 import it.unibo.hookmaster.model.upgrade.upgrades.SpeedUpgrade;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 
@@ -12,15 +13,17 @@ import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
  */
 public final class UpgradeFactory {
 
-    private static final int MAX_WEIGHT_BASE = 30_000;
-    private static final double MAX_WEIGHT_STEP = 20;
-    private static final int SPEED_BASE = 30;
-    private static final double SPEED_STEP = 1.5;
+    private static final int MAX_WEIGHT_BASE = 50;
+    private static final double MAX_WEIGHT_STEP = 10;
+    private static final int SPEED_BASE = 50;
+    private static final double SPEED_STEP = 5;
+    private static final int MINIGAME_EASE_BASE = 1;
+    private static final double MINIGAME_EASE_STEP = -0.1;
 
     /**
      * Prevents instantiation of this class.
      */
-    private UpgradeFactory() { }
+    private UpgradeFactory() {}
 
     /**
      * Factory method that generates the different upgrades.
@@ -34,6 +37,8 @@ public final class UpgradeFactory {
                 new LinearUpgradeValueStrategy(MAX_WEIGHT_BASE, MAX_WEIGHT_STEP)));
         upgrades.put(UpgradeType.SPEED,
                 new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP)));
+        upgrades.put(UpgradeType.MINIGAME_EASE, new MinigameEaseUpgrade(
+                new LinearUpgradeValueStrategy(MINIGAME_EASE_BASE, MINIGAME_EASE_STEP)));
         return upgrades;
     }
 }

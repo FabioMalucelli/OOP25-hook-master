@@ -3,22 +3,20 @@ package it.unibo.hookmaster.model.upgrade.upgrades;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.strategies.UpgradeValueStrategy;
 
-/**
- * Represents the speed upgrade {@link UpgradeType#SPEED}.
- */
-public final class SpeedUpgrade extends AbstractUpgrade {
+public final class MinigameEaseUpgrade extends AbstractUpgrade {
 
-    private static final UpgradeType TYPE = UpgradeType.SPEED;
-    private static final String UPGRADE_NAME = "Speed";
-    private static final String UPGRADE_DESCRIPTION = "Increases the speed of the hook, allowing for faster movement.";
-    private static final int MAX_LEVEL = 10;
+    private static final UpgradeType TYPE = UpgradeType.MINIGAME_EASE;
+    private static final String UPGRADE_NAME = "Minigame Ease";
+    private static final String UPGRADE_DESCRIPTION =
+            "Reduces the difficulty of minigames, making them easier to complete.";
+    private static final int MAX_LEVEL = 5;
 
     /**
-     * Constructs a new speed upgrade using the specified value strategy.
+     * Constructs a new minigame ease upgrade using the specified value strategy.
      * 
      * @param strategy the upgrade strategy used by this upgrade.
      */
-    public SpeedUpgrade(final UpgradeValueStrategy strategy) {
+    public MinigameEaseUpgrade(final UpgradeValueStrategy strategy) {
         super(strategy);
     }
 
@@ -52,5 +50,13 @@ public final class SpeedUpgrade extends AbstractUpgrade {
     @Override
     public int getMaxLevel() {
         return MAX_LEVEL;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getCost() {
+        return super.getLevel() * 20;
     }
 }

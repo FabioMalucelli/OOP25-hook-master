@@ -11,5 +11,9 @@ public enum UpgradeType {
     /**
      * An upgrade that increases the movement speed.
      */
-    SPEED
+    SPEED,
+    /**
+     * An upgrade that reduces the difficulty of minigames.
+     */
+    MINIGAME_EASE
 }
