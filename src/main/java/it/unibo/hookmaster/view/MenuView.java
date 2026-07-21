@@ -1,12 +1,16 @@
 package it.unibo.hookmaster.view;
 
+import java.io.File;
+
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -16,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
 
 /**
  * Represents the menu view.
@@ -60,15 +65,34 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
         final VBox btnList = new VBox(scene.getHeight() * BUTTONS_SPACING_RATIO);
         this.btnStart = buildButton("Start game");
         final Button btnLoad = buildButton("Load save");
+        final Button btnSave = buildButton("Save game");
         final Button btnExit = buildButton("Exit game");
 
         btnStart.setOnAction(e -> inputHandler.pressPlayButton());
+        btnLoad.setOnAction(e -> {
+            final File selectedFile = getSelectedFile("Select a file to load", false);
+            if (selectedFile == null) {
+                return;
+            }
+            try {
+                inputHandler.pressLoadButton(selectedFile);
+            } catch (final IllegalArgumentException ex) {
+                new Alert(AlertType.ERROR, ex.getMessage()).showAndWait();
+            }
+        });
+        btnSave.setOnAction(e -> {
+            final File selectedFile = getSelectedFile("Select a file to save", true);
+            if (selectedFile == null) {
+                return;
+            }
+            inputHandler.pressSaveButton(selectedFile);
+        });
         btnExit.setOnAction(e -> inputHandler.pressExitButton());
 
         btnList.setMaxWidth(scene.getWidth() * BUTTONS_WIDTH_RATIO);
         btnList.setAlignment(Pos.TOP_CENTER);
         btnList.setFillWidth(true);
-        btnList.getChildren().addAll(btnStart, btnLoad, btnExit);
+        btnList.getChildren().addAll(btnStart, btnLoad, btnSave, btnExit);
 
         this.getChildren().addAll(logo, btnList);
     }
@@ -109,6 +133,12 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
         btn.setCursor(Cursor.HAND);
 
         return btn;
+    }
+
+    private File getSelectedFile(final String title, boolean save) {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        return save ? fileChooser.showSaveDialog(this.scene.getWindow()) : fileChooser.showOpenDialog(this.scene.getWindow());
     }
 
     /**

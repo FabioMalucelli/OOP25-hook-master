@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.save.Originator;
 import it.unibo.hookmaster.model.upgrade.PlayerWallet;
 import it.unibo.hookmaster.model.upgrade.Shop;
 import it.unibo.hookmaster.model.weather.Weather;
@@ -13,7 +14,7 @@ import it.unibo.hookmaster.model.weather.Weather;
  * the game entities and their states, and it is responsible for updating them. The GameWorld is the
  * main entry point for the game logic, and it is used by the GameController to run the game loop.
  */
-public interface GameWorld {
+public interface GameWorld extends Originator<GameWorld.Memento> {
     /**
      * Advances the game state by the given delta time. This method is called by the game loop to
      * update the game world. It updates all the game entities and their states.
@@ -64,4 +65,10 @@ public interface GameWorld {
      * @return the weather
      */
     Weather getWeather();
+
+    /**
+     * Represents a memento (a snapshot) of the game world's state.
+     */
+    static interface Memento extends it.unibo.hookmaster.model.save.Memento {
+    }
 }

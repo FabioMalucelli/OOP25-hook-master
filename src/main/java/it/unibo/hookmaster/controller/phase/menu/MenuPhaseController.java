@@ -1,6 +1,11 @@
 package it.unibo.hookmaster.controller.phase.menu;
 
 import it.unibo.hookmaster.controller.phase.Phase;
+import it.unibo.hookmaster.model.GameWorld;
+
+import java.io.File;
+import java.io.IOException;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.AbstractPhaseController;
 import it.unibo.hookmaster.view.View;
@@ -14,6 +19,7 @@ import javafx.application.Platform;
 public class MenuPhaseController extends AbstractPhaseController {
     private final View<MenuSnapshot, MenuInputHandler> menuView;
     private boolean isGameStarted = false;
+    private final GameWorld gameWorld;
 
     /**
      * Creates a new MenuPhaseController tied to the given menu view.
@@ -24,7 +30,8 @@ public class MenuPhaseController extends AbstractPhaseController {
         value = "EI_EXPOSE_REP2",
         justification = "The view does not contain any of the controller state, so it is safe to expose it."
     )
-    public MenuPhaseController(final View<MenuSnapshot, MenuInputHandler> menuView) {
+    public MenuPhaseController(final GameWorld gameWorld, final View<MenuSnapshot, MenuInputHandler> menuView) {
+        this.gameWorld = gameWorld;
         this.menuView = menuView;
         menuView.setInputHandler(new InputHandlerImpl());
     }
@@ -64,9 +71,14 @@ public class MenuPhaseController extends AbstractPhaseController {
          * {@inheritDoc}
          */
         @Override
-        public void pressLoadButton() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'pressLoadButton'");
+        public void pressLoadButton(final File file) throws IllegalArgumentException {
+            try {
+                final GameWorld.Memento memento = (GameWorld.Memento) SaveManager.load(file);
+                gameWorld.restoreFromMemento(memento);
+            } catch (final IOException | ClassNotFoundException e) {
+                throw new IllegalArgumentException("Failed to load the game state from the file: " + file.getAbsolutePath());
+            }
+            pressPlayButton();
         }
 
         /**
@@ -75,6 +87,18 @@ public class MenuPhaseController extends AbstractPhaseController {
         @Override
         public void pressExitButton() {
             Platform.exit();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void pressSaveButton(final File file) {
+            try {
+                SaveManager.save(gameWorld.createMemento(), file);
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

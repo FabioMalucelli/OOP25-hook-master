@@ -58,4 +58,27 @@ public abstract class AbstractUpgrade implements Upgrade {
     public void upgrade() {
         this.level++;
     }
+
+    @Override
+    public AbstractUpgrade.Memento createMemento() {
+        return new AbstractUpgrade.Memento(this.level);
+    }
+
+    @Override
+    public void restoreFromMemento(final Upgrade.Memento memento) {
+        if (!(memento instanceof AbstractUpgrade.Memento)) {
+            throw new IllegalArgumentException("Invalid memento type");
+        }
+        this.level = ((AbstractUpgrade.Memento) memento).level;
+    }
+
+
+    public static final class Memento implements Upgrade.Memento {
+        private static final long serialVersionUID = 1L;
+        private final int level;
+
+        private Memento(final int level) {
+            this.level = level;
+        }
+    }
 }

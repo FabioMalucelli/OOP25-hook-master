@@ -41,7 +41,7 @@ public class GameControllerImpl implements GameController {
         final View<ShopSnapshot, ShopInputHandler> shopView
     ) {
         this.phaseGraph = new PhaseGraph();
-        this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(menuView));
+        this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(gameWorld,menuView));
         this.phaseGraph.registerPhase(Phase.GAME, new GamePhaseController(gameWorld, gameView));
         this.phaseGraph.registerPhase(Phase.MINIGAME, new MinigamePhaseController(gameWorld, minigameView));
         this.phaseGraph.registerPhase(Phase.SHOP, new ShopPhaseController(gameWorld, shopView));

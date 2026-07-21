@@ -2,8 +2,11 @@ package it.unibo.hookmaster.model.upgrade;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import it.unibo.hookmaster.model.save.Originator;
 import it.unibo.hookmaster.model.upgrade.event.UpgradeEvent;
 import it.unibo.hookmaster.model.upgrade.event.UpgradeObserver;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
@@ -11,7 +14,7 @@ import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 /**
  * Represents the upgrades shop.
  */
-public final class Shop {
+public final class Shop implements Originator<Shop.Memento> {
 
     private final Map<UpgradeType, Upgrade> upgrades;
     private final List<UpgradeObserver> observers = new ArrayList<>();
@@ -66,6 +69,31 @@ public final class Shop {
             playerWallet.spendCoins(upgrade.getCost());
             upgrade.upgrade();
             notifyObserves(new UpgradeEvent(type, upgrade.getLevel(), upgrade.getValue()));
+        }
+    }
+
+    @Override
+    public Shop.Memento createMemento() {
+        return new Shop.Memento(this.upgrades);
+    }
+
+    @Override
+    public void restoreFromMemento(final Shop.Memento memento) {
+        memento.upgradesMementos.forEach((type, upgradeMemento) -> {
+            final Upgrade upgrade = this.upgrades.get(type);
+            if (upgrade != null) {
+                upgrade.restoreFromMemento(upgradeMemento);
+            }
+        });
+    }
+
+    public static final class Memento implements it.unibo.hookmaster.model.save.Memento {
+        private static final long serialVersionUID = 1L;
+        private final HashMap<UpgradeType, Upgrade.Memento> upgradesMementos;
+
+        private Memento(final Map<UpgradeType, Upgrade> upgrades) {
+            this.upgradesMementos = new HashMap<>();
+            upgrades.forEach((type, upgrade) -> this.upgradesMementos.put(type, upgrade.createMemento()));
         }
     }
 }

@@ -1,11 +1,12 @@
 package it.unibo.hookmaster.model.upgrade.upgrades;
 
+import it.unibo.hookmaster.model.save.Originator;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 
 /**
  * Represents a general upgrade in the game.
  */
-public interface Upgrade {
+public interface Upgrade extends Originator<Upgrade.Memento> {
 
     /**
      * Retrives the type of the upgrade.
@@ -69,4 +70,7 @@ public interface Upgrade {
      * levelled up.
      */
     void upgrade();
+
+    static interface Memento extends it.unibo.hookmaster.model.save.Memento {
+    }
 }

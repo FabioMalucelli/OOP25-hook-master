@@ -123,4 +123,31 @@ public class GameWorldImpl implements GameWorld {
     public Weather getWeather() {
         return this.weatherSystem.getCurrentWeather();
     }
+
+    @Override
+    public GameWorldImpl.MementoImpl createMemento() {
+        return new MementoImpl(this.playerWallet.createMemento(), this.shop.createMemento());
+    }
+
+    @Override
+    public void restoreFromMemento(GameWorld.Memento memento) {
+        if (!(memento instanceof MementoImpl)) {
+            throw new IllegalArgumentException("Invalid memento type");
+        }
+        final MementoImpl m = (MementoImpl) memento;
+        this.playerWallet.restoreFromMemento(m.playerWalletMemento);
+        this.shop.restoreFromMemento(m.shopMemento);
+    }
+
+    private static final class MementoImpl implements GameWorld.Memento {
+        private static final long serialVersionUID = 1L;
+
+        private final PlayerWallet.Memento playerWalletMemento;
+        private final Shop.Memento shopMemento;
+
+        private MementoImpl(final PlayerWallet.Memento playerWalletMemento, final Shop.Memento shopMemento) {
+            this.playerWalletMemento = playerWalletMemento;
+            this.shopMemento = shopMemento;
+        }
+    }
 }

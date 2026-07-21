@@ -1,9 +1,11 @@
 package it.unibo.hookmaster.model.upgrade;
 
+import it.unibo.hookmaster.model.save.Originator;
+
 /**
  * Class for holding the player balance.
  */
-public final class PlayerWallet {
+public final class PlayerWallet implements Originator<PlayerWallet.Memento> {
 
     private int coins;
 
@@ -33,6 +35,25 @@ public final class PlayerWallet {
     public void spendCoins(final int amount) {
         if (amount <= this.coins) {
             this.coins -= amount;
+        }
+    }
+
+    @Override
+    public PlayerWallet.Memento createMemento() {
+        return new PlayerWallet.Memento(this.coins);
+    }
+
+    @Override
+    public void restoreFromMemento(PlayerWallet.Memento memento) {
+        this.coins = memento.coins;
+    }
+
+    public static final class Memento implements it.unibo.hookmaster.model.save.Memento {
+        private static final long serialVersionUID = 1L;
+        private final int coins;
+
+        private Memento(final int coins) {
+            this.coins = coins;
         }
     }
 }
