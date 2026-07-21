@@ -16,9 +16,7 @@ public class FishImpl implements Fish {
     private static final double MAX_WEIGHT_RATIO = 2.0;
     private static final double MIN_CATCH_DIFFICULTY = 0.0;
     private static final double MAX_CATCH_DIFFICULTY = 1.0;
-
-    private CollisionReaction collisionReaction = other -> {
-    };
+    
     private final double weight;
     private final FishType type;
     private Position position;
