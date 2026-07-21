@@ -6,7 +6,6 @@ import java.util.Random;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
-import it.unibo.hookmaster.model.fishing.Catchable;
 
 /**
  * Represents a fish instance.
@@ -15,7 +14,7 @@ public class FishImpl implements Fish {
 
     private static final double MIN_WEIGHT_RATIO = 1.0;
     private static final double MAX_WEIGHT_RATIO = 2.0;
-    private static final double MIN_CATCH_DIFFICULTY = 0.1;
+    private static final double MIN_CATCH_DIFFICULTY = 0.0;
     private static final double MAX_CATCH_DIFFICULTY = 1.0;
 
     private CollisionReaction collisionReaction = other -> {
@@ -207,5 +206,6 @@ public class FishImpl implements Fish {
      * @param other reaction to a collision
      */
     @Override
-    public boolean onCollision(final Collidable other) { return false; }
+    public boolean onCollision(final Collidable other) { return false;
+    }
 }

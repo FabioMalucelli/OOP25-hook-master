@@ -5,6 +5,9 @@ import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.fishing.Catchable;
 
+/*
+* Fish interface.
+*/
 public interface Fish extends Catchable, Collidable {
     /**
      * {@inheritDoc}

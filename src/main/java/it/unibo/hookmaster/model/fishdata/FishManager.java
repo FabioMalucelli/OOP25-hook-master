@@ -16,9 +16,8 @@ import java.util.Objects;
 public class FishManager implements WeatherObserver {
 
     private static final int TARGET_FISH_COUNT = 20;
-    private static final double STORM_SPEED_MULTIPLIER = 1.5;
+    private static final double STORM_SPEED_MULTIPLIER = 2.5;
     private static final double CLEAR_SPEED_MULTIPLIER = 1.0;
-    private static final int OUT_OF_BOUNDS_MARGIN = 100;
 
     private final List<Fish> fishes = new ArrayList<>();
     private final List<Fish> deadFishes = new ArrayList<>();
@@ -69,7 +68,7 @@ public class FishManager implements WeatherObserver {
      * @return a view of the currently dead fish.
      */
     public List<Fish> consumeDeadFishes() {
-        List<Fish> consumedFishes = new ArrayList<>(this.deadFishes);
+        final List<Fish> consumedFishes = new ArrayList<>(this.deadFishes);
         this.deadFishes.clear();
         return consumedFishes;
     }
@@ -144,7 +143,7 @@ public class FishManager implements WeatherObserver {
     }
 
     private boolean isOutOfBounds(final Fish fish) {
-        return fish.getX() < -OUT_OF_BOUNDS_MARGIN
-                || fish.getX() > this.mapWidth + OUT_OF_BOUNDS_MARGIN;
+        return fish.getX() < -fish.getCollisionArea().getWidth()
+                || fish.getX() > this.mapWidth + fish.getCollisionArea().getWidth();
     }
 }

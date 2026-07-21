@@ -35,7 +35,8 @@ public class FishSpawner {
 
     /**
      * Spawns an eligible species at a random edge and height within bounds.
-     *
+     * 
+     * @param fishManager    manager needed to assign predator behavior
      * @param currentWeather the current weather, used to filter eligible species
      * @return new fish
      */
@@ -44,10 +45,10 @@ public class FishSpawner {
         final FishType type = eligibleTypes.get(random.nextInt(eligibleTypes.size()));
 
         final boolean fromLeft = random.nextBoolean();
-        final double x = fromLeft ? -50 : mapWidth + 50;
-        final double y = randomYWithinBand();
-
-        Fish fish = new FishImpl(type, new Position(x, y), randomMovementStrategy());
+        Fish fish = new FishImpl(type, new Position(0, 0), randomMovementStrategy());
+        final double x = fromLeft ? -fish.getCollisionArea().getWidth() : mapWidth + fish.getCollisionArea().getWidth();
+        final double y = randomYWithinBand(fish.getCollisionArea().getHeight());
+        fish.setPosition(new Position(x, y));
         if (type.isPredator()) {
             fish = new PredatorFishImpl(fishManager, fish);
         }
@@ -79,7 +80,7 @@ public class FishSpawner {
         }
     }
 
-    private double randomYWithinBand() {
-        return random.nextDouble(mapHeight);
+    private double randomYWithinBand(final double collisionHeight) {
+        return random.nextDouble(mapHeight - collisionHeight);
     }
 }
