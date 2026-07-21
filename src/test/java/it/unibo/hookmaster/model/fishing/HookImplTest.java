@@ -53,6 +53,8 @@ class HookImplTest {
     private static final int UPGRADE_NEW_LEVEL = 2;
     private static final double UPGRADE_NEW_SPEED = 50.0;
 
+    private static final String HEAVY_FISH = "HeavyFish";
+
     private HookImpl hook;
 
     @BeforeEach
@@ -281,7 +283,7 @@ class HookImplTest {
 
     @Test
     void hookFishRejectsFishHeavierThanMaxWeight() {
-        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, "HeavyFish", HEAVY_FISH_WEIGHT);
+        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, HEAVY_FISH, HEAVY_FISH_WEIGHT);
         hook.hookFish(heavyFish);
         assertEquals(HookState.MOVING, hook.getCurrentState());
         assertNull(hook.getHookedFish());
@@ -290,7 +292,7 @@ class HookImplTest {
 
     @Test
     void hookFishAcceptFishAtOrBelowMaxWeight() {
-        final FakeCatchable lightFish = new FakeCatchable(10, 0.5, "HeavyFish", LIGHT_FISH_WEIGHT);
+        final FakeCatchable lightFish = new FakeCatchable(10, 0.5, HEAVY_FISH, LIGHT_FISH_WEIGHT);
         hook.hookFish(lightFish);
         assertEquals(HookState.MINIGAME, hook.getCurrentState());
         assertEquals(lightFish, hook.getHookedFish());
@@ -307,7 +309,7 @@ class HookImplTest {
     void hookFishFiresFishTooHeavyEventForRejectedFish() {
         final RecordingFishingListener listener = new RecordingFishingListener();
         hook.addListener(listener);
-        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, "HeavyFish", HEAVY_FISH_WEIGHT);
+        final FakeCatchable heavyFish = new FakeCatchable(10, 0.5, HEAVY_FISH, HEAVY_FISH_WEIGHT);
 
         hook.hookFish(heavyFish);
 

@@ -77,7 +77,8 @@ public final class FakeCatchable implements Catchable, Collidable {
     }
 
     @Override
-    public void onCollision(final Collidable other) {
-        //Intentionally empty : this double is only the target of collisions in tests, it never need to react to one itself.
+    public boolean onCollision(final Collidable other) {
+        //Intentionally empty
+        return false;
     }
 }

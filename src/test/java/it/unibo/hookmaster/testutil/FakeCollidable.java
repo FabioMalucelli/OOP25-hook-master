@@ -15,9 +15,9 @@ public final class FakeCollidable implements Collidable {
         return new CollisionAreaRectangle(0, 0, 0, 0);
     }
 
-    @Override
-    public void onCollision(final Collidable other) {
-        //Intentionally empty : this double only need to exists as a nonCatchable  Collidable
-        //it never reacts to collsions itself.
+    @Override public boolean onCollision(final Collidable other) {
+        //Intentionally empty.
+        //it never reacts to collision itself.
+        return false;
     }
 }

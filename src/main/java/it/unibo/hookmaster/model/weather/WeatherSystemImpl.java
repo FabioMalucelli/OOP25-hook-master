@@ -12,6 +12,8 @@ public final class WeatherSystemImpl implements WeatherSystem {
     private static final double DEFAULT_MIN_INTERVAL_SECONDS = 15.0;
     private static final double DEFAULT_MAX_INTERVAL_SECONDS = 45.0;
 
+    private static final Weather[] ALL_WEATHERS = Weather.values();
+
     private final double minChangeInterval;
     private final double maxChangeInterval;
     private final List<WeatherObserver> observers = new ArrayList<>();
@@ -69,13 +71,15 @@ public final class WeatherSystemImpl implements WeatherSystem {
     }
 
     private void changeWeather() {
-        final Weather[] allWeathers = Weather.values();
-        Weather next;
-        do {
-            next = allWeathers[(int) (Math.random() * allWeathers.length)];
-        } while (next == currentWeather && allWeathers.length > 1);
+        if (ALL_WEATHERS.length > 1) {
+            final int currentIndex = currentWeather.ordinal();
+            int nextIndex = (int) (Math.random() * (ALL_WEATHERS.length - 1));
+            if (nextIndex >= currentIndex) {
+                nextIndex++;
+            }
+            currentWeather = ALL_WEATHERS[nextIndex];
+        }
 
-        currentWeather = next;
         final WeatherEvent event = new WeatherEvent(currentWeather);
         for (final WeatherObserver observer : observers) {
             observer.onWeatherChanged(event);
