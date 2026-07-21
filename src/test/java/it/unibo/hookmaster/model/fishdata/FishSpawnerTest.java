@@ -21,7 +21,7 @@ class FishSpawnerTest {
     @Test
     void spawnedFishIsPositionedOutsideTheHorizontalBounds() {
         for (int i = 0; i < SAMPLES; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.CLEAR);
+            final Fish fish = spawner.spawnFish(null, Weather.CLEAR, false);
             assertTrue(fish.getX() <= 0 || fish.getX() >= MAP_WIDTH);
         }
     }
@@ -29,7 +29,7 @@ class FishSpawnerTest {
     @Test
     void spawnedFishDirectionIsCoherentWithTheSpawnSide() {
         for (int i = 0; i < SAMPLES; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.CLEAR);
+            final Fish fish = spawner.spawnFish(null, Weather.CLEAR, false);
             if (fish.getX() <= 0) {
                 assertEquals(1, fish.getDirection());
             } else {
@@ -41,7 +41,7 @@ class FishSpawnerTest {
     @Test
     void spawnedFishStaysWithinTheVerticalBand() {
         for (int i = 0; i < SAMPLES; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.CLEAR);
+            final Fish fish = spawner.spawnFish(null, Weather.CLEAR, false);
             final double maxY = MAP_HEIGHT - fish.getCollisionArea().getHeight();
             assertTrue(fish.getY() >= 0 && fish.getY() <= maxY);
         }
@@ -50,7 +50,7 @@ class FishSpawnerTest {
     @Test
     void stormOnlySpeciesNeverSpawnDuringClearWeather() {
         for (int i = 0; i < 4 * SAMPLES; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.CLEAR);
+            final Fish fish = spawner.spawnFish(null, Weather.CLEAR, false);
             assertFalse(fish.getType().isStormOnly());
         }
     }
@@ -59,7 +59,7 @@ class FishSpawnerTest {
     void stormOnlySpeciesCanSpawnDuringAStorm() {
         boolean found = false;
         for (int i = 0; i < 10 * SAMPLES && !found; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.STORMY);
+            final Fish fish = spawner.spawnFish(null, Weather.STORMY, false);
             found = fish.getType().isStormOnly();
         }
         assertTrue(found);
@@ -69,7 +69,7 @@ class FishSpawnerTest {
     void predatorTypesAreWrappedInPredatorFishImpl() {
         boolean found = false;
         for (int i = 0; i < 4 * SAMPLES && !found; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.STORMY);
+            final Fish fish = spawner.spawnFish(null, Weather.STORMY, false);
             if (fish.getType().isPredator()) {
                 assertInstanceOf(PredatorFishImpl.class, fish);
                 found = true;
@@ -82,7 +82,7 @@ class FishSpawnerTest {
     void nonPredatorTypesAreNotWrapped() {
         boolean found = false;
         for (int i = 0; i < SAMPLES && !found; i++) {
-            final Fish fish = spawner.spawnFish(null, Weather.CLEAR);
+            final Fish fish = spawner.spawnFish(null, Weather.CLEAR, false);
             if (!fish.getType().isPredator()) {
                 assertFalse(fish instanceof PredatorFishImpl);
                 found = true;
