@@ -25,7 +25,7 @@ public class FishSpawner {
     /**
      * Creates a new fish spawner.
      *
-     * @param mapWidth  the horizontal size of the map
+     * @param mapWidth the horizontal size of the map
      * @param mapHeight the vertical size of the map
      */
     public FishSpawner(final double mapWidth, final double mapHeight) {
@@ -36,17 +36,19 @@ public class FishSpawner {
     /**
      * Spawns an eligible species at a random edge and height within bounds.
      * 
-     * @param fishManager    manager needed to assign predator behavior
+     * @param fishManager manager needed to assign predator behavior
      * @param currentWeather the current weather, used to filter eligible species
      * @return new fish
      */
-    public Fish spawnFish(final FishManager fishManager, final Weather currentWeather) {
-        final List<FishType> eligibleTypes = eligibleTypes(currentWeather);
+    public Fish spawnFish(final FishManager fishManager, final Weather currentWeather, final boolean isBoid) {
+        final List<FishType> eligibleTypes = eligibleTypes(currentWeather, isBoid);
         final FishType type = eligibleTypes.get(random.nextInt(eligibleTypes.size()));
 
         final boolean fromLeft = random.nextBoolean();
-        Fish fish = new FishImpl(type, new Position(0, 0), randomMovementStrategy());
-        final double x = fromLeft ? -fish.getCollisionArea().getWidth() : mapWidth + fish.getCollisionArea().getWidth();
+        Fish fish =
+                new FishImpl(type, new Position(0, 0), randomMovementStrategy());
+        final double x = fromLeft ? -fish.getCollisionArea().getWidth()
+                : mapWidth + fish.getCollisionArea().getWidth();
         final double y = randomYWithinBand(fish.getCollisionArea().getHeight());
         fish.setPosition(new Position(x, y));
         if (type.isPredator()) {
@@ -56,11 +58,14 @@ public class FishSpawner {
         return fish;
     }
 
-    private List<FishType> eligibleTypes(final Weather currentWeather) {
+    private List<FishType> eligibleTypes(final Weather currentWeather, final boolean isBoid) {
         final List<FishType> eligible = new ArrayList<>();
         for (final FishType type : FishType.values()) {
             if (!type.isStormOnly() || currentWeather == Weather.STORMY) {
                 eligible.add(type);
+            }
+            if (isBoid && type.isPredator()) {
+                eligible.remove(type);
             }
         }
         return eligible;

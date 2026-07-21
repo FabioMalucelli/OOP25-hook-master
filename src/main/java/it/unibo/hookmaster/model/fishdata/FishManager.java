@@ -1,5 +1,6 @@
 package it.unibo.hookmaster.model.fishdata;
 
+import it.unibo.hookmaster.model.fishdata.boids.BoidsManager;
 import it.unibo.hookmaster.model.weather.Weather;
 import it.unibo.hookmaster.model.weather.WeatherEvent;
 import it.unibo.hookmaster.model.weather.WeatherObserver;
@@ -9,13 +10,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Handles the population of fishes, their movements, spawn and removal.
  */
 public class FishManager implements WeatherObserver {
 
-    private static final int TARGET_FISH_COUNT = 20;
+    private static final int TARGET_FISH_COUNT = 30;
     private static final double STORM_SPEED_MULTIPLIER = 2.5;
     private static final double CLEAR_SPEED_MULTIPLIER = 1.0;
 
@@ -25,6 +27,9 @@ public class FishManager implements WeatherObserver {
     private final double mapWidth;
     private final double mapHeight;
     private Weather currentWeather;
+
+    private final Random random = new Random();
+    private final BoidsManager boidsManager;
 
     /**
      * Creates a new fish manager and populates it.
@@ -41,6 +46,7 @@ public class FishManager implements WeatherObserver {
         this.mapHeight = mapHeight;
         this.currentWeather = weatherSystem.getCurrentWeather();
         weatherSystem.addObserver(this);
+        this.boidsManager = new BoidsManager(mapHeight, spawner, this);
         replenish();
     }
 
@@ -77,8 +83,17 @@ public class FishManager implements WeatherObserver {
      * Spawns a new fish and applies it's speed.
      */
     private void spawnFish() {
-        final Fish fish = this.spawner.spawnFish(this, this.currentWeather);
+        final Fish fish = this.spawner.spawnFish(this, this.currentWeather, false);
         applyWeatherSpeedEffect(fish);
+        this.fishes.add(fish);
+    }
+
+    /**
+     * Adds a fish to the manager.
+     * 
+     * @param fish the fish to add
+     */
+    public void addFish(final Fish fish) {
         this.fishes.add(fish);
     }
 
@@ -88,10 +103,13 @@ public class FishManager implements WeatherObserver {
      * @param deltaTime the time
      */
     public void update(final long deltaTime) {
+        this.boidsManager.update(deltaTime);
         final Iterator<Fish> iterator = this.fishes.iterator();
         while (iterator.hasNext()) {
             final Fish fish = iterator.next();
-            fish.update(this.mapWidth, this.mapHeight, deltaTime);
+            if (fish instanceof FishImpl || fish instanceof PredatorFishImpl) {
+                fish.update(this.mapWidth, this.mapHeight, deltaTime);
+            }
 
             if (isOutOfBounds(fish)) {
                 iterator.remove();
@@ -125,11 +143,16 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
-     * Adds a new fish when another one disappears.
+     * Replenishes the fish population to maintain a target count.
      */
     private void replenish() {
         while (this.fishes.size() < TARGET_FISH_COUNT) {
-            spawnFish();
+            final double randomValue = this.random.nextDouble();
+            if (randomValue < 0.3) {
+                this.boidsManager.spawnBoids();
+            } else {
+                spawnFish();
+            }
         }
     }
 
