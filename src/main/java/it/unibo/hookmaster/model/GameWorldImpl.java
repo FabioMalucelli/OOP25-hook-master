@@ -9,23 +9,24 @@ import it.unibo.hookmaster.model.collision.CollisionPredicates;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishdata.FishManager;
 import it.unibo.hookmaster.model.fishdata.FishSpawner;
-import it.unibo.hookmaster.model.fishing.hook.FishingEvent;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
 import it.unibo.hookmaster.model.fishing.hook.HookImpl;
 import it.unibo.hookmaster.model.fishing.hook.HookState;
 import it.unibo.hookmaster.model.upgrade.PlayerWallet;
 import it.unibo.hookmaster.model.upgrade.Shop;
+import it.unibo.hookmaster.model.weather.Weather;
 import it.unibo.hookmaster.model.weather.WeatherSystem;
 import it.unibo.hookmaster.model.weather.WeatherSystemImpl;
 
 /**
- * The only implementation of the GameWorld interface.
- * It contains all the game entities and their states, and it is responsible for updating them.
- * The GameWorld is the main entry point for the game logic, and it is used by the GameController to run the game loop.
+ * The only implementation of the GameWorld interface. It contains all the game entities and their
+ * states, and it is responsible for updating them. The GameWorld is the main entry point for the
+ * game logic, and it is used by the GameController to run the game loop.
  */
 public class GameWorldImpl implements GameWorld {
     private final FishManager fishManager;
-    private final CollisionManager collisionManager = CollisionPredicates.prefilledCollisionManager();
+    private final CollisionManager collisionManager =
+            CollisionPredicates.prefilledCollisionManager();
     private final Hook hook;
     private final Shop shop = new Shop();
     private final PlayerWallet playerWallet = new PlayerWallet();
@@ -87,6 +88,14 @@ public class GameWorldImpl implements GameWorld {
      * {@inheritDoc}
      */
     @Override
+    public List<Fish> consumeDeadFishes() {
+        return this.fishManager.consumeDeadFishes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Hook getHook() {
         return this.hook;
     }
@@ -105,5 +114,13 @@ public class GameWorldImpl implements GameWorld {
     @Override
     public PlayerWallet getPlayerWallet() {
         return this.playerWallet;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Weather getWeather() {
+        return this.weatherSystem.getCurrentWeather();
     }
 }

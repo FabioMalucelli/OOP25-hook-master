@@ -21,7 +21,7 @@ public final class HookImpl implements Hook {
     /**
      * Radius of the circular hitbox around the hook tip(in pixels).
      */
-    private static final double HOOK_RADIUS = 5.0;
+    private static final double HOOK_RADIUS = 10.0;
 
     private double x;
     private double y;

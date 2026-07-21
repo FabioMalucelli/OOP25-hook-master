@@ -88,8 +88,8 @@ public class PredatorFishImpl implements Fish {
         boolean fishRemoved = false;
         if (other instanceof Fish) {
             final Fish otherFish = (Fish) other;
-            if (otherFish.getWeight() < this.fish.getWeight()) {
-                this.fishManager.removeFish(otherFish);
+            if (otherFish.getWeight() < this.fish.getWeight() && otherFish.getDirection() != this.fish.getDirection()) {
+                this.fishManager.removeDeadFish(otherFish);
                 fishRemoved = true;
             }
         }

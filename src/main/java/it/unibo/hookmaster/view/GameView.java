@@ -9,6 +9,7 @@ import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.weather.Weather;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -50,9 +51,9 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private static final String FISHES_IMAGES_PATH = "/fishes/";
 
     private final Scene scene;
-    private final Canvas mapCanvas;
-    private final Canvas fishesCanvas;
-    private final GraphicsContext fishesGc;
+    private final Canvas canvas;
+    private final GraphicsContext content;
+    private final Label weatherLabel;
     private final Label coinsLabel;
 
     private final Map<String, Image> imagesCache = new HashMap<>();
@@ -66,18 +67,24 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      */
     public GameView(final Scene scene) {
         this.scene = scene;
-        this.mapCanvas = new Canvas(scene.getWidth(), scene.getHeight());
-        this.fishesCanvas = new Canvas(scene.getWidth(), scene.getHeight());
-        this.fishesGc = fishesCanvas.getGraphicsContext2D();
+        this.canvas = new Canvas(scene.getWidth(), scene.getHeight());
+        this.content = canvas.getGraphicsContext2D();
 
-        this.offset = JFXApp.SKY_RATIO * fishesCanvas.getHeight();
+        this.offset = JFXApp.SKY_RATIO * canvas.getHeight();
 
-        coinsLabel = new Label("0 C");
-        coinsLabel.setTextFill(COINS_TEXT_COLOR);
-        coinsLabel.setFont(Font.font("", FontWeight.BOLD, COINS_LABEL_FONT_SIZE));
-        coinsLabel.setBackground(new Background(new BackgroundFill(DARK_BACKGROUND_COLOR,
+        this.coinsLabel = new Label("0 C");
+        this.coinsLabel.setTextFill(COINS_TEXT_COLOR);
+        this.coinsLabel.setFont(Font.font("", FontWeight.NORMAL, COINS_LABEL_FONT_SIZE));
+        this.coinsLabel.setBackground(new Background(new BackgroundFill(DARK_BACKGROUND_COLOR,
                 new CornerRadii(CORNER_RADII), Insets.EMPTY)));
-        coinsLabel.setPadding(new Insets(COINS_LABEL_PADDING));
+        this.coinsLabel.setPadding(new Insets(COINS_LABEL_PADDING));
+
+        this.weatherLabel = new Label("Weather: ");
+        this.weatherLabel.setTextFill(TEXT_COLOR);
+        this.weatherLabel.setFont(Font.font("", FontWeight.NORMAL, COINS_LABEL_FONT_SIZE));
+        this.weatherLabel.setBackground(new Background(new BackgroundFill(DARK_BACKGROUND_COLOR,
+                new CornerRadii(CORNER_RADII), Insets.EMPTY)));
+        this.weatherLabel.setPadding(new Insets(COINS_LABEL_PADDING));
 
         final Button shopButton = new Button("Open shop");
         shopButton.setTextFill(TEXT_COLOR);
@@ -101,18 +108,11 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         hud.setAlignment(Pos.CENTER_RIGHT);
         hud.setPadding(new Insets(HUD_PADDING));
         hud.setMaxSize(scene.getWidth(), scene.getHeight() * 0.1);
-        hud.getChildren().addAll(coinsLabel, shopButton);
+        hud.getChildren().addAll(coinsLabel, weatherLabel, shopButton);
 
         setAlignment(hud, Pos.TOP_RIGHT);
 
-        final GraphicsContext gc = mapCanvas.getGraphicsContext2D();
-        gc.drawImage(
-                new Image("/map/background.png", scene.getWidth(), scene.getHeight(), false, true),
-                0, 0);
-        gc.drawImage(new Image("/map/sand.png", scene.getWidth(), scene.getHeight(), false, true),
-                0, 0);
-
-        this.getChildren().addAll(mapCanvas, fishesCanvas, hud);
+        this.getChildren().addAll(canvas, hud);
 
         this.setOnKeyPressed(e -> {
             switch (e.getCode()) {
@@ -140,13 +140,45 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         shopButton.setOnAction(e -> inputHandler.pressShopBtn());
     }
 
+    private void renderMapWithWeather(final Weather weather) {
+        content.drawImage(new Image("/map/background.png", canvas.getWidth(), canvas.getHeight(),
+                false, true), 0, 0);
+        content.drawImage(
+                new Image("/map/sand.png", canvas.getWidth(), canvas.getHeight(), false, true), 0,
+                0);
+
+        if (weather == Weather.STORMY) {
+            content.setFill(Color.web("#13376191"));
+            content.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        }
+    }
+
+    private void renderFish(final Fish fish, final boolean isDead) {
+        final String path = FISHES_IMAGES_PATH
+                + fish.getType().name().toLowerCase(Locale.getDefault()) + ".png";
+        final Image image = imagesCache.computeIfAbsent(path,
+                i -> new Image(path, canvas.getWidth(), 0, true, true));
+        final CollisionAreaRectangle collisionArea = fish.getCollisionArea();
+        content.save();
+        content.translate(
+                fish.getDirection() == 1 ? fish.getX() : fish.getX() + collisionArea.getWidth(),
+                fish.getY() + offset);
+        content.scale(fish.getDirection(), 1);
+        if (isDead) {
+            content.setFill(Color.RED);
+            content.fillRect(0, 0, collisionArea.getWidth(), collisionArea.getHeight());
+        }
+        content.drawImage(image, 0, 0, collisionArea.getWidth(), collisionArea.getHeight());
+        content.restore();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void select() {
         this.scene.setRoot(this);
-        if (this.getChildren().size() == 4) {
+        if (this.getChildren().size() == 3) {
             this.getChildren().remove(this.getChildren().size() - 1);
         }
     }
@@ -156,42 +188,41 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      */
     @Override
     public void update(final GameSnapshot snapshot) {
-        fishesGc.clearRect(0, 0, fishesCanvas.getWidth(), fishesCanvas.getHeight());
+        content.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        renderMapWithWeather(snapshot.weather());
 
         for (final Fish fish : snapshot.fishes()) {
-            final String path = FISHES_IMAGES_PATH
-                    + fish.getType().name().toLowerCase(Locale.getDefault()) + ".png";
-            final Image image = imagesCache.computeIfAbsent(path,
-                    i -> new Image(path, fishesCanvas.getWidth(), 0, true, true));
-            final CollisionAreaRectangle collisionArea = fish.getCollisionArea();
-            fishesGc.save();
-            fishesGc.translate(
-                    fish.getDirection() == 1 ? fish.getX() : fish.getX() + collisionArea.getWidth(),
-                    fish.getY() + offset);
-            fishesGc.scale(fish.getDirection(), 1);
-            fishesGc.drawImage(image, 0, 0, collisionArea.getWidth(), collisionArea.getHeight());
-            fishesGc.restore();
+            renderFish(fish, false);
+        }
+
+        for (final Fish fish : snapshot.deadFishes()) {
+            renderFish(fish, true);
         }
 
         final Hook hook = snapshot.hook();
         final CollisionAreaCircle collisionArea = hook.getCollisionArea();
         final double size = collisionArea.getRadius() * 2;
 
-        final Image boatImage = imagesCache.computeIfAbsent("/boat.png", i -> new Image("/boat.png",
-                fishesCanvas.getWidth(), fishesCanvas.getHeight(), true, true));
-        final double boatWidth = fishesCanvas.getWidth() * 0.1;
+        final Image boatImage = imagesCache.computeIfAbsent("/boat.png",
+                i -> new Image("/boat.png", canvas.getWidth(), canvas.getHeight(), true, true));
+        final double boatWidth = canvas.getWidth() * 0.1;
         final double boatHeight = boatWidth / (boatImage.getWidth() / boatImage.getHeight());
-        fishesGc.drawImage(boatImage, hook.getX() - (boatWidth / 2), offset - boatHeight, boatWidth,
+        content.drawImage(boatImage, hook.getX() - (boatWidth / 2), offset - boatHeight, boatWidth,
                 boatHeight);
 
-        fishesGc.setLineWidth(2.5);
-        fishesGc.strokeLine(hook.getX(), offset - (boatHeight / 2), hook.getX() + (size / 2),
-                hook.getY() + offset + (size / 2));
+        content.setLineWidth(2);
+        content.strokeLine(hook.getX(), offset - (boatHeight / 2),
+                hook.getX() - collisionArea.getRadius() + (size / 2),
+                hook.getY() - collisionArea.getRadius() + offset + (size / 2));
 
-        final Image hookImage = imagesCache.computeIfAbsent("/hook.png", i -> new Image("/hook.png",
-                fishesCanvas.getWidth(), fishesCanvas.getHeight(), true, true));
-        fishesGc.drawImage(hookImage, hook.getX(), hook.getY() + offset, size, size);
+        final Image hookImage = imagesCache.computeIfAbsent("/hook.png",
+                i -> new Image("/hook.png", canvas.getWidth(), canvas.getHeight(), true, true));
+        content.drawImage(hookImage, hook.getX() - collisionArea.getRadius(),
+                hook.getY() - collisionArea.getRadius() + offset, size, size);
 
+        weatherLabel
+                .setText("Weather: " + snapshot.weather().name().toLowerCase(Locale.getDefault()));
         coinsLabel.setText(snapshot.coins() + " C");
     }
 

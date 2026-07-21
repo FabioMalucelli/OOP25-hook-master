@@ -21,6 +21,7 @@ public class FishManager implements WeatherObserver {
     private static final int OUT_OF_BOUNDS_MARGIN = 100;
 
     private final List<Fish> fishes = new ArrayList<>();
+    private final List<Fish> deadFishes = new ArrayList<>();
     private final FishSpawner spawner;
     private final double mapWidth;
     private final double mapHeight;
@@ -29,10 +30,10 @@ public class FishManager implements WeatherObserver {
     /**
      * Creates a new fish manager and populates it.
      *
-     * @param spawner       the spawner used to create new fish
+     * @param spawner the spawner used to create new fish
      * @param weatherSystem the weather system driving spawn eligibility
-     * @param mapWidth      the horizontal size of the map
-     * @param mapHeight     the vertical size of the map
+     * @param mapWidth the horizontal size of the map
+     * @param mapHeight the vertical size of the map
      */
     public FishManager(final FishSpawner spawner, final WeatherSystem weatherSystem,
             final double mapWidth, final double mapHeight) {
@@ -65,6 +66,15 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
+     * @return a view of the currently dead fish.
+     */
+    public List<Fish> consumeDeadFishes() {
+        List<Fish> consumedFishes = new ArrayList<>(this.deadFishes);
+        this.deadFishes.clear();
+        return consumedFishes;
+    }
+
+    /**
      * Spawns a new fish and applies it's speed.
      */
     private void spawnFish() {
@@ -92,12 +102,25 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
-     * Removes a specific fish and notifies listeners.
+     * Removes a specific fish.
      *
      * @param fish the fish to remove
      */
     public void removeFish(final Fish fish) {
         if (this.fishes.remove(fish)) {
+            replenish();
+        }
+    }
+
+    /**
+     * Removes a specific dead fish.
+     *
+     * @param fish the dead fish to remove
+     */
+    public void removeDeadFish(final Fish fish) {
+        if (this.fishes.contains(fish)) {
+            this.deadFishes.add(fish);
+            this.fishes.remove(fish);
             replenish();
         }
     }
@@ -115,13 +138,13 @@ public class FishManager implements WeatherObserver {
         if (fish.getType().isStormOnly()) {
             return;
         }
-        final double multiplier = currentWeather == Weather.STORMY
-                ? STORM_SPEED_MULTIPLIER
-                : CLEAR_SPEED_MULTIPLIER;
+        final double multiplier =
+                currentWeather == Weather.STORMY ? STORM_SPEED_MULTIPLIER : CLEAR_SPEED_MULTIPLIER;
         fish.setSpeedMultiplier(multiplier);
     }
 
     private boolean isOutOfBounds(final Fish fish) {
-        return fish.getX() < -OUT_OF_BOUNDS_MARGIN || fish.getX() > this.mapWidth + OUT_OF_BOUNDS_MARGIN;
+        return fish.getX() < -OUT_OF_BOUNDS_MARGIN
+                || fish.getX() > this.mapWidth + OUT_OF_BOUNDS_MARGIN;
     }
 }

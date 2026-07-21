@@ -10,7 +10,6 @@ import it.unibo.hookmaster.controller.phase.minigame.MinigamePhaseController;
 import it.unibo.hookmaster.controller.phase.shop.ShopInputHandler;
 import it.unibo.hookmaster.controller.phase.shop.ShopPhaseController;
 import it.unibo.hookmaster.model.GameWorld;
-import it.unibo.hookmaster.model.GameWorldImpl;
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;

@@ -68,7 +68,7 @@ public class GamePhaseController extends AbstractPhaseController {
      * @return a snapshot of the current game state
      */
     private GameSnapshot buildSnapshot() {
-        return new GameSnapshot(gameWorld.getFishes(), gameWorld.getHook(), gameWorld.getPlayerWallet().getCoins());
+        return new GameSnapshot(gameWorld.getFishes(), gameWorld.consumeDeadFishes(), gameWorld.getHook(), gameWorld.getPlayerWallet().getCoins(), gameWorld.getWeather());
     }
 
     /**

@@ -3,6 +3,7 @@ package it.unibo.hookmaster.view.snapshot;
 import java.util.List;
 import it.unibo.hookmaster.model.fishdata.Fish;
 import it.unibo.hookmaster.model.fishing.hook.Hook;
+import it.unibo.hookmaster.model.weather.Weather;
 
 /**
  * Immutable snapshot of the game state, used to pass data to the
@@ -12,4 +13,4 @@ import it.unibo.hookmaster.model.fishing.hook.Hook;
  * @param hook the state of the hook.
  * @param coins the player coin balance.
  */
-public record GameSnapshot(List<Fish> fishes, Hook hook, int coins) { }
+public record GameSnapshot(List<Fish> fishes, List<Fish> deadFishes, Hook hook, int coins, Weather weather) { }
