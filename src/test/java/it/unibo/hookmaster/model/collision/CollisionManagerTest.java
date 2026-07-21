@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -94,6 +96,60 @@ class CollisionManagerTest {
         assertCollisionState(expectedCollision, rect, circle);
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "0, 0, 10, 10",
+        "5, 5, 8, 8"
+    })
+    void testRemovedCollidable(
+        final double x,
+        final double y,
+        final double width,
+        final double height
+    ) {
+        final CollisionManager collisionManager = CollisionPredicates.prefilledCollisionManager();
+        final RectangleCollidable remover = new RectangleCollidable(x, y, width, height, true);
+        final RectangleCollidable removed = new RectangleCollidable(x, y, width, height);
+        final RectangleCollidable other = new RectangleCollidable(x, y, width, height);
+
+        collisionManager.checkCollisions(List.of(remover, removed, other));
+
+        assertEquals(List.of(removed, other), remover.getCollidedWith());
+        assertEquals(List.of(remover), removed.getCollidedWith());
+        assertEquals(List.of(remover), other.getCollidedWith());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "0, 0, 10, 10",
+        "5, 5, 8, 8"
+    })
+    void testRemoveObjectsFromOriginalCollection(
+        final double x,
+        final double y,
+        final double width,
+        final double height
+    ) {
+        final CollisionManager collisionManager = CollisionPredicates.prefilledCollisionManager();
+        final List<Collidable> collidables = new ArrayList<>();
+        final RectangleCollidable remover = new RectangleCollidable(
+            x,
+            y,
+            width,
+            height,
+            true,
+            collidables::remove
+        );
+        final RectangleCollidable firstRemoved = new RectangleCollidable(x, y, width, height);
+        final RectangleCollidable secondRemoved = new RectangleCollidable(x, y, width, height);
+        collidables.addAll(List.of(remover, firstRemoved, secondRemoved));
+
+        assertDoesNotThrow(() -> collisionManager.checkCollisions(collidables));
+
+        assertEquals(List.of(remover), collidables);
+        assertEquals(List.of(firstRemoved, secondRemoved), remover.getCollidedWith());
+    }
+
     private void assertCollisionState(
         final boolean expectedCollision,
         final TestCollidable first,
@@ -105,14 +161,43 @@ class CollisionManagerTest {
 
     private interface TestCollidable extends Collidable {
         boolean hasCollided();
+
+        List<Collidable> getCollidedWith();
     }
 
     private static final class RectangleCollidable implements TestCollidable {
         private final CollisionAreaRectangle area;
+        private final boolean removesOtherOnCollision;
+        private final Consumer<Collidable> collisionAction;
+        private final List<Collidable> collidedWith = new ArrayList<>();
         private boolean collided;
 
         RectangleCollidable(final double x, final double y, final double width, final double height) {
+            this(x, y, width, height, false);
+        }
+
+        RectangleCollidable(
+            final double x,
+            final double y,
+            final double width,
+            final double height,
+            final boolean removesOtherOnCollision
+        ) {
+            this(x, y, width, height, removesOtherOnCollision, ignored -> {
+            });
+        }
+
+        RectangleCollidable(
+            final double x,
+            final double y,
+            final double width,
+            final double height,
+            final boolean removesOtherOnCollision,
+            final Consumer<Collidable> collisionAction
+        ) {
             this.area = new CollisionAreaRectangle(x, y, width, height);
+            this.removesOtherOnCollision = removesOtherOnCollision;
+            this.collisionAction = collisionAction;
         }
 
         @Override
@@ -121,18 +206,27 @@ class CollisionManagerTest {
         }
 
         @Override
-        public void onCollision(final Collidable other) {
+        public boolean onCollision(final Collidable other) {
             this.collided = true;
+            this.collidedWith.add(other);
+            this.collisionAction.accept(other);
+            return this.removesOtherOnCollision;
         }
 
         @Override
         public boolean hasCollided() {
             return this.collided;
         }
+
+        @Override
+        public List<Collidable> getCollidedWith() {
+            return List.copyOf(this.collidedWith);
+        }
     }
 
     private static final class CircleCollidable implements TestCollidable {
         private final CollisionAreaCircle area;
+        private final List<Collidable> collidedWith = new ArrayList<>();
         private boolean collided;
 
         CircleCollidable(final double centerX, final double centerY, final double radius) {
@@ -145,13 +239,20 @@ class CollisionManagerTest {
         }
 
         @Override
-        public void onCollision(final Collidable other) {
+        public boolean onCollision(final Collidable other) {
             this.collided = true;
+            this.collidedWith.add(other);
+            return false;
         }
 
         @Override
         public boolean hasCollided() {
             return this.collided;
+        }
+
+        @Override
+        public List<Collidable> getCollidedWith() {
+            return List.copyOf(this.collidedWith);
         }
     }
 }
