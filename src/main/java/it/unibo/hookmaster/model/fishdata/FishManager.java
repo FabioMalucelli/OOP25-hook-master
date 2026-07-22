@@ -71,7 +71,9 @@ public class FishManager implements WeatherObserver {
     }
 
     /**
-     * @return a view of the currently dead fish.
+     * Consumes all dead fishes and returns them.
+     * 
+     * @return the list of dead fishes
      */
     public List<Fish> consumeDeadFishes() {
         final List<Fish> consumedFishes = new ArrayList<>(this.deadFishes);
@@ -146,7 +148,7 @@ public class FishManager implements WeatherObserver {
      * Replenishes the fish population to maintain a target count.
      */
     private void replenish() {
-        while (this.fishes.size() < TARGET_FISH_COUNT) {
+        while (this.fishes.size() - this.boidsManager.getBoids().size() < TARGET_FISH_COUNT) {
             final double randomValue = this.random.nextDouble();
             if (randomValue < 0.3) {
                 this.boidsManager.spawnBoids();
