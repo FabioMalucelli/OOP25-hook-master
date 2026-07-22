@@ -42,7 +42,7 @@ public final class SaveManager {
      * @throws ClassCastException if the loaded object cannot be cast to a Memento.
      */
     public static Memento load(final File loadFrom)
-            throws IOException, ClassNotFoundException, ClassCastException {
+            throws IOException, ClassNotFoundException {
         try (var fis = new java.io.FileInputStream(loadFrom)) {
             try (var ois = new java.io.ObjectInputStream(fis)) {
                 return (Memento) ois.readObject();

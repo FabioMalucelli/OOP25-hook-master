@@ -17,7 +17,7 @@ public interface MenuInputHandler {
      * 
      * @param file the file to load the game state from
      */
-    void pressLoadButton(File file) throws IllegalArgumentException;
+    void pressLoadButton(File file);
 
     /**
      * Called when the user presses the save button in the menu.

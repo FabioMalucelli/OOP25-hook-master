@@ -38,8 +38,9 @@ public final class CollisionManagerImpl implements CollisionManager {
      * {@inheritDoc}
      */
     @Override
-    public void checkCollisions(List<? extends Collidable> collidables) {
-        collidables = List.copyOf(collidables); // Make a copy to avoid concurrent modification issues
+    public void checkCollisions(final List<? extends Collidable> collidablesParam) {
+        // Make a copy to avoid concurrent modification issues
+        final List<? extends Collidable> collidables = List.copyOf(collidablesParam);
         final boolean[] toRemove = new boolean[collidables.size()];
         for (int i = 0; i < collidables.size(); i++) {
             final Collidable first = collidables.get(i);
