@@ -51,10 +51,8 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
      * 
      * @param scene the main game scene.
      */
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP",
-        justification = "The scene is the main game scene."
-    )
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "The scene is the main game scene.")
     public MenuView(final Scene scene) {
         this.scene = scene;
 
@@ -142,7 +140,10 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
     private File getSelectedFile(final String title, final boolean save) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
-        return save ? fileChooser.showSaveDialog(this.scene.getWindow()) : fileChooser.showOpenDialog(this.scene.getWindow());
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("HookMaster save files", "*.hms"));
+        return save ? fileChooser.showSaveDialog(this.scene.getWindow())
+                : fileChooser.showOpenDialog(this.scene.getWindow());
     }
 
     /**
