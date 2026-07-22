@@ -28,6 +28,7 @@ public class FishManager implements WeatherObserver {
     private final double mapWidth;
     private final double mapHeight;
     private Weather currentWeather;
+    private boolean boidsSpawnPending;
 
     private final Random random = new Random();
     private final BoidsManager boidsManager;
@@ -149,10 +150,18 @@ public class FishManager implements WeatherObserver {
      * Replenishes the fish population to maintain a target count.
      */
     private void replenish() {
-        while (this.fishes.size() - this.boidsManager.getBoids().size() < TARGET_FISH_COUNT) {
-            final double randomValue = this.random.nextDouble();
-            if (randomValue < BOIDS_SPAWN_CHANCE) {
-                this.boidsManager.spawnBoids();
+        while (this.fishes.size() < TARGET_FISH_COUNT) {
+            if (!this.boidsSpawnPending && this.random.nextDouble() < BOIDS_SPAWN_CHANCE) {
+                this.boidsSpawnPending = true;
+            }
+
+            if (this.boidsSpawnPending) {
+                if (this.fishes.size() + BoidsManager.NUMBER_OF_BOIDS <= TARGET_FISH_COUNT) {
+                    this.boidsManager.spawnBoids();
+                    this.boidsSpawnPending = false;
+                } else {
+                    break;
+                }
             } else {
                 spawnFish();
             }

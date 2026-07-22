@@ -14,7 +14,7 @@ import it.unibo.hookmaster.model.weather.Weather;
  * Manages the boids in the simulation, including their spawning, movement, and removal.
  */
 public final class BoidsManager {
-    private static final int NUMBER_OF_BOIDS = 10;
+    public static final int NUMBER_OF_BOIDS = 10;
     private static final double CENTERING_FACTOR = 0.0005;
     private static final double AVOID_FACTOR = 0.05;
     private static final double MATCHING_FACTOR = 0.05;
