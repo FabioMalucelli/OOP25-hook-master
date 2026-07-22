@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 class ShopTest {
 
-    private static final int UPGRADES_NUMBER = 2;
-    private static final int COINS = 1;
+    private static final int UPGRADES_NUMBER = 3;
+    private static final int COINS = 50;
     private static final int EXPECTED_COINS = 0;
     private static final int EXPECTED_LEVEL = 2;
 

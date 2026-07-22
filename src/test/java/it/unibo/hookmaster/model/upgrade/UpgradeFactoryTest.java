@@ -14,7 +14,7 @@ import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
 
 class UpgradeFactoryTest {
 
-    private static final int UPGRADES_NUMBER = 2;
+    private static final int UPGRADES_NUMBER = 3;
 
     @Test
     void testUpgradeFactory() {
