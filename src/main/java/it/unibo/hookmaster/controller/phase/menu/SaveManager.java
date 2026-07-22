@@ -7,7 +7,16 @@ import java.io.ObjectOutputStream;
 
 import it.unibo.hookmaster.model.save.Memento;
 
+/**
+ * Utility class for saving and loading mementos to and from files.
+ */
 public final class SaveManager {
+
+    /**
+     * Private constructor to prevent instantiation of this class.
+     */
+    private SaveManager() { }
+
     /**
      * Saves a memento to a file.
      * 
@@ -32,7 +41,8 @@ public final class SaveManager {
      * @throws ClassNotFoundException if the class of a serialized object cannot be found.
      * @throws ClassCastException if the loaded object cannot be cast to a Memento.
      */
-    public static Memento load(final File loadFrom) throws IOException, ClassNotFoundException, ClassCastException {
+    public static Memento load(final File loadFrom)
+            throws IOException, ClassNotFoundException, ClassCastException {
         try (var fis = new java.io.FileInputStream(loadFrom)) {
             try (var ois = new java.io.ObjectInputStream(fis)) {
                 return (Memento) ois.readObject();

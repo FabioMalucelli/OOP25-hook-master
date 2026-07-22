@@ -20,6 +20,7 @@ public final class RecordingWeatherObserver implements WeatherObserver {
     }
 
     /** 
+     * Returns an unmodifiable list of all events recieved by this observer.
      * 
      * @return an unmodifiable list of all events recieved
      */

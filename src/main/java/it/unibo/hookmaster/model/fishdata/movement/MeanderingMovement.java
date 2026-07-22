@@ -70,8 +70,6 @@ public final class MeanderingMovement implements MovementStrategy {
                 phase = Phase.STRAIGHT;
                 millisRemaining = randomStraightDuration();
                 break;
-            default:
-                throw new IllegalStateException("Unexpected phase: " + phase);
         }
     }
 

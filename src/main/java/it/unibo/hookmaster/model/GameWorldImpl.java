@@ -2,7 +2,7 @@ package it.unibo.hookmaster.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionManager;
 import it.unibo.hookmaster.model.collision.CollisionPredicates;
@@ -23,7 +23,7 @@ import it.unibo.hookmaster.model.weather.WeatherSystemImpl;
  * states, and it is responsible for updating them. The GameWorld is the main entry point for the
  * game logic, and it is used by the GameController to run the game loop.
  */
-public class GameWorldImpl implements GameWorld {
+public final class GameWorldImpl implements GameWorld {
     private final FishManager fishManager;
     private final CollisionManager collisionManager =
             CollisionPredicates.prefilledCollisionManager();
@@ -47,6 +47,7 @@ public class GameWorldImpl implements GameWorld {
             switch (e.getType()) {
                 case FISH_CAUGHT:
                     playerWallet.addCoins(e.getFish().getEconomicValue());
+                    break;
                 case FISH_ESCAPED:
                     fishManager.removeFish((Fish) e.getFish());
                     break;
@@ -95,6 +96,8 @@ public class GameWorldImpl implements GameWorld {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "The hook is updated by the game world and should be exposed by the game world.")
     @Override
     public Hook getHook() {
         return this.hook;
@@ -103,6 +106,8 @@ public class GameWorldImpl implements GameWorld {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "The fish manager is updated by the game world and should be exposed by the game world.")
     @Override
     public Shop getShop() {
         return this.shop;
@@ -111,6 +116,8 @@ public class GameWorldImpl implements GameWorld {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "The player wallet is updated by the game world and should be exposed by the game world.")
     @Override
     public PlayerWallet getPlayerWallet() {
         return this.playerWallet;
@@ -130,7 +137,7 @@ public class GameWorldImpl implements GameWorld {
     }
 
     @Override
-    public void restoreFromMemento(GameWorld.Memento memento) {
+    public void restoreFromMemento(final GameWorld.Memento memento) {
         if (!(memento instanceof MementoImpl)) {
             throw new IllegalArgumentException("Invalid memento type");
         }

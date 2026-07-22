@@ -10,8 +10,8 @@ import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.GameSnapshot;
 
 /**
- * Controller for the game phase of the game.
- * It handles the user input and updates the view for the game phase.
+ * Controller for the game phase of the game. It handles the user input and updates the view for the
+ * game phase.
  */
 public class GamePhaseController extends AbstractPhaseController {
     private final View<GameSnapshot, GameInputHandler> gameView;
@@ -20,13 +20,13 @@ public class GamePhaseController extends AbstractPhaseController {
     /**
      * Creates a new GamePhaseController tied to the given game view.
      * 
+     * @param gameworld the game world
      * @param gameView the game view to tie the controller to
      */
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "The view does not contain any of the controller state, so it is safe to expose it."
-    )
-    public GamePhaseController(final GameWorld gameworld, final View<GameSnapshot, GameInputHandler> gameView) {
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2",
+            justification = "The view does not contain any of the controller state, so it is safe to expose it.")
+    public GamePhaseController(final GameWorld gameworld,
+            final View<GameSnapshot, GameInputHandler> gameView) {
         this.gameWorld = gameworld;
         this.gameView = gameView;
         this.gameView.setInputHandler(new InputHandlerImpl());
@@ -62,20 +62,20 @@ public class GamePhaseController extends AbstractPhaseController {
     }
 
     /**
-     * Builds a snapshot of the current game state
-     * for the view to render.
+     * Builds a snapshot of the current game state for the view to render.
      * 
      * @return a snapshot of the current game state
      */
     private GameSnapshot buildSnapshot() {
-        return new GameSnapshot(gameWorld.getFishes(), gameWorld.consumeDeadFishes(), gameWorld.getHook(), gameWorld.getPlayerWallet().getCoins(), gameWorld.getWeather());
+        return new GameSnapshot(gameWorld.getFishes(), gameWorld.consumeDeadFishes(),
+                gameWorld.getHook(), gameWorld.getPlayerWallet().getCoins(),
+                gameWorld.getWeather());
     }
 
     /**
-     * Implementation of the GameInputHandler interface.
-     * All the operations are performed directly on the game world,
-     * because, since the game loop is running in the same thread as the view,
-     * we are sure that the input events are not processed in the middle of a tick.
+     * Implementation of the GameInputHandler interface. All the operations are performed directly
+     * on the game world, because, since the game loop is running in the same thread as the view, we
+     * are sure that the input events are not processed in the middle of a tick.
      */
     private final class InputHandlerImpl implements GameInputHandler {
         /**

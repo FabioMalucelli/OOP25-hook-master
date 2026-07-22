@@ -69,6 +69,6 @@ public interface GameWorld extends Originator<GameWorld.Memento> {
     /**
      * Represents a memento (a snapshot) of the game world's state.
      */
-    static interface Memento extends it.unibo.hookmaster.model.save.Memento {
+    interface Memento extends it.unibo.hookmaster.model.save.Memento {
     }
 }

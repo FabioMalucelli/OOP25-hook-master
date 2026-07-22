@@ -106,7 +106,7 @@ class PredatorFishImplTest {
         public void removeDeadFish(final Fish fish) {
             removeFish(fish);
         }
-    
+
         List<Fish> getRemovedFishes() {
             return List.copyOf(this.removedFishes);
         }
@@ -118,7 +118,7 @@ class PredatorFishImplTest {
         }
 
         @Override
-        public Fish spawnFish(final FishManager fishManager, final Weather currentWeather, boolean isBoid) {
+        public Fish spawnFish(final FishManager fishManager, final Weather currentWeather, final boolean isBoid) {
             return new TestFish(FishType.ANCHOVY, DEFAULT_FISH_WEIGHT);
         }
     }
@@ -163,7 +163,7 @@ class PredatorFishImplTest {
         private final FishType type;
         private final double weight;
         private final List<Collidable> collidedWith = new ArrayList<>();
-        private Position position = new Position(COLLISION_AREA_X, COLLISION_AREA_Y);
+        private final Position position = new Position(COLLISION_AREA_X, COLLISION_AREA_Y);
         private boolean removeOtherOnCollision;
         private int direction = DEFAULT_DIRECTION;
 

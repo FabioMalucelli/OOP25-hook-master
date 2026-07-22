@@ -38,6 +38,7 @@ public class FishSpawner {
      * 
      * @param fishManager manager needed to assign predator behavior
      * @param currentWeather the current weather, used to filter eligible species
+     * @param isBoid whether the fish is a boid or not
      * @return new fish
      */
     public Fish spawnFish(final FishManager fishManager, final Weather currentWeather, final boolean isBoid) {

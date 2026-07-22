@@ -7,7 +7,6 @@ import it.unibo.hookmaster.model.GameWorld;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.view.View;
 import it.unibo.hookmaster.view.snapshot.ShopSnapshot;
-import javafx.application.Platform;
 
 /**
  * Controller for the game phase of the game.
@@ -19,9 +18,10 @@ public class ShopPhaseController extends AbstractPhaseController {
     private boolean needsRefresh = true;
 
     /**
-     * Creates a new MinigamePhaseController tied to the given minigame view.
+     * Creates a new ShopPhaseController tied to the given shop view.
      * 
-     * @param minigameView the minigame view to tie the controller to
+     * @param gameworld the game world
+     * @param shopView the shop view to tie the controller to
      */
     @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
@@ -71,7 +71,7 @@ public class ShopPhaseController extends AbstractPhaseController {
          * {@inheritDoc}
          */
         @Override
-        public void pressBuyBtn(UpgradeType upgradeType) {
+        public void pressBuyBtn(final UpgradeType upgradeType) {
             gameWorld.getShop().buy(upgradeType, gameWorld.getPlayerWallet());
             needsRefresh = true;
         }

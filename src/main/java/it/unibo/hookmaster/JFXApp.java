@@ -41,12 +41,12 @@ public final class JFXApp extends Application {
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
 
-        GameWorld gameWorld = new GameWorldImpl(bounds.getWidth(),
+        final GameWorld gameWorld = new GameWorldImpl(bounds.getWidth(),
                 (bounds.getHeight() * (1 - SKY_RATIO)) - (bounds.getHeight() * SEABED_RATIO));
-        View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
-        GameView gameView = new GameView(scene);
-        View<MinigameSnapshot, MinigameInputHandler> minigameView = new MinigameView(scene, gameView);
-        View<ShopSnapshot, ShopInputHandler> shopView = new ShopView(scene);
+        final View<MenuSnapshot, MenuInputHandler> menuView = new MenuView(scene);
+        final GameView gameView = new GameView(scene);
+        final View<MinigameSnapshot, MinigameInputHandler> minigameView = new MinigameView(scene, gameView);
+        final View<ShopSnapshot, ShopInputHandler> shopView = new ShopView(scene);
         new GameControllerImpl(gameWorld, menuView, gameView, minigameView, shopView).run();
     }
 }

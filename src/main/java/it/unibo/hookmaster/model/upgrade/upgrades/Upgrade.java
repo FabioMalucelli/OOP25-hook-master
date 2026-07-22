@@ -71,6 +71,9 @@ public interface Upgrade extends Originator<Upgrade.Memento> {
      */
     void upgrade();
 
-    static interface Memento extends it.unibo.hookmaster.model.save.Memento {
+    /**
+     * Memento class for saving and restoring the state of the Upgrade.
+     */
+    interface Memento extends it.unibo.hookmaster.model.save.Memento {
     }
 }

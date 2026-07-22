@@ -10,7 +10,8 @@ public final class MaxWeightUpgrade extends AbstractUpgrade {
 
     private static final UpgradeType TYPE = UpgradeType.MAX_WEIGHT;
     private static final String UPGRADE_NAME = "Max Weight";
-    private static final String UPGRADE_DESCRIPTION = "Increases the maximum weight the hook can catch, allowing for larger fish to be caught.";
+    private static final String UPGRADE_DESCRIPTION =
+            "Increases the maximum weight the hook can catch, allowing for larger fish to be caught.";
     private static final int MAX_LEVEL = 30;
 
     /**

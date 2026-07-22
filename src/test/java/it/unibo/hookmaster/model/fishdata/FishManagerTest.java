@@ -39,7 +39,7 @@ class FishManagerTest {
     }
 
     @Test
-    void FishesReturnsAnUnmodifiableView() {
+    void fishesReturnsAnUnmodifiableView() {
         final List<Fish> fishes = manager.getFishes();
         assertThrows(UnsupportedOperationException.class, () -> fishes.add(null));
     }

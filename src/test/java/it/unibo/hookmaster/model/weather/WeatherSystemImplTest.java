@@ -25,7 +25,7 @@ class WeatherSystemImplTest {
 
     @Test
     void constructorRejectsMaxLowerThanMin() {
-        assertThrows(IllegalArgumentException.class, ()-> new WeatherSystemImpl(2.0, 1.0));
+        assertThrows(IllegalArgumentException.class, () -> new WeatherSystemImpl(2.0, 1.0));
     }
 
     @Test

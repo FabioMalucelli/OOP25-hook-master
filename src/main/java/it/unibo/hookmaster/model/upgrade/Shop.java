@@ -2,7 +2,7 @@ package it.unibo.hookmaster.model.upgrade;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,11 +72,17 @@ public final class Shop implements Originator<Shop.Memento> {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Shop.Memento createMemento() {
         return new Shop.Memento(this.upgrades);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void restoreFromMemento(final Shop.Memento memento) {
         memento.upgradesMementos.forEach((type, upgradeMemento) -> {
@@ -87,12 +93,15 @@ public final class Shop implements Originator<Shop.Memento> {
         });
     }
 
+    /**
+     * Memento class for saving and restoring the state of the Shop.
+     */
     public static final class Memento implements it.unibo.hookmaster.model.save.Memento {
         private static final long serialVersionUID = 1L;
-        private final HashMap<UpgradeType, Upgrade.Memento> upgradesMementos;
+        private final Map<UpgradeType, Upgrade.Memento> upgradesMementos;
 
         private Memento(final Map<UpgradeType, Upgrade> upgrades) {
-            this.upgradesMementos = new HashMap<>();
+            this.upgradesMementos = new EnumMap<>(UpgradeType.class);
             upgrades.forEach((type, upgrade) -> this.upgradesMementos.put(type, upgrade.createMemento()));
         }
     }

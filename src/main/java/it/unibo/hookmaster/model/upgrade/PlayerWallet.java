@@ -38,16 +38,25 @@ public final class PlayerWallet implements Originator<PlayerWallet.Memento> {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PlayerWallet.Memento createMemento() {
         return new PlayerWallet.Memento(this.coins);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void restoreFromMemento(PlayerWallet.Memento memento) {
+    public void restoreFromMemento(final PlayerWallet.Memento memento) {
         this.coins = memento.coins;
     }
 
+    /**
+     * Memento class for saving and restoring the state of the PlayerWallet.
+     */
     public static final class Memento implements it.unibo.hookmaster.model.save.Memento {
         private static final long serialVersionUID = 1L;
         private final int coins;

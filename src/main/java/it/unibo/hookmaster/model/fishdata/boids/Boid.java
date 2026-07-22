@@ -1,5 +1,6 @@
 package it.unibo.hookmaster.model.fishdata.boids;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.model.collision.Collidable;
 import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.Fish;
@@ -12,7 +13,7 @@ import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
  */
 public final class Boid implements Fish {
 
-    private Fish fish;
+    private final Fish fish;
     private double velocityX;
     private double velocityY;
 
@@ -23,6 +24,10 @@ public final class Boid implements Fish {
      * @param velocityX the initial velocity in the X direction.
      * @param velocityY the initial velocity in the Y direction.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The fish is a reference to the original fish."
+    )
     public Boid(final Fish fish, final double velocityX, final double velocityY) {
         this.fish = fish;
         this.velocityX = velocityX;
@@ -52,7 +57,7 @@ public final class Boid implements Fish {
      * 
      * @param velocityX the new velocity in the X direction.
      */
-    public void setVelocityX(double velocityX) {
+    public void setVelocityX(final double velocityX) {
         this.velocityX = velocityX;
     }
 
@@ -61,7 +66,7 @@ public final class Boid implements Fish {
      * 
      * @param velocityY the new velocity in the Y direction.
      */
-    public void setVelocityY(double velocityY) {
+    public void setVelocityY(final double velocityY) {
         this.velocityY = velocityY;
     }
 
@@ -101,7 +106,7 @@ public final class Boid implements Fish {
      * {@inheritDoc}
      */
     @Override
-    public boolean onCollision(Collidable other) {
+    public boolean onCollision(final Collidable other) {
         return this.fish.onCollision(other);
     }
 
@@ -133,7 +138,7 @@ public final class Boid implements Fish {
      * {@inheritDoc}
      */
     @Override
-    public void setSpeedMultiplier(double speedMultiplier) {
+    public void setSpeedMultiplier(final double speedMultiplier) {
         this.fish.setSpeedMultiplier(speedMultiplier);
     }
 
@@ -165,7 +170,7 @@ public final class Boid implements Fish {
      * {@inheritDoc}
      */
     @Override
-    public void setPosition(Position newPosition) {
+    public void setPosition(final Position newPosition) {
         this.fish.setPosition(newPosition);
     }
 
@@ -181,7 +186,7 @@ public final class Boid implements Fish {
      * {@inheritDoc}
      */
     @Override
-    public void setDirection(int direction) {
+    public void setDirection(final int direction) {
         this.fish.setDirection(direction);
     }
 
@@ -189,7 +194,7 @@ public final class Boid implements Fish {
      * Not supported for Boid. Boids have their own movement strategy.
      */
     @Override
-    public void setMovementStrategy(MovementStrategy movementStrategy) {
+    public void setMovementStrategy(final MovementStrategy movementStrategy) {
         throw new UnsupportedOperationException("Boids have their own movement strategy.");
     }
 
@@ -197,7 +202,7 @@ public final class Boid implements Fish {
      * Not supported for Boid. Boids have their own movement strategy.
      */
     @Override
-    public void update(double mapWidth, double mapHeight, long deltaTime) {
+    public void update(final double mapWidth, final double mapHeight, final long deltaTime) {
         throw new UnsupportedOperationException("Boids have their own movement strategy.");
     }
 }

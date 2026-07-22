@@ -16,7 +16,7 @@ public class FishImpl implements Fish {
     private static final double MAX_WEIGHT_RATIO = 2.0;
     private static final double MIN_CATCH_DIFFICULTY = 0.0;
     private static final double MAX_CATCH_DIFFICULTY = 1.0;
-    
+
     private final double weight;
     private final FishType type;
     private Position position;
@@ -204,6 +204,7 @@ public class FishImpl implements Fish {
      * @param other reaction to a collision
      */
     @Override
-    public boolean onCollision(final Collidable other) { return false;
+    public boolean onCollision(final Collidable other) { 
+        return false;
     }
 }

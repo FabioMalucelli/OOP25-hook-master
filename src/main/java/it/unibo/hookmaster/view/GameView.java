@@ -3,6 +3,7 @@ package it.unibo.hookmaster.view;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.JFXApp;
 import it.unibo.hookmaster.controller.phase.game.GameInputHandler;
 import it.unibo.hookmaster.model.collision.CollisionAreaCircle;
@@ -47,6 +48,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
     private static final double COINS_LABEL_FONT_SIZE = 18;
     private static final double COINS_LABEL_PADDING = 15;
     private static final double HUD_PADDING = 15;
+    private static final double HUD_HEIGHT_RATIO = 0.1;
 
     private static final String FISHES_IMAGES_PATH = "/fishes/";
 
@@ -65,6 +67,10 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
      * 
      * @param scene the main game scene.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "The scene is the main game scene."
+    )
     public GameView(final Scene scene) {
         this.scene = scene;
         this.canvas = new Canvas(scene.getWidth(), scene.getHeight());
@@ -107,7 +113,7 @@ public final class GameView extends StackPane implements View<GameSnapshot, Game
         final HBox hud = new HBox(scene.getWidth() * SPACING_RATIO);
         hud.setAlignment(Pos.CENTER_RIGHT);
         hud.setPadding(new Insets(HUD_PADDING));
-        hud.setMaxSize(scene.getWidth(), scene.getHeight() * 0.1);
+        hud.setMaxSize(scene.getWidth(), scene.getHeight() * HUD_HEIGHT_RATIO);
         hud.getChildren().addAll(coinsLabel, weatherLabel, shopButton);
 
         setAlignment(hud, Pos.TOP_RIGHT);

@@ -30,8 +30,11 @@ public class GameControllerImpl implements GameController {
     /**
      * Creates the default controller.
      * 
-     * @param menuView the view of the menu phase
-     * @param gameView the view of the game phase
+     * @param gameWorld the game world to control
+     * @param menuView the view for the menu phase
+     * @param gameView the view for the game phase
+     * @param minigameView the view for the minigame phase
+     * @param shopView the view for the shop phase
      */
     public GameControllerImpl(
         final GameWorld gameWorld,
@@ -41,7 +44,7 @@ public class GameControllerImpl implements GameController {
         final View<ShopSnapshot, ShopInputHandler> shopView
     ) {
         this.phaseGraph = new PhaseGraph();
-        this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(gameWorld,menuView));
+        this.phaseGraph.registerPhase(Phase.MENU, new MenuPhaseController(gameWorld, menuView));
         this.phaseGraph.registerPhase(Phase.GAME, new GamePhaseController(gameWorld, gameView));
         this.phaseGraph.registerPhase(Phase.MINIGAME, new MinigamePhaseController(gameWorld, minigameView));
         this.phaseGraph.registerPhase(Phase.SHOP, new ShopPhaseController(gameWorld, shopView));

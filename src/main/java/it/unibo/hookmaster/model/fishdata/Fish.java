@@ -5,9 +5,9 @@ import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
 import it.unibo.hookmaster.model.fishing.Catchable;
 
-/*
-* Fish interface.
-*/
+/**
+ * Fish interface.
+ */
 public interface Fish extends Catchable, Collidable {
     /**
      * {@inheritDoc}
@@ -76,7 +76,7 @@ public interface Fish extends Catchable, Collidable {
     /**
      * Advances this fish by one simulation step.
      *
-     * @param mapWidth  the horizontal size of the map
+     * @param mapWidth the horizontal size of the map
      * @param mapHeight the vertical size of the map
      * @param deltaTime the time
      */

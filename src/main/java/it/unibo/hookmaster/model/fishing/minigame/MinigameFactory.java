@@ -10,7 +10,10 @@ public final class MinigameFactory {
 
     private static final double STORM_SPEED_MULTIPLIER = 1.5;
 
-    private MinigameFactory() {}
+    /**
+     * Private constructor to prevent instantiation of the factory class.
+     */
+    private MinigameFactory() { }
 
     /**
      * Creates a minigame with the strategy appropriate for current weather.

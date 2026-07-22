@@ -1,7 +1,7 @@
 package it.unibo.hookmaster.view;
 
 import java.io.File;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.menu.MenuInputHandler;
 import it.unibo.hookmaster.view.snapshot.MenuSnapshot;
 import javafx.geometry.Insets;
@@ -51,6 +51,10 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
      * 
      * @param scene the main game scene.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "The scene is the main game scene."
+    )
     public MenuView(final Scene scene) {
         this.scene = scene;
 
@@ -135,7 +139,7 @@ public final class MenuView extends VBox implements View<MenuSnapshot, MenuInput
         return btn;
     }
 
-    private File getSelectedFile(final String title, boolean save) {
+    private File getSelectedFile(final String title, final boolean save) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         return save ? fileChooser.showSaveDialog(this.scene.getWindow()) : fileChooser.showOpenDialog(this.scene.getWindow());

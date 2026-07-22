@@ -1,5 +1,6 @@
 package it.unibo.hookmaster.view;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.hookmaster.controller.phase.shop.ShopInputHandler;
 import it.unibo.hookmaster.model.upgrade.UpgradeType;
 import it.unibo.hookmaster.model.upgrade.upgrades.Upgrade;
@@ -63,6 +64,10 @@ public final class ShopView extends BorderPane implements View<ShopSnapshot, Sho
      * 
      * @param scene the main game scene.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "The scene is the main game scene."
+    )
     public ShopView(final Scene scene) {
         this.scene = scene;
 

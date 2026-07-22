@@ -20,6 +20,7 @@ public class FishManager implements WeatherObserver {
     private static final int TARGET_FISH_COUNT = 30;
     private static final double STORM_SPEED_MULTIPLIER = 2.5;
     private static final double CLEAR_SPEED_MULTIPLIER = 1.0;
+    private static final double BOIDS_SPAWN_CHANCE = 0.1;
 
     private final List<Fish> fishes = new ArrayList<>();
     private final List<Fish> deadFishes = new ArrayList<>();
@@ -150,7 +151,7 @@ public class FishManager implements WeatherObserver {
     private void replenish() {
         while (this.fishes.size() - this.boidsManager.getBoids().size() < TARGET_FISH_COUNT) {
             final double randomValue = this.random.nextDouble();
-            if (randomValue < 0.3) {
+            if (randomValue < BOIDS_SPAWN_CHANCE) {
                 this.boidsManager.spawnBoids();
             } else {
                 spawnFish();

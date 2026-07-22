@@ -23,7 +23,7 @@ public final class UpgradeFactory {
     /**
      * Prevents instantiation of this class.
      */
-    private UpgradeFactory() {}
+    private UpgradeFactory() { }
 
     /**
      * Factory method that generates the different upgrades.

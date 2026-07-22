@@ -1,10 +1,8 @@
 package it.unibo.hookmaster.model.collision;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import it.unibo.hookmaster.util.Pair;
 
 /**
@@ -42,7 +40,7 @@ public final class CollisionManagerImpl implements CollisionManager {
     @Override
     public void checkCollisions(List<? extends Collidable> collidables) {
         collidables = List.copyOf(collidables); // Make a copy to avoid concurrent modification issues
-        boolean[] toRemove = new boolean[collidables.size()];
+        final boolean[] toRemove = new boolean[collidables.size()];
         for (int i = 0; i < collidables.size(); i++) {
             final Collidable first = collidables.get(i);
             final CollisionArea firstArea = first.getCollisionArea();
@@ -56,8 +54,8 @@ public final class CollisionManagerImpl implements CollisionManager {
                     Pair.of(firstArea.getClass(), secondArea.getClass())
                 );
                 if (predicate != null && predicate.test(firstArea, secondArea)) {
-                    boolean removeSecond = first.onCollision(second);
-                    boolean removeFirst = second.onCollision(first);
+                    final boolean removeSecond = first.onCollision(second);
+                    final boolean removeFirst = second.onCollision(first);
                     toRemove[i] = removeFirst;
                     toRemove[j] = removeSecond;
                 }

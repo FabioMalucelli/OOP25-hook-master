@@ -59,11 +59,17 @@ public abstract class AbstractUpgrade implements Upgrade {
         this.level++;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AbstractUpgrade.Memento createMemento() {
         return new AbstractUpgrade.Memento(this.level);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void restoreFromMemento(final Upgrade.Memento memento) {
         if (!(memento instanceof AbstractUpgrade.Memento)) {
@@ -72,7 +78,9 @@ public abstract class AbstractUpgrade implements Upgrade {
         this.level = ((AbstractUpgrade.Memento) memento).level;
     }
 
-
+    /**
+     * Memento class for saving and restoring the state of the AbstractUpgrade.
+     */
     public static final class Memento implements Upgrade.Memento {
         private static final long serialVersionUID = 1L;
         private final int level;
