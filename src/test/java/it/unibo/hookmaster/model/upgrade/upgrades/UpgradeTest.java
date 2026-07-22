@@ -31,14 +31,16 @@ class UpgradeTest {
     private static final int MINIGAME_EASE_COST_MULTIPLIER = 20;
     private static final int START_MINIGAME_EASE_COST = START_LEVEL * MINIGAME_EASE_COST_MULTIPLIER;
 
-
     @Test
     void testMaxWeightUpgrade() {
-        final Upgrade upgrade = new MaxWeightUpgrade(new LinearUpgradeValueStrategy(MAX_WEIGHT_BASE, MAX_WEIGHT_STEP));
+        final Upgrade upgrade = new MaxWeightUpgrade(
+                new LinearUpgradeValueStrategy(MAX_WEIGHT_BASE, MAX_WEIGHT_STEP));
 
         assertEquals(UpgradeType.MAX_WEIGHT, upgrade.getType());
         assertEquals("Max Weight", upgrade.getName());
-        assertEquals("Increases the maximum weight the hook can catch, allowing for larger fish to be caught.", upgrade.getDescription());
+        assertEquals(
+                "Increases the maximum weight the hook can catch, allowing for larger fish to be caught.",
+                upgrade.getDescription());
         assertEquals(MAX_WEIGHT_MAX_LEVEL, upgrade.getMaxLevel());
 
         assertEquals(START_LEVEL, upgrade.getLevel());
@@ -54,11 +56,13 @@ class UpgradeTest {
 
     @Test
     void testSpeedUpgrade() {
-        final Upgrade upgrade = new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP));
+        final Upgrade upgrade =
+                new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP));
 
         assertEquals(UpgradeType.SPEED, upgrade.getType());
         assertEquals("Speed", upgrade.getName());
-        assertEquals("Increases the speed of the hook, allowing for faster movement.", upgrade.getDescription());
+        assertEquals("Increases the speed of the hook, allowing for faster movement.",
+                upgrade.getDescription());
         assertEquals(SPEED_MAX_LEVEL, upgrade.getMaxLevel());
 
         assertEquals(START_LEVEL, upgrade.getLevel());
@@ -74,11 +78,13 @@ class UpgradeTest {
 
     @Test
     void testMinigameEaseUpgrade() {
-        final Upgrade upgrade = new MinigameEaseUpgrade(new LinearUpgradeValueStrategy(MINIGAME_EASE_BASE, MINIGAME_EASE_STEP));
+        final Upgrade upgrade = new MinigameEaseUpgrade(
+                new LinearUpgradeValueStrategy(MINIGAME_EASE_BASE, MINIGAME_EASE_STEP));
 
         assertEquals(UpgradeType.MINIGAME_EASE, upgrade.getType());
         assertEquals("Minigame Ease", upgrade.getName());
-        assertEquals("Reduces the difficulty of minigames, making them easier to complete.", upgrade.getDescription());
+        assertEquals("Reduces the difficulty of minigames, making them easier to complete.",
+                upgrade.getDescription());
         assertEquals(MINIGAME_EASE_MAX_LEVEL, upgrade.getMaxLevel());
 
         assertEquals(START_LEVEL, upgrade.getLevel());
@@ -94,7 +100,8 @@ class UpgradeTest {
 
     @Test
     void testMaxLevelLimit() {
-        final Upgrade upgrade = new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP));
+        final Upgrade upgrade =
+                new SpeedUpgrade(new LinearUpgradeValueStrategy(SPEED_BASE, SPEED_STEP));
 
         while (upgrade.getLevel() < upgrade.getMaxLevel()) {
             assertTrue(upgrade.canUpgrade(Integer.MAX_VALUE));
