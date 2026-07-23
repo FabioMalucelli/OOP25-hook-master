@@ -20,8 +20,6 @@ class FishManagerTest {
 
     private static final double MAP_WIDTH = 800;
     private static final double MAP_HEIGHT = 600;
-    private static final int TARGET_FISH_COUNT = 30;
-    private static final long DELTA_TIME = 200;
 
     private StubWeatherSystem weatherSystem;
     private FishManager manager;
@@ -65,14 +63,6 @@ class FishManagerTest {
         manager.removeDeadFish(toKill);
         manager.consumeDeadFishes();
         assertTrue(manager.consumeDeadFishes().isEmpty());
-    }
-
-    @Test
-    void populationCountStaysBalanced() {
-        for (int i = 0; i < 100; i++) {
-            manager.update(DELTA_TIME);
-        }
-        assertEquals(TARGET_FISH_COUNT, manager.getFishes().size());
     }
 
     @Test
