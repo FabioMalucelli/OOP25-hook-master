@@ -4,9 +4,9 @@ package it.unibo.hookmaster.view;
  * The base interface implemented by all views in the game.
  * 
  * @param <S> the type of the data snapshot used by the view.
- * @param <T> the type of input handler used by the view to interact with the controller.
+ * @param <I> the type of input handler used by the view to interact with the controller.
  */
-public interface View<S, T> {
+public interface View<S, I> {
 
     /**
      * Set this view as the active scene root.
@@ -25,5 +25,5 @@ public interface View<S, T> {
      * 
      * @param inputHandler the input handler for this view.
      */
-    void setInputHandler(T inputHandler);
+    void setInputHandler(I inputHandler);
 }
