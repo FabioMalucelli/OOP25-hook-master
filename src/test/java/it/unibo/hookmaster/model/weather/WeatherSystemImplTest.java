@@ -2,6 +2,7 @@ package it.unibo.hookmaster.model.weather;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ class WeatherSystemImplTest {
         for (int i = 0; i < MIN_EXPECTED_CHANGES; i++) {
             weatherSystem.update(EXACT_INTERVAL);
             final Weather current = weatherSystem.getCurrentWeather();
-            assertTrue(current != previous);
+            assertNotSame(previous, current);
             previous = current;
         }
     }
