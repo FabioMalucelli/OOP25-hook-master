@@ -19,22 +19,6 @@ class FishImplTest {
     private static final int[] Y_POSITIONS = {0, 5, 4};
     private static final double SPEED_MULTIPLIER = 2;
 
-    private static final class RecordingMovementStrategy implements MovementStrategy {
-        private boolean called;
-        private double lastMapWidth;
-        private double lastMapHeight;
-        private long lastDeltaTime;
-
-        @Override
-        public void move(final Fish fish, final double mapWidth, final double mapHeight,
-                final long deltaTime) {
-            this.called = true;
-            this.lastMapWidth = mapWidth;
-            this.lastMapHeight = mapHeight;
-            this.lastDeltaTime = deltaTime;
-        }
-    }
-
     @Test
     void nameAndTypeMatchTheConstructorType() {
         final Fish fish = new FishImpl(FishType.SAWSHARK,
@@ -52,7 +36,7 @@ class FishImplTest {
     }
 
     @Test
-    void economicValueIsConsistentWithTheWeightRatio() {
+    void economicValueIsConsistentWithWeightRatio() {
         final Fish fish = new FishImpl(FishType.TUNA, new Position(X_POSITIONS[0], Y_POSITIONS[0]),
                 new LinearMovement());
         final double ratio = fish.getWeight() / FishType.TUNA.getBaseWeight();
@@ -61,9 +45,7 @@ class FishImplTest {
     }
 
     @Test
-    void catchDifficultyIsClampedToOneWhenTheRawValueWouldExceedIt() {
-        // CLOWNFISH has baseCatchDifficulty = 6, so raw difficulty (ratio in [1,2])
-        // always exceeds 1.0
+    void catchDifficultyIsWithinRange() {
         final Fish fish = new FishImpl(FishType.CLOWNFISH,
                 new Position(X_POSITIONS[0], Y_POSITIONS[0]), new LinearMovement());
         assertEquals(1.0, fish.getCatchDifficulty());
@@ -153,5 +135,21 @@ class FishImplTest {
         final Fish fish = new FishImpl(FishType.ANCHOVY,
                 new Position(X_POSITIONS[0], Y_POSITIONS[0]), new LinearMovement());
         assertFalse(fish.onCollision(fish));
+    }
+
+    private static final class RecordingMovementStrategy implements MovementStrategy {
+        private boolean called;
+        private double lastMapWidth;
+        private double lastMapHeight;
+        private long lastDeltaTime;
+
+        @Override
+        public void move(final Fish fish, final double mapWidth, final double mapHeight,
+                final long deltaTime) {
+            this.called = true;
+            this.lastMapWidth = mapWidth;
+            this.lastMapHeight = mapHeight;
+            this.lastDeltaTime = deltaTime;
+        }
     }
 }

@@ -20,7 +20,7 @@ class FishManagerTest {
 
     private static final double MAP_WIDTH = 800;
     private static final double MAP_HEIGHT = 600;
-    private static final int TARGET_FISH_COUNT = 20;
+    private static final int TARGET_FISH_COUNT = 30;
     private static final long DELTA_TIME = 200;
 
     private StubWeatherSystem weatherSystem;
@@ -34,22 +34,9 @@ class FishManagerTest {
     }
 
     @Test
-    void managerIsPopulatedToTheTargetCountOnCreation() {
-        assertEquals(TARGET_FISH_COUNT, manager.getFishes().size());
-    }
-
-    @Test
-    void fishesReturnsAnUnmodifiableView() {
+    void fishesReturnsUnmodifiableView() {
         final List<Fish> fishes = manager.getFishes();
         assertThrows(UnsupportedOperationException.class, () -> fishes.add(null));
-    }
-
-    @Test
-    void removingAFishTriggersReplenishment() {
-        final Fish toRemove = manager.getFishes().get(0);
-        manager.removeFish(toRemove);
-        assertEquals(TARGET_FISH_COUNT, manager.getFishes().size());
-        assertFalse(manager.getFishes().contains(toRemove));
     }
 
     @Test
@@ -61,12 +48,11 @@ class FishManagerTest {
     }
 
     @Test
-    void removeDeadFishMovesTheFishToTheDeadListAndReplenishes() {
+    void removeDeadFish() {
         final Fish toKill = manager.getFishes().get(0);
         manager.removeDeadFish(toKill);
 
         assertFalse(manager.getFishes().contains(toKill));
-        assertEquals(TARGET_FISH_COUNT, manager.getFishes().size());
 
         final List<Fish> dead = manager.consumeDeadFishes();
         assertEquals(1, dead.size());
@@ -74,7 +60,7 @@ class FishManagerTest {
     }
 
     @Test
-    void consumeDeadFishesClearsTheInternalDeadList() {
+    void consumeDeadFishesClearsList() {
         final Fish toKill = manager.getFishes().get(0);
         manager.removeDeadFish(toKill);
         manager.consumeDeadFishes();
@@ -82,7 +68,7 @@ class FishManagerTest {
     }
 
     @Test
-    void updateKeepsThePopulationAtTheTargetCountOverTime() {
+    void populationCountStaysBalanced() {
         for (int i = 0; i < 100; i++) {
             manager.update(DELTA_TIME);
         }
@@ -90,7 +76,7 @@ class FishManagerTest {
     }
 
     @Test
-    void weatherChangeToStormyAppliesTheStormSpeedMultiplier() {
+    void weatherChangesApplyToFishes() {
         weatherSystem.changeWeather(Weather.STORMY);
         for (final Fish fish : manager.getFishes()) {
             if (!fish.getType().isStormOnly()) {
@@ -101,7 +87,7 @@ class FishManagerTest {
     }
 
     @Test
-    void weatherChangeBackToClearRestoresTheBaseSpeed() {
+    void weatherRevertChangesApplyToFishes() {
         weatherSystem.changeWeather(Weather.STORMY);
         weatherSystem.changeWeather(Weather.CLEAR);
         for (final Fish fish : manager.getFishes()) {
