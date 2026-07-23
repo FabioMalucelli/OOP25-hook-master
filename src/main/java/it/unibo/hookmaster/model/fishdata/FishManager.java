@@ -160,7 +160,7 @@ public class FishManager implements WeatherObserver {
                     this.boidsManager.spawnBoids();
                     this.boidsSpawnPending = false;
                 } else {
-                    break;
+                    spawnFish();
                 }
             } else {
                 spawnFish();
