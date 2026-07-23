@@ -19,7 +19,7 @@ public final class MinigameFactory {
      * Creates a minigame with the strategy appropriate for current weather.
      * 
      * @param fish the fish to be caught
-     * @param minigameEase the ease of the minigame
+     * @param minigameEase the ease of the minigame (lower values makes the minigame easier,higher values make it harder)
      * @param isStormy true if stormy weather is active
      * @return a fully configured FishingMinigame
      */
@@ -35,7 +35,7 @@ public final class MinigameFactory {
      * Creates a minigame with calm weather conditions.
      * 
      * @param fish the fish to be caught
-     * @param minigameEase the ease of the minigame
+     * @param minigameEase the ease of the minigame (lower values makes the minigame easier,higher values make it harder)
      * @return a fully configured FishingMinigame
      */
     public static FishingMinigame create(final Catchable fish, final double minigameEase) {

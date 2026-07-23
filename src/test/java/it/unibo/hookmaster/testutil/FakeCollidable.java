@@ -6,7 +6,7 @@ import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 
 /**
  * A Collidable test double that is intentionally NOT a Catchable.
- * Used to verify that onHookCollision ignores collisions with nonFish objects.
+ * Used to verify that Hook.onCollision ignores collisions with nonFish objects.
  */
 public final class FakeCollidable implements Collidable {
 

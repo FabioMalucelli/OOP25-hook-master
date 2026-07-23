@@ -8,8 +8,8 @@ import it.unibo.hookmaster.util.TimeUtils;
  * making the QTE harder.
  * 
  * 
- * <p>Used by the weather system to replace the OscillantingIndicator
- * at runtime when a storm is active.</p>
+ * <p>Choosen by the MinigameFactory when a minigame is created while a
+ * storm is active.Once a minigame is created is strategy never changes.</p>
  */
 public final class StormyIndicator implements IndicatorStrategy {
 
