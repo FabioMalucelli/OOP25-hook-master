@@ -131,7 +131,7 @@ public final class HookImpl implements Hook {
 
     @Override
     public boolean hookFish(final Catchable fish) {
-        if (currentState != HookState.MOVING || hookedFish != null) {
+        if (currentState != HookState.MOVING && hookedFish != null) {
             return false;
         }
         if (fish.getWeight() > maxWeight) {
