@@ -97,9 +97,6 @@ public final class HookImpl implements Hook {
         } else if (movingDown && !movingUp) {
             y += speed * deltaSeconds;
         }
-        if (y > maxDepth) {
-            y = maxDepth;
-        }
         y = Math.clamp(y, minY, maxDepth);
  
     }
@@ -134,7 +131,7 @@ public final class HookImpl implements Hook {
 
     @Override
     public boolean hookFish(final Catchable fish) {
-        if (currentState != HookState.MOVING && hookedFish != null) {
+        if (currentState != HookState.MOVING || hookedFish != null) {
             return false;
         }
         if (fish.getWeight() > maxWeight) {
