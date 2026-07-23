@@ -131,7 +131,7 @@ public interface Hook extends Collidable, UpgradeObserver, WeatherObserver {
     void setStormy(boolean stormy);
 
     /**
-     * Sets the movement speed on both axes. Invoked by the shop on upgrade purchase.
+     * Sets the movement speed on both axes.
      * 
      * @param speed new movement speed in pixels/second
      */
