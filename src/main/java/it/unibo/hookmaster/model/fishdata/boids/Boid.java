@@ -1,19 +1,14 @@
 package it.unibo.hookmaster.model.fishdata.boids;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.hookmaster.model.collision.Collidable;
-import it.unibo.hookmaster.model.collision.CollisionAreaRectangle;
 import it.unibo.hookmaster.model.fishdata.Fish;
-import it.unibo.hookmaster.model.fishdata.FishType;
-import it.unibo.hookmaster.model.fishdata.Position;
 import it.unibo.hookmaster.model.fishdata.movement.MovementStrategy;
+import it.unibo.hookmaster.model.fishdata.AbstractFishDecorator;
 
 /**
  * Represents a boid in the simulation.
  */
-public final class Boid implements Fish {
+public final class Boid extends AbstractFishDecorator {
 
-    private final Fish fish;
     private double velocityX;
     private double velocityY;
 
@@ -24,12 +19,8 @@ public final class Boid implements Fish {
      * @param velocityX the initial velocity in the X direction.
      * @param velocityY the initial velocity in the Y direction.
      */
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "The fish is a reference to the original fish."
-    )
     public Boid(final Fish fish, final double velocityX, final double velocityY) {
-        this.fish = fish;
+        super(fish);
         this.velocityX = velocityX;
         this.velocityY = velocityY;
     }
@@ -68,126 +59,6 @@ public final class Boid implements Fish {
      */
     public void setVelocityY(final double velocityY) {
         this.velocityY = velocityY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getEconomicValue() {
-        return this.fish.getEconomicValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getCatchDifficulty() {
-        return this.fish.getCatchDifficulty();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-        return this.fish.getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getWeight() {
-        return this.fish.getWeight();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onCollision(final Collidable other) {
-        return this.fish.onCollision(other);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CollisionAreaRectangle getCollisionArea() {
-        return this.fish.getCollisionArea();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public FishType getType() {
-        return this.fish.getType();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getSpeed() {
-        return this.fish.getSpeed();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSpeedMultiplier(final double speedMultiplier) {
-        this.fish.setSpeedMultiplier(speedMultiplier);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Position getPosition() {
-        return this.fish.getPosition();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getX() {
-        return this.fish.getPosition().getX();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getY() {
-        return this.fish.getPosition().getY();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setPosition(final Position newPosition) {
-        this.fish.setPosition(newPosition);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getDirection() {
-        return this.fish.getDirection();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDirection(final int direction) {
-        this.fish.setDirection(direction);
     }
 
     /**
